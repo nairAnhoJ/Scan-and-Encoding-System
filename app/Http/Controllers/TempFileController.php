@@ -13,23 +13,28 @@ class TempFileController extends Controller
 {
     public function store(Request $request){
 
+        $image = array();
         $user = auth()->user();
-        $file = $request->file('file');
-        $filename = $file->getClientOriginalName();
 
         $dirTemp = public_path().'/temporary';
         if (!file_exists($dirTemp)) {
             File::makeDirectory($dirTemp);
         }
 
-        $nameUnique = date('mdYHis').uniqid().'.'.$file->getClientOriginalExtension();
-        $request->file->move('temporary', $nameUnique);
+        if($files = $request->file('file')){
+            foreach($files as $file){
+                $filename = $file->getClientOriginalName();
+                $nameUnique = date('mdYHis').uniqid().'.'.$file->getClientOriginalExtension();
+                $file->move('temporary', $nameUnique);
 
-        $temp = new TempFile();
-        $temp->name = $filename;
-        $temp->unique_name = $nameUnique;
-        $temp->uploader = $user->id;
-        $temp->save();
+                $temp = new TempFile();
+                $temp->name = $filename;
+                $temp->unique_name = $nameUnique;
+                $temp->uploader = $user->id;
+                $temp->save();
+
+            }
+        }
 
         return redirect()->back();
     }

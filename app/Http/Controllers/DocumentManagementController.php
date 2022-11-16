@@ -24,11 +24,12 @@ class DocumentManagementController extends Controller
 
     public function uploadIndex(){
         $user = auth()->user()->id;
+        $dept = auth()->user()->department;
         $tempLast = TempFile::all()->where('uploader',$user)->last();
         $tempCount = TempFile::all()->where('uploader',$user)->count();
         $temps = TempFile::all();
-        $batchs = Batch::orderby('name', 'asc')->get();
-        $docTypes = DocType::orderby('name', 'asc')->get();
+        $batchs = DB::table('batches')->where('dept_id', $dept)->orderby('name', 'asc')->get();
+        $docTypes = DB::table('doc_types')->where('dept_id', $dept)->orderby('name', 'asc')->get();
 
         return view('document-management/upload', compact('tempLast','tempCount','temps','batchs','docTypes'));
     }
@@ -41,7 +42,15 @@ class DocumentManagementController extends Controller
         $temps = TempFile::all()->where('uploader',$userId);
         $batchID = $request->batch;
         $folderRow = DB::table('folder_lists')->where('batch_id', $batchID)->orderBy('id','desc')->take(1)->first();
+
+
+
         $folder = $folderRow->name;
+
+        $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$folder;
+        if (!file_exists($dirDoc)) {
+            File::makeDirectory($dirDoc);
+        }
 
         $request->validate([
             'batch' => 'required',
@@ -64,7 +73,8 @@ class DocumentManagementController extends Controller
             // Move file from temporary to designated folder
             $filename = $temp->unique_name;
             $file = 'temporary/'.$filename;
-            File::move(public_path($file), public_path('documents/'.$request->batch.'/'.$folder.'/'.$filename));
+
+            File::move(public_path($file), public_path('documents/'.$user->department.'/'.$request->batch.'/'.$folder.'/'.$filename));
         }
 
         // Delete specific rows from temporary table in database
@@ -86,6 +96,8 @@ class DocumentManagementController extends Controller
     public function encodeIndex(){
 
         $user = auth()->user()->id;
+        $dept = auth()->user()->department;
+        $batchs = DB::table('batches')->where('dept_id', $dept)->orderby('name', 'asc')->get();
         $temps = TempFile::all()->where('uploader',$user);
 
         foreach($temps as $temp){
@@ -96,7 +108,6 @@ class DocumentManagementController extends Controller
 
         TempFile::where('uploader',$user)->delete();
 
-        $batchs = Batch::orderby('name', 'asc')->get();
 
         return view('document-management/encode', compact('batchs'));
     }
@@ -113,6 +124,7 @@ class DocumentManagementController extends Controller
     }
 
     public function encodeGetFiles(Request $request){
+        $dept = auth()->user()->department;
         $selBatch = $request->batchValue;
         $selFolder = $request->folderValue;
         $files = DB::table('documents')->where('batch_id', $selBatch)->where('folder', $selFolder)->orderBy('id', 'desc')->get();
@@ -130,7 +142,7 @@ class DocumentManagementController extends Controller
                 $textColor = '';
             }
 
-            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$selBatch.'/'.$selFolder.'/'.$file->unique_name.'">'.$file->name.'</option>';
+            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$selFolder.'/'.$file->unique_name.'">'.$file->name.'</option>';
         }
         echo $output;
     }
@@ -162,7 +174,12 @@ class DocumentManagementController extends Controller
                 $x = 0;
                 foreach($forms as $form){
                     if(isset($details[$x]->response)){
-                        $detailVal = $details[$x]->response;
+                        if($details[$x]->form_id == $form->id){
+                            $detailVal = $details[$x]->response;
+                            $x++;
+                        }else{
+                            $detailVal = '';
+                        }
                     }else{
                         $detailVal = '';
                     }
@@ -172,7 +189,6 @@ class DocumentManagementController extends Controller
                                     <input type="'.$form->type.'" value="'.$detailVal.'" name="'.$form->name_nospace.'" id="'.$form->name_nospace.'" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 ';
-                    $x++;
                 }
                 $output .= '<button '.$dis.' type="submit" id="encodeSubmit" class="disabled:pointer-events-none disabled:opacity-75 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-1.5 mr-2 mb-2 mt-2 focus:outline-none">Update</button>
                 ';
@@ -204,12 +220,12 @@ class DocumentManagementController extends Controller
         $thisFile = DB::table('documents')->where('id', $selFile)->get();
         $forms = DB::table('encode_forms')->where('doctype_id', $thisFile[0]->doctype_id)->orderBy('id', 'asc')->get();
 
-        foreach($forms as $form){
-            $nospace = $form->name_nospace;
-            $request->validate([
-                $nospace => 'required',
-            ]);
-        }
+        // foreach($forms as $form){
+        //     $nospace = $form->name_nospace;
+        //     $request->validate([
+        //         $nospace => 'required',
+        //     ]);
+        // }
 
         if($detailsCount > 0){
             
@@ -217,22 +233,26 @@ class DocumentManagementController extends Controller
 
             foreach($forms as $form){
                 $nospace = $form->name_nospace;
-                $fileDetail = new FileDetail();
-                $fileDetail->document_id = $selFile;
-                $fileDetail->form_id = $form->id;
-                $fileDetail->response = $request->$nospace;
-                $fileDetail->encoder = $userId;
-                $fileDetail->save();
+                if($request->$nospace != ''){
+                    $fileDetail = new FileDetail();
+                    $fileDetail->document_id = $selFile;
+                    $fileDetail->form_id = $form->id;
+                    $fileDetail->response = $request->$nospace;
+                    $fileDetail->encoder = $userId;
+                    $fileDetail->save();
+                }
             }
         }else{
             foreach($forms as $form){
                 $nospace = $form->name_nospace;
-                $fileDetail = new FileDetail();
-                $fileDetail->document_id = $selFile;
-                $fileDetail->form_id = $form->id;
-                $fileDetail->response = $request->$nospace;
-                $fileDetail->encoder = $userId;
-                $fileDetail->save();
+                if($request->$nospace != ''){
+                    $fileDetail = new FileDetail();
+                    $fileDetail->document_id = $selFile;
+                    $fileDetail->form_id = $form->id;
+                    $fileDetail->response = $request->$nospace;
+                    $fileDetail->encoder = $userId;
+                    $fileDetail->save();
+                }
             }
         }
 
@@ -267,6 +287,8 @@ class DocumentManagementController extends Controller
     public function qualityCheckIndex(){
 
         $user = auth()->user()->id;
+        $dept = auth()->user()->department;
+        $batchs = DB::table('batches')->where('dept_id', $dept)->orderby('name', 'asc')->get();
         $temps = TempFile::all()->where('uploader',$user);
 
         foreach($temps as $temp){
@@ -277,7 +299,6 @@ class DocumentManagementController extends Controller
 
         TempFile::where('uploader',$user)->delete();
 
-        $batchs = Batch::orderby('name', 'asc')->get();
         return view('document-management/quality-check', compact('batchs'));
     }
 
@@ -294,6 +315,7 @@ class DocumentManagementController extends Controller
     }
 
     public function qcGetFiles(Request $request){
+        $dept = auth()->user()->department;
         $selBatch = $request->batchValue;
         $selFolder = $request->folderValue;
         $files = DB::table('documents')->where('batch_id', $selBatch)->where('folder', $selFolder)->orderBy('id', 'desc')->get();
@@ -307,7 +329,7 @@ class DocumentManagementController extends Controller
                 $textColor = '';
             }
 
-            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$selBatch.'/'.$selFolder.'/'.$file->unique_name.'">'.$file->name.'</option>';
+            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$selFolder.'/'.$file->unique_name.'">'.$file->name.'</option>';
         }
         echo $output;
     }
@@ -340,7 +362,12 @@ class DocumentManagementController extends Controller
                 $x = 0;
                 foreach($forms as $form){
                     if(isset($details[$x]->response)){
-                        $detailVal = $details[$x]->response;
+                        if($details[$x]->form_id == $form->id){
+                            $detailVal = $details[$x]->response;
+                            $x++;
+                        }else{
+                            $detailVal = '';
+                        }
                     }else{
                         $detailVal = '';
                     }
@@ -350,7 +377,6 @@ class DocumentManagementController extends Controller
                                     <input readonly type="'.$form->type.'" value="'.$detailVal.'" name="'.$form->name_nospace.'" id="'.$form->name_nospace.'" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 ';
-                    $x++;
                 }
                 $output .= '<button '.$ddd.' type="submit" id="qcSubmit" class="disabled:pointer-events-none disabled:opacity-75 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-1.5 mr-2 mb-2 mt-2 focus:outline-none">Check</button>
                 ';

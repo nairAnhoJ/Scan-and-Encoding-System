@@ -77,7 +77,7 @@
         {{-- Right Content --}}
         <div class="w-4/6 h-full pl-5">
             <div style="border: 1px solid #0284c7;" class="h-full w-full">
-                <iframe id="selectedFile" src="" frameborder="0" class="h-full w-full"></iframe>
+                <embed id="selectedFile" src="" frameborder="0" type="application/pdf" class="h-full w-full">
             </div>
         </div>
     </div>

@@ -18,10 +18,13 @@ class ReportController extends Controller
         $uploadCount = '0';
         $EncodeCount = '0';
         $CheckedCount = '0';
+        $maxArrayCount = '0';
+        $fileDetailsArray = '';
         $dateStart = date('m-d-Y');
         $dateEnd = date('m-d-Y');
 
-        return view('reports/index', compact('batches', 'docTypes', 'users', 'docTypeID', 'batchID', 'userID', 'dateStart', 'dateEnd', 'uploadCount', 'EncodeCount', 'CheckedCount'));
+
+        return view('reports/index', compact('batches', 'docTypes', 'users', 'docTypeID', 'batchID', 'userID', 'dateStart', 'dateEnd', 'uploadCount', 'EncodeCount', 'CheckedCount', 'fileDetailsArray', 'maxArrayCount'));
     }
 
     public function genReport(Request $request){
@@ -60,10 +63,13 @@ class ReportController extends Controller
         $uploadCount = 0;
         $EncodeCount = 0;
         $CheckedCount = 0;
+        $fileDetailsArray = [];
         foreach ($documents as $doc){
             $uploadCount++;
             $docId = $doc->id;
             $fileCount = DB::table('file_details')->where('document_id', $docId)->get()->count();
+            $fileDetails  = DB::table('file_details')->where('document_id', $docId)->get();
+            array_push($fileDetailsArray, $fileDetails);
             if($fileCount > 0){
                 $EncodeCount++;
             }
@@ -72,7 +78,9 @@ class ReportController extends Controller
             }
         }
 
-        return view('reports/index', compact('batches', 'docTypes', 'users', 'documents', 'dateStart', 'dateEnd', 'batchID', 'docTypeID', 'userID', 'uploadCount', 'EncodeCount', 'CheckedCount'));
+        $maxArrayCount = count(max($fileDetailsArray));
+
+        return view('reports/index', compact('batches', 'docTypes', 'users', 'documents', 'dateStart', 'dateEnd', 'batchID', 'docTypeID', 'userID', 'uploadCount', 'EncodeCount', 'CheckedCount', 'fileDetailsArray', 'maxArrayCount'));
 
     }
 }

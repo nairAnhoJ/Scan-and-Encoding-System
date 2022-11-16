@@ -95,9 +95,10 @@
                             <th>File Name</th>
                             <th>Date Uploaded</th>
                             <th>Uploader</th>
-                            <th class="hidden">index</th>
-                            <th class="hidden">index</th>
-                            <th class="hidden">index</th>
+
+                            @for ($i = 0; $i < $maxArrayCount; $i++)
+                                <th class="hidden">index</th>
+                            @endfor
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="text-sm">
@@ -107,17 +108,25 @@
                         @if (isset($documents))
                             @foreach ($documents as $document)
                                 <tr>
-                                    <td>{{ $x++ }}</td>
+                                    <td>{{ $x }}</td>
                                     <td>{{ $document->department }}</td>
                                     <td>{{ $document->batch }}</td>
                                     <td>{{ $document->docType }}</td>
                                     <td>{{ $document->name }}</td>
                                     <td>{{ $document->created_at }}</td>
                                     <td>{{ $document->uploader }}</td>
-                                    <td class="hidden">@php if($x == 5){echo 'payb';}else{echo 'qwe';} @endphp</td>
-                                    <td class="hidden">@php if($x == 8){echo 'eyt';}else{echo 'asd';} @endphp</td>
-                                    <td class="hidden">@php if($x == 2){echo 'tu';}else{echo 'zxc';} @endphp</td>
+                                    
+                                    @for ($i = 0; $i < $maxArrayCount; $i++)
+                                        @if (isset($fileDetailsArray[($x-1)][$i]))
+                                            <th class="hidden">{{ $fileDetailsArray[$x-1][$i]->response }}</th>
+                                        @else
+                                            <th class="hidden"></th>
+                                        @endif
+                                    @endfor
                                 </tr>
+                                @php
+                                    $x++;
+                                @endphp
                             @endforeach
                         @endif
                     </tbody>

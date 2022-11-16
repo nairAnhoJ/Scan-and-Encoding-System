@@ -151,9 +151,9 @@
                                         <li>
                                             <a href={{ route('qc.index') }} class="{{ request()->path()=='quality-check' ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-100' }} block py-2 px-4 text-center">Quality Check</a>
                                         </li>
-                                        <li>
+                                        {{-- <li>
                                             <a href={{ route('view.index') }} class="{{ request()->path()=='view' ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-100' }} block py-2 px-4 text-center">View</a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </div>
                             </li>
