@@ -26,7 +26,7 @@ class SystemController extends Controller
         $folders = DB::table('folder_lists')->get();
         $departments = DB::table('departments')->orderBy('name', 'asc')->get();
         // $accounts = DB::table('accounts')->where('id','!=','1')->get();
-        $accounts = DB::select('SELECT accounts.id, accounts.name, accounts.username, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
+        $accounts = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
 
         return view('/system-management/index', compact('batches','docTypes','folders','departments','accounts'))->with('tab', '1');
     }
@@ -175,7 +175,7 @@ class SystemController extends Controller
                 'batchName' => 'required',
             ]);
 
-            DB::update('update batches SET name = ? WHERE id = ?', [$batchName, $thisBatchId]);
+            DB::update('update batches SET name = ? WHERE id = ?', [strtoupper($batchName), $thisBatchId]);
 
             $deptBatches = DB::table('batches')->where('dept_id', $batchDeptId)->orderBy('name', 'asc')->get();
 
@@ -384,7 +384,7 @@ class SystemController extends Controller
                 'docTypeName' => 'required',
             ]);
 
-            DB::update('update doc_types SET name = ? WHERE id = ?', [$docTypeName, $thisTypeId]);
+            DB::update('update doc_types SET name = ? WHERE id = ?', [strtoupper($docTypeName), $thisTypeId]);
 
             $deptDocTypes = DB::table('doc_types')->where('dept_id', $deptID)->orderBy('id', 'asc')->get();
 
@@ -608,7 +608,7 @@ class SystemController extends Controller
             'docTypeFormIndexType' => 'required',
         ]);
 
-        DB::update('UPDATE encode_forms SET name = ? , type = ? WHERE id = ?', [$IndexName, $IndexType, $editId]);
+        DB::update('UPDATE encode_forms SET name = ? , type = ? WHERE id = ?', [strtoupper($IndexName), $IndexType, $editId]);
 
         $docTypeForms = DB::table('encode_forms')->where('doctype_id', $formType)->orderBy('id', 'asc')->get();
 
@@ -792,7 +792,7 @@ class SystemController extends Controller
             'deptName' => 'required',
         ]);
 
-        DB::update('update departments SET name = ? WHERE id = ?', [$deptName, $thisDeptId]);
+        DB::update('update departments SET name = ? WHERE id = ?', [strtoupper($deptName), $thisDeptId]);
 
 
         $departments = DB::table('departments')->orderBy('id', 'asc')->get();
@@ -870,7 +870,6 @@ class SystemController extends Controller
         $userName = ucwords(strtolower($request->userName));
         $userUsername = $request->userUsername;
         $userPass = $request->userPass;
-        $userCPass = $request->userPass_confirmation;
         $userDept = $request->userDept;
 
 
@@ -891,7 +890,7 @@ class SystemController extends Controller
         $user->save();
 
         
-        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
+        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
 
         $output = '';
 
@@ -905,7 +904,56 @@ class SystemController extends Controller
                                 <td class="py-4 px-6">'.$user->username.'</td>
                                 <td class="py-4 px-6">'.$user->department.'</td>
                                 <td class="py-4 px-6">
-                                    <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                    <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" data-name="'.$user->username.'" data-dept="'.$user->deptid.'" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                    <span> | </span>
+                                    <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" data-name="'.$user->username.'" class="btnDeleteThisUser font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
+                                </td>
+                            </tr>
+                        ';
+        }
+
+        echo $output;
+    }
+
+    public function userEdit(Request $request){
+        $userName = ucwords(strtolower($request->userName));
+        $userUsername = $request->userUsername;
+        $userPass = $request->userPass;
+        $userDept = $request->userDept;
+        $thisUserId = $request->thisUserId;
+
+        if($userPass == ''){
+            $request->validate([
+                'userName' => 'required',
+                'userUsername' => 'required',
+                'userDept' => 'required'
+            ]);
+            DB::update('update accounts SET name = ? , username = ? , department = ? WHERE id = ?', [$userName, $userUsername, $userDept, $thisUserId]);
+        }else{
+            $request->validate([
+                'userName' => 'required',
+                'userUsername' => 'required',
+                'userPass' => 'required_with:userPass_confirmation|same:userPass_confirmation',
+                'userDept' => 'required'
+            ]);
+            DB::update('update accounts SET name = ? , username = ? , password = ? , department = ? WHERE id = ?', [$userName, $userUsername, Hash::make($userPass), $userDept, $thisUserId]);
+        }
+        
+        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
+
+        $output = '';
+
+        $x = 1;
+
+        foreach ($users as $user){
+            $output .=  '
+                            <tr class="bg-white border-b">
+                                <td class="py-4 px-6">'.$x++.'</td>
+                                <td class="py-4 px-6">'.$user->name.'</td>
+                                <td class="py-4 px-6">'.$user->username.'</td>
+                                <td class="py-4 px-6">'.$user->department.'</td>
+                                <td class="py-4 px-6">
+                                    <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" data-username="'.$user->username.'" data-dept="'.$user->deptid.'" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
                                     <span> | </span>
                                     <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" class="btnDeleteThisUser font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
                                 </td>
@@ -916,68 +964,35 @@ class SystemController extends Controller
         echo $output;
     }
 
-    // public function deptEdit(Request $request){
-    //     $deptName = $request->deptName;
-    //     $thisDeptId = $request->thisDeptId;
+    public function userDelete(Request $request){
+        $userId = $request->hdnDeleteId;
 
-    //     $request->validate([
-    //         'deptName' => 'required',
-    //     ]);
+        Account::where('id',$userId)->delete();
+        
+        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
 
-    //     DB::update('update departments SET name = ? WHERE id = ?', [$deptName, $thisDeptId]);
+        $output = '';
 
+        $x = 1;
 
-    //     $departments = DB::table('departments')->orderBy('id', 'asc')->get();
+        foreach ($users as $user){
+            $output .=  '
+                            <tr class="bg-white border-b">
+                                <td class="py-4 px-6">'.$x++.'</td>
+                                <td class="py-4 px-6">'.$user->name.'</td>
+                                <td class="py-4 px-6">'.$user->username.'</td>
+                                <td class="py-4 px-6">'.$user->department.'</td>
+                                <td class="py-4 px-6">
+                                    <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" data-username="'.$user->username.'" data-dept="'.$user->deptid.'" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                    <span> | </span>
+                                    <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" class="btnDeleteThisUser font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
+                                </td>
+                            </tr>
+                        ';
+        }
 
-    //     $output = '';
-
-    //     $x = 1;
-
-    //     foreach ($departments as $department){
-    //         $output .=  '
-    //                         <tr class="bg-white border-b">
-    //                             <td class="py-4 px-6">'.$x++.'</td>
-    //                             <td class="py-4 px-6">'.$department->name.'</td>
-    //                             <td class="py-4 px-6">
-    //                                 <a type="button" data-id="'.$department->id.'" data-name="'.$department->name.'" class="btnEditThisDept font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
-    //                                 <span> | </span>
-    //                                 <a type="button" data-id="'.$department->id.'" data-name="'.$department->name.'" class="btnDeleteThisDept font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
-    //                             </td>
-    //                         </tr>
-    //                     ';
-    //     }
-
-    //     echo $output;
-    // }
-
-    // public function deptDelete(Request $request){
-    //     $deptId = $request->hdnDeleteId;
-
-    //     Department::where('id',$deptId)->delete();
-
-
-    //     $departments = DB::table('departments')->orderBy('id', 'asc')->get();
-
-    //     $output = '';
-
-    //     $x = 1;
-
-    //     foreach ($departments as $department){
-    //         $output .=  '
-    //                         <tr class="bg-white border-b">
-    //                             <td class="py-4 px-6">'.$x++.'</td>
-    //                             <td class="py-4 px-6">'.$department->name.'</td>
-    //                             <td class="py-4 px-6">
-    //                                 <a type="button" data-id="'.$department->id.'" data-name="'.$department->name.'" class="btnEditThisDept font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
-    //                                 <span> | </span>
-    //                                 <a type="button" data-id="'.$department->id.'" data-name="'.$department->name.'" class="btnDeleteThisDept font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
-    //                             </td>
-    //                         </tr>
-    //                     ';
-    //     }
-
-    //     echo $output;
-    // }
+        echo $output;
+    }
 
 
 }

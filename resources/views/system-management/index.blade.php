@@ -759,6 +759,12 @@
                     <button id="btnAddUser" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 text-center float-right" type="button" data-modal-toggle="userModal">
                         Add
                     </button>
+                    <button id="btnEditUser" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 text-center h-10 border border-blue-700 float-right" type="button" data-modal-toggle="userModal">
+                        Edit
+                    </button>
+                    <button id="btnDeleteUser" data-modal-toggle="deleteModal" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 text-center h-10 border border-blue-700 float-right" type="button">
+                        Delete
+                    </button>
                 </div>
                 {{-- ---------------------------------- Modal Button End ---------------------------------- --}}
                 <div class="overflow-x-auto relative shadow-md sm:rounded-lg w-full mt-3 border-t-2">
@@ -801,9 +807,9 @@
                                         {{ $account->department }}
                                     </td>
                                     <td class="py-4 px-6">
-                                        <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
+                                        <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" data-username="{{ $account->username }}" data-dept="{{ $account->deptid }}" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
                                         <span> | </span>
-                                        <a href="#" class="font-medium text-red-600 hover:underline">Delete</a>
+                                        <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" class="btnDeleteThisUser font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -1342,52 +1348,58 @@
             });
 
 
-            // $(document).on('click', '.btnEditThisDept', function(){
-            //     var deptId = $(this).data('id');
-            //     var deptName = $(this).data('name');
-            //     $('#deptModalTitle').html('Edit Batch');
-            //     $('#dept-name').val(deptName);
+            $(document).on('click', '.btnEditThisUser', function(){
+                var thisUserId = $(this).data('id');
+                var thisUserName = $(this).data('name');
+                var thisUserUsername = $(this).data('username');
+                var thisUserDept = $(this).data('dept');
 
-            //     $('#btnEditDept').click();
+                $('#deptModalTitle').html('Edit Batch');
+                $('#thisUserId').val(thisUserId);
+                $('#user-fullname').val(thisUserName);
+                $('#user-username').val(thisUserUsername);
+                $('#user-slcDept').val(thisUserDept).change();
+                $('#user-pass').val('');
+                $('#user-cpass').val('');
 
-            //     $('#thisDeptId').val(deptId);
-            //     $('#btnDeptAddEdit').addClass('btnDeptEdit');
-            //     $('#btnDeptAddEdit').removeClass('btnDeptAdd');
-            // });
+                $('#btnEditUser').click();
+                $('#btnUserAddEdit').removeClass('btnUserAdd');
+                $('#btnUserAddEdit').addClass('btnUserEdit');
+            });
 
-            // $(document).on('click', '.btnDeptEdit', function(){
-            //     $.ajax({
-            //         url:"{{ route('system.dept.edit') }}",
-            //         method:"POST",
-            //         data: $('#deptForm').serialize(),
-            //         success:function(result){
-            //             $('#tblDepts').html(result);
-            //         }
-            //     })
-            // });
+            $(document).on('click', '.btnUserEdit', function(){
+                $.ajax({
+                    url:"{{ route('system.user.edit') }}",
+                    method:"POST",
+                    data: $('#userForm').serialize(),
+                    success:function(result){
+                        $('#tblUsers').html(result);
+                    }
+                })
+            });
 
-            // $(document).on('click', '.btnDeleteThisDept', function(){
-            //     var deptId = $(this).data('id');
-            //     var deptName = $(this).data('name');
+            $(document).on('click', '.btnDeleteThisUser', function(){
+                var userId = $(this).data('id');
+                var userName = $(this).data('name');
 
-            //     $('#hdnDeleteId').val(deptId);
-            //     $('#deleteAccept').addClass('btnDeptDelete');
-            //     $('#deleteMessage').html('Are you sure you want to delete this department?');
-            //     $('#deleteName').html(deptName);
+                $('#hdnDeleteId').val(userId);
+                $('#deleteAccept').addClass('btnUserDelete');
+                $('#deleteMessage').html('Are you sure you want to remove this user?');
+                $('#deleteName').html(userName);
                 
-            //     $('#btnDeleteDept').click();
-            // });
+                $('#btnDeleteUser').click();
+            });
 
-            // $(document).on('click', '.btnDeptDelete', function(){
-            //     $.ajax({
-            //         url:"{{ route('system.dept.delete') }}",
-            //         method:"POST",
-            //         data: $('#frmDeleteModal').serialize(),
-            //         success:function(result){
-            //             $('#tblDepts').html(result);
-            //         }
-            //     })
-            // });
+            $(document).on('click', '.btnUserDelete', function(){
+                $.ajax({
+                    url:"{{ route('system.user.delete') }}",
+                    method:"POST",
+                    data: $('#frmDeleteModal').serialize(),
+                    success:function(result){
+                        $('#tblUsers').html(result);
+                    }
+                })
+            });
 
 
 

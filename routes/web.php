@@ -12,6 +12,7 @@ use App\Http\Controllers\TempFileController;
 use App\Models\Account;
 use Illuminate\Notifications\Action;
 use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -99,8 +100,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('user-delete', [SystemController::class, 'userDelete'])->name('system.user.delete');
 
 
-
-
+    
     // DROPZONE
     Route::post('/retrieve', [TempFileController::class, 'store'])->name('temp.store');
     Route::get('/clear', [TempFileController::class, 'clear'])->name('temp.clear');
