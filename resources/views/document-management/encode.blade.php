@@ -209,10 +209,9 @@
                 data: $('#fillupForm').serialize(),
                 success:function(result){
                     $('#c-con').html(result);
+                    $('#file option:selected').addClass('text-green-500');
                 }
             })
-            
-            $('#file option:selected').addClass('text-green-500');
         });
 
         $(document).on('click', '#succNotif', function(){

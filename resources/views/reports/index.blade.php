@@ -12,7 +12,7 @@
         <form id="frmGenerate" method="POST" action="{{ route('report.generate') }}" enctype="multipart/form-data" class="flex h-24 items-center">
             @csrf
             <div class="w-4/5 h-24 grid grid-cols-6 grid-rows-2 gap-x-3 text-center">
-                <div class="col-span-3 self-center">
+                <div class="col-span-2 self-center">
                     <div class="relative">
                         <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                           <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
@@ -20,7 +20,7 @@
                         <input datepicker type="text" name="startDate" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-1.5" placeholder="Select Start Date" value="{{ $dateStart }}">
                     </div>
                 </div>
-                <div class="col-span-3 self-center">
+                <div class="col-span-2 self-center">
                     <div class="relative">
                         <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                           <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
@@ -30,25 +30,48 @@
                 </div>
                 <div class="col-span-2 self-center">
                     <div class="flex w-full">
-                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-28 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
-                            Batch
+                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-32 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
+                            Department
                         </div>
-                        <label for="batch" class="sr-only">Choose a Batch</label>
-                        <select id="batch" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        <label for="batch" class="sr-only">Choose a Department</label>
+                        <select {{ $user->role == '0' ? 'disabled' : '' }} id="department" name="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
                             <option value="0">All</option>
-                            @foreach ($batches as $batch)
-                                <option value="{{ $batch->id }}" @if($batchID == $batch->id) selected @endif>{{ $batch->name }}</option>
+                            @foreach ($depts as $dept)
+                                <option {{ ($user->role == '0') ? (($user->department == $dept->id) ? 'selected' : '') : '' }} value="{{ $dept->id }}">{{ $dept->name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col-span-2 self-center">
                     <div class="flex w-full">
-                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-28 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
+                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-32 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
+                            Batch
+                        </div>
+                        <label for="batch" class="sr-only">Choose a Batch</label>
+                        <select {{ $user->role == '1' ? 'disabled' : '' }} id="batch" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                            @if ($user->role == '1')
+                                <div id="batchOptionForAdmin">
+                                    <option value="0">All</option>
+                                    @foreach ($batches as $batch)
+                                        <option value="{{ $batch->id }}" @if($batchID == $batch->id) selected @endif>{{ $batch->name }}</option>
+                                    @endforeach
+                                </div>
+                            @else
+                                <option value="0">All</option>
+                                @foreach ($sbatches as $sbatch)
+                                    <option value="{{ $sbatch->id }}" @if($batchID == $sbatch->id) selected @endif>{{ $sbatch->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                <div class="col-span-2 self-center">
+                    <div class="flex w-full">
+                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-32 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
                             Doc Type
                         </div>
                         <label for="docType" class="sr-only">Choose a Document Type</label>
-                        <select id="docType" name="docType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        <select disabled id="docType" name="docType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
                             <option value="0">All</option>
                             @foreach ($docTypes as $docType)
                                 <option value="{{ $docType->id }}" @if($docTypeID == $docType->id) selected @endif>{{ $docType->name }}</option>
@@ -58,11 +81,11 @@
                 </div>
                 <div class="col-span-2 self-center">
                     <div class="flex w-full">
-                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-28 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
+                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-32 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
                             User
                         </div>
                         <label for="user" class="sr-only">Choose a Uploader</label>
-                        <select id="user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        <select disabled id="user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
                             <option value="0">All</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}" @if($userID == $user->id) selected @endif>{{ $user->name }}</option>
@@ -141,17 +164,36 @@
         $(document).ready( function () {
             $('#table_id').DataTable();
 
-            // $(document).on('click', '#btnGenerate', function(){
-            //     $.ajax({
-            //         url:"{{ route('report.generate') }}",
-            //         method:"POST",
-            //         data: $('#frmGenerate').serialize(),
-            //         success:function(result){
-            //             $('#tableBody').html(result);
-            //         }
-            //     })
-            //     $('#table_id').DataTable();
-            // });
+            $(document).on('click', '#btnGenerate', function(){
+                $('#user').prop('disabled', false);
+                $('#docType').prop('disabled', false);
+                $('#batch').prop('disabled', false);
+            });
+
+            $('#department').change(function(){
+                var dept = $('#department option:selected').val();
+                    
+                $.ajax({
+                    url: "{{ route('report.get.batch') }}",
+                    method: "POST",
+                    data:{
+                        department: department,
+                        _token: _token
+                    },
+                    success:function(result){
+                        $('#batchOptionForAdmin').html(result);
+                    }
+                })
+            });
+
+
+
+
+
+
+
+
+
         } );
     </script>
 @endsection

@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function(){
     // ==================================== R E P O R T S ==================================== //
 
     Route::get('reports', [ReportController::class, 'index'])->name('report.index');
+    Route::post('report-get-batch', [ReportController::class, 'reportGetBatch'])->name('report.get.batch');
     Route::post('reports', [ReportController::class, 'genReport'])->name('report.generate');
 
     // ========================== S Y S T E M - M A G E M E N T ========================== //
