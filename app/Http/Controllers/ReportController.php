@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -112,7 +113,43 @@ class ReportController extends Controller
     }
 
     public function reportGetBatch(Request $request){
+        $deptID = $request->dept;
+        if($deptID == '0'){
+            $ndeptID = '%';
+        }else{
+            $ndeptID = $deptID;
+        }
 
+        $batches = DB::select('select * from batches where dept_id LIKE ? ORDER BY name asc', [$ndeptID]);
+        $docTypes = DB::select('select * from doc_types where dept_id LIKE ? ORDER BY name asc', [$ndeptID]);
+        $users = DB::select('select * from accounts where department LIKE ? AND id != 1 ORDER BY name asc', [$ndeptID]);
+
+        $bOutput = "<option value='0'>All</option>";
+        $dOutput = "<option value='0'>All</option>";
+        $uOutput = "<option value='0'>All</option>";
+
+        foreach($batches as $batch){
+            $bOutput .= '<option value="'.$batch->id.'">'.$batch->name.'</option>';
+        }
+        
+        foreach($docTypes as $docType){
+            $dOutput .= '<option value="'.$docType->id.'">'.$docType->name.'</option>';
+        }
+        
+        foreach($users as $user){
+            $uOutput .= '<option value="'.$user->id.'">'.$user->name.'</option>';
+        }
+
+        $response = array(
+            'batchOut' => $bOutput,
+            'docTypeOut'  => $dOutput,
+            'userOut'  => $uOutput
+        );
+
+
+
+
+        echo json_encode($response);
     }
 
 

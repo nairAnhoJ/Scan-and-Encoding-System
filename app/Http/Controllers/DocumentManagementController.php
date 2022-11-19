@@ -220,12 +220,12 @@ class DocumentManagementController extends Controller
         $thisFile = DB::table('documents')->where('id', $selFile)->get();
         $forms = DB::table('encode_forms')->where('doctype_id', $thisFile[0]->doctype_id)->orderBy('id', 'asc')->get();
 
-        // foreach($forms as $form){
-        //     $nospace = $form->name_nospace;
-        //     $request->validate([
-        //         $nospace => 'required',
-        //     ]);
-        // }
+        foreach($forms as $form){
+            $nospace = $form->name_nospace;
+            $request->validate([
+                $nospace => 'required',
+            ]);
+        }
 
         if($detailsCount > 0){
             

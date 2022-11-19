@@ -7,6 +7,199 @@
 
 
 @section('content')
+
+    {{-- MODAL BUTTON --}}
+    <button id="btnViewingModal" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="button" data-modal-toggle="viewingModal">
+        Toggle modal
+    </button>
+
+    {{-- MAIN MODAL --}}
+    <div id="viewingModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 p-10 w-screen md:inset-0 h-screen">
+        <div class="relative w-full h-full">
+            <!-- Modal content -->
+            <div class="relative w-full h-full bg-white rounded-lg shadow">
+                <!-- Modal header -->
+                <div class="flex justify-between items-start px-4 py-2 rounded-t border-b">
+                    <h3 class="text-xl font-semibold text-blue-500">
+                        Document
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="viewingModal">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div style="height: calc(100% - 116px);" class="px-6 space-y-6 pb-3 m-0 flex flex-row">
+
+                    {{-- Left Content --}}
+                    <div class="w-2/6 min-h-full">
+                        <div style="border: 1px solid #0284c7;" class="h-full">
+                            <div>
+                                <hr class="border-sky-300 mx-3">
+                                <div id="batchdd" class="w-full">
+                                    @csrf
+                                    <label for="batch" class="text-sky-600 pl-3 block text-sm font-medium">Batch</label>
+                                    <div class="px-3">
+                                        <select id="batch" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1 pl-3">
+                                            <option value="" style="display: none"></option>
+                                            {{-- @foreach ($batchs as $batch)
+                                                <option value="{{$batch->id}}">{{$batch->name}}</option>
+                                            @endforeach --}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="folderdd" class="w-full">
+                                    @csrf
+                                    <label for="folder" class="text-sky-600 pl-3 block text-sm font-medium">Folder</label>
+                                    <div class="px-3">
+                                        <select id="folder" name="folder" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1 pl-3">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="filedd" class="w-full">
+                                    @csrf
+                                    <label for="file" class="text-sky-600 pl-3 block text-sm font-medium">Files</label>
+                                    <div class="px-3">
+                                        <select multiple id="file" name="file" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-1 pl-3">
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr class="mt-3 border-sky-600">
+                            </div>
+                            <form style="height: calc(100% - 260px);" enctype="multipart/form-data" id="fillupForm" class="w-full px-3 overflow-auto">
+                                @csrf
+                                <div id="fillupFormdd">
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    {{-- Right Content --}}
+                    <div style="margin: 0px" class="w-4/6 h-full pl-5">
+                        <div class="h-full w-full">
+                            <embed id="selectedFile" src="documents/13/24/1/111720220639236375d71bebb69.pdf" frameborder="0" type="application/pdf" class="h-full w-full">
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    {{-- <div class="border-b border-gray-200">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#viewContent" role="tablist">
+                            <li class="mr-2" role="presentation">
+                                <button class="inline-block p-4 rounded-t-lg border-b-2" id="viewer-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Viewer</button>
+                            </li>
+                            <li class="mr-2" role="presentation">
+                                <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" id="details-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Details</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="height: calc(100% - 78px);" id="viewContent"> --}}
+                        {{-- Viewer --}}
+                        {{-- <div class="hidden bg-gray-50 rounded-lg h-full w-full" id="profile" role="tabpanel" aria-labelledby="viewer-tab">
+                            <embed id="selectedFile" src="documents/13/24/1/111720220639236375d71bebb69.pdf" frameborder="0" type="application/pdf" class="h-full w-full">
+                        </div> --}}
+                        {{-- Details --}}
+                        {{-- <div class="hidden bg-white rounded-lg h-full w-full overflow-y-scroll" id="dashboard" role="tabpanel" aria-labelledby="details-tab">
+                            <div class="grid gap-6 mb-6 md:grid-cols-3">
+                                <div>
+                                    <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900">Department</label>
+                                    <input readonly type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="John" required>
+                                </div>
+                                <div>
+                                    <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900">Batch Name</label>
+                                    <input readonly type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="Doe" required>
+                                </div>
+                                <div>
+                                    <label for="company" class="block mb-2 text-sm font-medium text-gray-900">Document Type</label>
+                                    <input readonly type="text" id="company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="Flowbite" required>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email867867 address</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 23513address</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 5345address</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email a678678ddress</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Emai2342l address</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 0890address</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 7854675address</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email a523452ddress</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email ad785684dress</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email234563 address</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 64563address</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email ad12412dress</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email a35ddress</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                            <div class="mb-6">
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email a1235ddress</label>
+                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+                            </div> 
+                        </div>
+                    </div> --}}
+                </div>
+                <!-- Modal footer -->
+                <div class="flex items-center px-6 py-3 space-x-2 rounded-b border-t border-gray-200">
+                    <button data-modal-toggle="viewingModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">I accept</button>
+                    <button data-modal-toggle="viewingModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Decline</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="p-5 h-full">
         <h1 class="text-sky-600 text-xl font-bold mb-3 text-center">Documents Report</h1>
         <form id="frmGenerate" method="POST" action="{{ route('report.generate') }}" enctype="multipart/form-data" class="flex h-24 items-center">
@@ -48,9 +241,8 @@
                             Batch
                         </div>
                         <label for="batch" class="sr-only">Choose a Batch</label>
-                        <select {{ $user->role == '1' ? 'disabled' : '' }} id="batch" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        <select id="batch" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
                             @if ($user->role == '1')
-                                <div id="batchOptionForAdmin">
                                     <option value="0">All</option>
                                     @foreach ($batches as $batch)
                                         <option value="{{ $batch->id }}" @if($batchID == $batch->id) selected @endif>{{ $batch->name }}</option>
@@ -71,7 +263,7 @@
                             Doc Type
                         </div>
                         <label for="docType" class="sr-only">Choose a Document Type</label>
-                        <select disabled id="docType" name="docType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        <select id="docType" name="docType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
                             <option value="0">All</option>
                             @foreach ($docTypes as $docType)
                                 <option value="{{ $docType->id }}" @if($docTypeID == $docType->id) selected @endif>{{ $docType->name }}</option>
@@ -85,7 +277,7 @@
                             User
                         </div>
                         <label for="user" class="sr-only">Choose a Uploader</label>
-                        <select disabled id="user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
+                        <select id="user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
                             <option value="0">All</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}" @if($userID == $user->id) selected @endif>{{ $user->name }}</option>
@@ -111,7 +303,7 @@
                 <table id="table_id" class="stripe hover nowrap row-border dt-body-center" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>Action</th>
                             <th>Department</th>
                             <th>Batch</th>
                             <th>Document Type</th>
@@ -131,7 +323,7 @@
                         @if (isset($documents))
                             @foreach ($documents as $document)
                                 <tr>
-                                    <td>{{ $x }}</td>
+                                    <td><a href="#" data-id="{{ $document->id }}" class="btnView text-blue-500 font-bold">View</a></td>
                                     <td>{{ $document->department }}</td>
                                     <td>{{ $document->batch }}</td>
                                     <td>{{ $document->docType }}</td>
@@ -172,18 +364,27 @@
 
             $('#department').change(function(){
                 var dept = $('#department option:selected').val();
+                var _token = $('input[name="_token"]').val();
                     
                 $.ajax({
                     url: "{{ route('report.get.batch') }}",
                     method: "POST",
-                    data:{
-                        department: department,
+                    dataType: 'json',
+                    data: {
+                        dept: dept,
                         _token: _token
                     },
-                    success:function(result){
-                        $('#batchOptionForAdmin').html(result);
+                    success:function(res){
+                        $('#batch').html(res.batchOut);
+                        $('#docType').html(res.docTypeOut);
+                        $('#user').html(res.userOut);
                     }
                 })
+            });
+
+            $('.btnView').click(function(){
+                var docID = $(this).data('id');
+                $('#btnViewingModal').click();
             });
 
 
