@@ -30,8 +30,9 @@ class DocumentManagementController extends Controller
         $temps = TempFile::all();
         $batchs = DB::table('batches')->where('dept_id', $dept)->orderby('name', 'asc')->get();
         $docTypes = DB::table('doc_types')->where('dept_id', $dept)->orderby('name', 'asc')->get();
+        $allTemps = DB::table('temp_files')->where('uploader',$user)->get();
 
-        return view('document-management/upload', compact('tempLast','tempCount','temps','batchs','docTypes'));
+        return view('document-management/upload', compact('tempLast','tempCount','temps','batchs','docTypes', 'allTemps'));
     }
 
     public function uploadStore(Request $request){
@@ -45,11 +46,12 @@ class DocumentManagementController extends Controller
 
 
 
-        $folder = $folderRow->name;
+        $folder = date('mdY');
 
         $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$folder;
         if (!file_exists($dirDoc)) {
             File::makeDirectory($dirDoc);
+            DB::insert('insert into folder_lists (dept_id, batch_id, name) values (?, ?, ?)', [$user->department, $request->batch, $folder]);
         }
 
         $request->validate([
@@ -186,7 +188,7 @@ class DocumentManagementController extends Controller
                     $output .= '
                                 <div class="mt-2">
                                     <label for="'.$form->name.'" class="block text-sm font-medium text-sky-600">'.$form->name.'</label>
-                                    <input type="'.$form->type.'" value="'.$detailVal.'" name="'.$form->name_nospace.'" id="'.$form->name_nospace.'" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <input type="'.$form->type.'" value="'.$detailVal.'" name="'.$form->name_nospace.'" id="'.$form->name_nospace.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 ';
                 }
@@ -200,7 +202,7 @@ class DocumentManagementController extends Controller
                     $output .= '
                                 <div class="mt-2">
                                     <label for="'.$form->name.'" class="block text-sm font-medium text-sky-600">'.$form->name.'</label>
-                                    <input type="'.$form->type.'" name="'.$form->name_nospace.'" id="'.$form->name_nospace.'" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <input type="'.$form->type.'" name="'.$form->name_nospace.'" id="'.$form->name_nospace.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 ';
                 }

@@ -46,19 +46,27 @@
             </div>
             <div style="height: calc(100% - 140px)" class="w-full mt-1 px-10 py-2">
                 <div class="w-full grid grid-cols-2">
-                    <h2 class="text-sky-600 font-medium">Last Retrieved File:</h2>
+                    <h2 class="text-sky-600 font-medium">File/s Retrieved:</h2>
                     {{-- <h2 class="text-sky-600 font-medium">Files: <span class="ml-3">1</span></h2> --}}
                     <h2 class="text-sky-600 font-medium text-right">Total Files: <span class="ml-3">{{ $tempCount }}</span></h2>
                 </div>
                 <div style="height: calc(100% - 30px)" class="border-2">
-                    @if (isset($tempLast->unique_name))
+                    <div class="px-4 py-3">
+                        @if ($allTemps->count() > 0)
+                            @foreach ($allTemps as $allTemp)
+                                <div class="whitespace-nowrap">{{ $allTemp->name }}</div>
+                            @endforeach
+                        @else
+                            <div class="text-center pt-5 text-xl text-red-500">Please upload a file.</div>
+                        @endif
+                    </div>
+                    {{-- @if (isset($tempLast->unique_name))
                         @php
                             $uploaded=true
                         @endphp
                         <iframe src="temporary/{{ $tempLast->unique_name }}" frameborder="0" class="w-full h-full"></iframe>
                     @else
-                        <h1 class="text-center pt-5 text-xl text-red-500">Please upload a file.</h1>
-                    @endif
+                    @endif --}}
                 </div>
                 <div class="pl-3">
                     <button type="button" data-modal-toggle="popup-modal" class="text-red-500 hover:text-red-600 font-semibold disabled:pointer-events-none" {{ isset($tempLast->unique_name) ? '' : 'disabled' }}>CLEAR</button>

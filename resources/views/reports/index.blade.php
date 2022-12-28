@@ -29,49 +29,22 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <div style="height: calc(100% - 116px);" class="px-6 space-y-6 pb-3 m-0 flex flex-row">
+                <div style="height: calc(100% - 116px);" class="px-6 pt-2.5 space-y-6 pb-3 m-0 flex flex-row">
 
                     {{-- Left Content --}}
-                    <div class="w-2/6 min-h-full">
-                        <div style="border: 1px solid #0284c7;" class="h-full">
-                            <div>
-                                <hr class="border-sky-300 mx-3">
-                                <div id="batchdd" class="w-full">
-                                    @csrf
-                                    <label for="batch" class="text-sky-600 pl-3 block text-sm font-medium">Batch</label>
-                                    <div class="px-3">
-                                        <select id="batch" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1 pl-3">
-                                            <option value="" style="display: none"></option>
-                                            {{-- @foreach ($batchs as $batch)
-                                                <option value="{{$batch->id}}">{{$batch->name}}</option>
-                                            @endforeach --}}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div id="folderdd" class="w-full">
-                                    @csrf
-                                    <label for="folder" class="text-sky-600 pl-3 block text-sm font-medium">Folder</label>
-                                    <div class="px-3">
-                                        <select id="folder" name="folder" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1 pl-3">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div id="filedd" class="w-full">
-                                    @csrf
-                                    <label for="file" class="text-sky-600 pl-3 block text-sm font-medium">Files</label>
-                                    <div class="px-3">
-                                        <select multiple id="file" name="file" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-1 pl-3">
-                                        </select>
-                                    </div>
-                                </div>
-                                <hr class="mt-3 border-sky-600">
+                    <div class="w-2/6 min-h-full h-full">
+                        <div style="border: 1px solid #0284c7;" class="h-full p-2 overflow-auto">
+                            <div class="w-full">
+                                <h1><span class="font-semibold">Date Uploaded: </span><span id="viewDateUploaded"></span></h1>
+                                <h1><span class="font-semibold">Department: </span><span id="viewDepartment"></span></h1>
+                                <h1><span class="font-semibold">Batch: </span><span id="viewBatch"></span></h1>
+                                <h1><span class="font-semibold">Document Type: </span><span id="viewDocType"></span></h1>
+                                <h1><span class="font-semibold">Filename: </span><span id="viewFilename"></span></h1>
+                                <h1><span class="font-semibold">Uploader: </span><span id="viewUploader"></span></h1>
                             </div>
-                            <form style="height: calc(100% - 260px);" enctype="multipart/form-data" id="fillupForm" class="w-full px-3 overflow-auto">
-                                @csrf
-                                <div id="fillupFormdd">
-
-                                </div>
-                            </form>
+                            <hr class="my-1">
+                            <div id="fileDetails" class="w-full pb-3 pt-1 leading-4">
+                            </div>
                         </div>
                     </div>
 
@@ -193,8 +166,7 @@
                 </div>
                 <!-- Modal footer -->
                 <div class="flex items-center px-6 py-3 space-x-2 rounded-b border-t border-gray-200">
-                    <button data-modal-toggle="viewingModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">I accept</button>
-                    <button data-modal-toggle="viewingModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Decline</button>
+                    <button data-modal-toggle="viewingModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Close</button>
                 </div>
             </div>
         </div>
@@ -242,18 +214,11 @@
                         </div>
                         <label for="batch" class="sr-only">Choose a Batch</label>
                         <select id="batch" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
-                            @if ($user->role == '1')
-                                    <option value="0">All</option>
-                                    @foreach ($batches as $batch)
-                                        <option value="{{ $batch->id }}" @if($batchID == $batch->id) selected @endif>{{ $batch->name }}</option>
-                                    @endforeach
-                                </div>
-                            @else
                                 <option value="0">All</option>
                                 @foreach ($sbatches as $sbatch)
                                     <option value="{{ $sbatch->id }}" @if($batchID == $sbatch->id) selected @endif>{{ $sbatch->name }}</option>
                                 @endforeach
-                            @endif
+                                </div>
                         </select>
                     </div>
                 </div>
@@ -384,17 +349,29 @@
 
             $('.btnView').click(function(){
                 var docID = $(this).data('id');
-                $('#btnViewingModal').click();
+                var _token = $('input[name="_token"]').val();
+
+                $.ajax({
+                    url: "{{ route('report.view') }}",
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        docID: docID,
+                        _token: _token
+                    },
+                    success:function(res){
+                        $('#viewDateUploaded').html(res.DateUploadedOut);
+                        $('#viewDepartment').html(res.DepartmentOut);
+                        $('#viewBatch').html(res.BatchOut);
+                        $('#viewDocType').html(res.DocTypeOut);
+                        $('#viewFilename').html(res.FilenameOut);
+                        $('#viewUploader').html(res.UploaderOut);
+                        $('#selectedFile').prop('src', res.FileSrcOut);
+                        $('#fileDetails').html(res.fileDetails);
+                        $('#btnViewingModal').click();
+                    }
+                })
             });
-
-
-
-
-
-
-
-
-
         } );
     </script>
 @endsection
