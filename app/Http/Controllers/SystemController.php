@@ -515,32 +515,36 @@ class SystemController extends Controller
 
     public function getforms(Request $request){
         $formType = $request->formType;
+        $output =   '';
+        $y = 1;
 
         $docTypeForms = DB::table('encode_forms')->where('doctype_id', $formType)->orderBy('id', 'asc')->get();
 
         if($docTypeForms->count() > 0){
-            $output =   '';
+
+            for($z = 1; $z <= 15; $z++){
+                $colName1 = 'field'.$z.'_name';
+                $colName3 = 'field'.$z.'_type';
+
+                if($docTypeForms[0]->$colName1 != null){
+                    $output .=  '
+                                    <tr class="bg-white border-b">
+                                        <td class="py-4 px-6">'.$y++.'</td>
+                                        <td class="py-4 px-6">'.$docTypeForms[0]->$colName1.'</td>
+                                        <td class="py-4 px-6">'.strtoupper($docTypeForms[0]->$colName3).'</td>
+                                        <td class="py-4 px-6">
+                                            <a type="button" data-id="'.$docTypeForms[0]->id.'" data-name="'.$docTypeForms[0]->$colName1.'" data-type="'.$docTypeForms[0]->$colName3.'" data-col="'.$z.'" data-modal-toggle="docTypeFormIndexModal" class="btnEditIndex font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                            <span> | </span>
+                                            <a type="button" data-id="'.$docTypeForms[0]->id.'" data-name="'.$docTypeForms[0]->$colName1.'" data-type="'.$docTypeForms[0]->$colName3.'" data-col="'.$z.'" data-modal-toggle="deleteModal" class="btnDeleteIndex font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
+                                        </td>
+                                    </tr>
+                                ';
+                }
+            }
         }else{
             $output =   '
                             <tr class="bg-white border-b">
-                                <td colspan="4" class="py-4 px-6 text-center">No data.</td>
-                            </tr>
-                        ';
-        }
-
-        $x = 1;
-
-        foreach ($docTypeForms as $docTypeForm){
-            $output .=  '
-                            <tr class="bg-white border-b">
-                                <td class="py-4 px-6">'.$x++.'</td>
-                                <td class="py-4 px-6">'.$docTypeForm->name.'</td>
-                                <td class="py-4 px-6">'.strtoupper($docTypeForm->type).'</td>
-                                <td class="py-4 px-6">
-                                    <a type="button" data-id="'.$docTypeForm->id.'" data-name="'.$docTypeForm->name.'" data-type="'.$docTypeForm->type.'" data-modal-toggle="docTypeFormIndexModal" class="btnEditIndex font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
-                                    <span> | </span>
-                                    <a type="button" data-id="'.$docTypeForm->id.'" data-name="'.$docTypeForm->name.'" data-type="'.$docTypeForm->type.'" data-modal-toggle="deleteModal" class="btnDeleteIndex font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
-                                </td>
+                                <td colspan="4" class="py-4 px-6 text-center">No data test.</td>
                             </tr>
                         ';
         }
@@ -552,46 +556,63 @@ class SystemController extends Controller
         $formType = $request->hdnFormType;
         $IndexName = $request->docTypeFormIndexName;
         $IndexType = $request->docTypeFormIndexType;
+        $output = '';
+        $y = 1;
 
         $request->validate([
             'docTypeFormIndexName' => 'required',
             'docTypeFormIndexType' => 'required',
         ]);
 
-        $typeForm = New EncodeForm();
-        $typeForm->doctype_id = $formType;
-        $typeForm->name = strtoupper($IndexName);
-        $typeForm->name_nospace = preg_replace('/[^\p{L}\p{N}\s]/u', '', strtolower(str_replace(' ', '', $IndexName)));
-        $typeForm->type = $IndexType;
-        $typeForm->save();
+        $colVal1 = strtoupper($IndexName);
+        $colVal2 = preg_replace('/[^\p{L}\p{N}\s]/u', '', strtolower(str_replace(' ', '', $IndexName)));
+        $colVal3 = $IndexType;
 
         $docTypeForms = DB::table('encode_forms')->where('doctype_id', $formType)->orderBy('id', 'asc')->get();
 
+        // echo $docTypeForms->count();
+
         if($docTypeForms->count() > 0){
-            $output =   '';
+            for($x = 1; $x <= 15; $x++){
+                $colName1 = 'field'.$x.'_name';
+                $colName2 = 'field'.$x.'_name_nospace';
+                $colName3 = 'field'.$x.'_type';
+
+                if($docTypeForms[0]->$colName1 === null){
+                    DB::table('encode_forms')->where(['doctype_id' => $formType])->update([$colName1 => $colVal1, $colName2 => $colVal2, $colName3 => $colVal3]);
+                    break;
+                }
+            }
+
         }else{
-            $output =   '
-                            <tr class="bg-white border-b">
-                                <td colspan="4" class="py-4 px-6 text-center">No data.</td>
-                            </tr>
-                        ';
+            $typeForm = New EncodeForm();
+            $typeForm->doctype_id = $formType;
+            $typeForm->field1_name = $colVal1;
+            $typeForm->field1_name_nospace = $colVal2;
+            $typeForm->field1_type = $colVal3;
+            $typeForm->save();
         }
+        
+        $docTypeForms = DB::table('encode_forms')->where('doctype_id', $formType)->orderBy('id', 'asc')->get();
 
-        $x = 1;
+        for($z = 1; $z <= 15; $z++){
+            $colName1 = 'field'.$z.'_name';
+            $colName3 = 'field'.$z.'_type';
 
-        foreach ($docTypeForms as $docTypeForm){
-            $output .=  '
-                            <tr class="bg-white border-b">
-                                <td class="py-4 px-6">'.$x++.'</td>
-                                <td class="py-4 px-6">'.$docTypeForm->name.'</td>
-                                <td class="py-4 px-6">'.strtoupper($docTypeForm->type).'</td>
-                                <td class="py-4 px-6">
-                                    <a type="button" data-id="'.$docTypeForm->id.'" data-name="'.$docTypeForm->name.'" data-type="'.$docTypeForm->type.'" data-modal-toggle="docTypeFormIndexModal" class="btnEditIndex font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
-                                    <span> | </span>
-                                    <a type="button" data-id="'.$docTypeForm->id.'" data-name="'.$docTypeForm->name.'" data-type="'.$docTypeForm->type.'" data-modal-toggle="deleteModal" class="btnDeleteIndex font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
-                                </td>
-                            </tr>
-                        ';
+            if($docTypeForms[0]->$colName1 != null){
+                $output .=  '
+                                <tr class="bg-white border-b">
+                                    <td class="py-4 px-6">'.$y++.'</td>
+                                    <td class="py-4 px-6">'.$docTypeForms[0]->$colName1.'</td>
+                                    <td class="py-4 px-6">'.strtoupper($docTypeForms[0]->$colName3).'</td>
+                                    <td class="py-4 px-6">
+                                        <a type="button" data-id="'.$docTypeForms[0]->id.'" data-name="'.$docTypeForms[0]->$colName1.'" data-type="'.$docTypeForms[0]->$colName3.'" data-col="'.$z.'" data-modal-toggle="docTypeFormIndexModal" class="btnEditIndex font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                        <span> | </span>
+                                        <a type="button" data-id="'.$docTypeForms[0]->id.'" data-name="'.$docTypeForms[0]->$colName1.'" data-type="'.$docTypeForms[0]->$colName3.'" data-col="'.$z.'" data-modal-toggle="deleteModal" class="btnDeleteIndex font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
+                                    </td>
+                                </tr>
+                            ';
+            }
         }
 
         echo $output;
@@ -599,36 +620,47 @@ class SystemController extends Controller
 
     public function indexEdit(Request $request){
         $editId = $request->hdnFormId;
-        $formType = $request->hdnFormType;
+        $formCol = $request->hdnFormCol;
         $IndexName = $request->docTypeFormIndexName;
         $IndexType = $request->docTypeFormIndexType;
+        $output = '';
+        $y = 1;
 
         $request->validate([
             'docTypeFormIndexName' => 'required',
             'docTypeFormIndexType' => 'required',
         ]);
 
-        DB::update('UPDATE encode_forms SET name = ? , type = ? WHERE id = ?', [strtoupper($IndexName), $IndexType, $editId]);
+        $colName1 = 'field'.$formCol.'_name';
+        $colName2 = 'field'.$formCol.'_name_nospace';
+        $colName3 = 'field'.$formCol.'_type';
 
-        $docTypeForms = DB::table('encode_forms')->where('doctype_id', $formType)->orderBy('id', 'asc')->get();
+        $colVal1 = strtoupper($IndexName);
+        $colVal2 = preg_replace('/[^\p{L}\p{N}\s]/u', '', strtolower(str_replace(' ', '', $IndexName)));
+        $colVal3 = $IndexType;
 
-        $output = '';
+        DB::table('encode_forms')->where(['id' => $editId])->update([$colName1 => $colVal1, $colName2 => $colVal2, $colName3 => $colVal3]);
 
-        $x = 1;
+        $docTypeForms = DB::table('encode_forms')->where('id', $editId)->orderBy('id', 'asc')->get();
 
-        foreach ($docTypeForms as $docTypeForm){
-            $output .=  '
-                            <tr class="bg-white border-b">
-                                <td class="py-4 px-6">'.$x++.'</td>
-                                <td class="py-4 px-6">'.$docTypeForm->name.'</td>
-                                <td class="py-4 px-6">'.strtoupper($docTypeForm->type).'</td>
-                                <td class="py-4 px-6">
-                                    <a type="button" data-id="'.$docTypeForm->id.'" data-name="'.$docTypeForm->name.'" data-type="'.$docTypeForm->type.'" data-modal-toggle="docTypeFormIndexModal" class="btnEditIndex font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
-                                    <span> | </span>
-                                    <a type="button" data-id="'.$docTypeForm->id.'" data-name="'.$docTypeForm->name.'" data-type="'.$docTypeForm->type.'" data-modal-toggle="deleteModal" class="btnDeleteIndex font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
-                                </td>
-                            </tr>
-                        ';
+        for($z = 1; $z <= 15; $z++){
+            $colName1 = 'field'.$z.'_name';
+            $colName3 = 'field'.$z.'_type';
+
+            if($docTypeForms[0]->$colName1 != null){
+                $output .=  '
+                                <tr class="bg-white border-b">
+                                    <td class="py-4 px-6">'.$y++.'</td>
+                                    <td class="py-4 px-6">'.$docTypeForms[0]->$colName1.'</td>
+                                    <td class="py-4 px-6">'.strtoupper($docTypeForms[0]->$colName3).'</td>
+                                    <td class="py-4 px-6">
+                                        <a type="button" data-id="'.$docTypeForms[0]->id.'" data-name="'.$docTypeForms[0]->$colName1.'" data-type="'.$docTypeForms[0]->$colName3.'" data-col="'.$z.'" data-modal-toggle="docTypeFormIndexModal" class="btnEditIndex font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                        <span> | </span>
+                                        <a type="button" data-id="'.$docTypeForms[0]->id.'" data-name="'.$docTypeForms[0]->$colName1.'" data-type="'.$docTypeForms[0]->$colName3.'" data-col="'.$z.'" data-modal-toggle="deleteModal" class="btnDeleteIndex font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
+                                    </td>
+                                </tr>
+                            ';
+            }
         }
 
         echo $output;
@@ -637,28 +669,37 @@ class SystemController extends Controller
     public function indexDelete(Request $request){
         $deleteId = $request->hdnDeleteId;
         $formType = $request->hdnSelected1;
-
-        EncodeForm::where('id',$deleteId)->delete();
-
-        $docTypeForms = DB::table('encode_forms')->where('doctype_id', $formType)->orderBy('id', 'asc')->get();
+        $IndexCol = $request->hdnCol;
 
         $output = '';
+        $y = 1;
 
-        $x = 1;
+        $colName1 = 'field'.$IndexCol.'_name';
+        $colName2 = 'field'.$IndexCol.'_name_nospace';
+        $colName3 = 'field'.$IndexCol.'_type';
 
-        foreach ($docTypeForms as $docTypeForm){
-            $output .=  '
-                            <tr class="bg-white border-b">
-                                <td class="py-4 px-6">'.$x++.'</td>
-                                <td class="py-4 px-6">'.$docTypeForm->name.'</td>
-                                <td class="py-4 px-6">'.strtoupper($docTypeForm->type).'</td>
-                                <td class="py-4 px-6">
-                                    <a type="button" data-id="'.$docTypeForm->id.'" data-name="'.$docTypeForm->name.'" data-type="'.$docTypeForm->type.'" data-modal-toggle="docTypeFormIndexModal" class="btnEditIndex font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
-                                    <span> | </span>
-                                    <a type="button" data-id="'.$docTypeForm->id.'" data-name="'.$docTypeForm->name.'" data-type="'.$docTypeForm->type.'" data-modal-toggle="deleteModal" class="btnDeleteIndex font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
-                                </td>
-                            </tr>
-                        ';
+        DB::table('encode_forms')->where(['id' => $deleteId])->update([$colName1 => null, $colName2 => null, $colName3 => null]);
+
+        $docTypeForms = DB::table('encode_forms')->where('id', $deleteId)->orderBy('id', 'asc')->get();
+
+        for($z = 1; $z <= 15; $z++){
+            $colName1 = 'field'.$z.'_name';
+            $colName3 = 'field'.$z.'_type';
+
+            if($docTypeForms[0]->$colName1 != null){
+                $output .=  '
+                                <tr class="bg-white border-b">
+                                    <td class="py-4 px-6">'.$y++.'</td>
+                                    <td class="py-4 px-6">'.$docTypeForms[0]->$colName1.'</td>
+                                    <td class="py-4 px-6">'.strtoupper($docTypeForms[0]->$colName3).'</td>
+                                    <td class="py-4 px-6">
+                                        <a type="button" data-id="'.$docTypeForms[0]->id.'" data-name="'.$docTypeForms[0]->$colName1.'" data-type="'.$docTypeForms[0]->$colName3.'" data-col="'.$z.'" data-modal-toggle="docTypeFormIndexModal" class="btnEditIndex font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                        <span> | </span>
+                                        <a type="button" data-id="'.$docTypeForms[0]->id.'" data-name="'.$docTypeForms[0]->$colName1.'" data-type="'.$docTypeForms[0]->$colName3.'" data-col="'.$z.'" data-modal-toggle="deleteModal" class="btnDeleteIndex font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
+                                    </td>
+                                </tr>
+                            ';
+            }
         }
 
         echo $output;

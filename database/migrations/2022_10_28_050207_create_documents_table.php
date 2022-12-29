@@ -20,6 +20,7 @@ return new class extends Migration
             $table->BigInteger('doctype_id');
             $table->string('name');
             $table->string('unique_name');
+            $table->boolean('is_Encoded');
             $table->boolean('is_Checked');
             $table->string('folder');
             $table->string('uploader');

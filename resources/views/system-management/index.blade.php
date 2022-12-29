@@ -23,6 +23,7 @@
                         @csrf
                         <input type="hidden" id="hdnDeleteId" name="hdnDeleteId">
                         <input type="hidden" id="hdnSelected1" name="hdnSelected1">
+                        <input type="hidden" id="hdnCol" name="hdnCol">
                         <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <h3 id="deleteMessage" class="text-lg font-normal text-gray-500"></h3>
                         <h3 id="deleteName" class="mb-8 text-lg font-semibold text-gray-500"></h3>
@@ -379,6 +380,7 @@
                             <div class="p-6">
                                 <input type="hidden" id="hdnFormType" name="hdnFormType">
                                 <input type="hidden" id="hdnFormId" name="hdnFormId">
+                                <input type="hidden" id="hdnFormCol" name="hdnFormCol">
                                 <label for="docType-dept" class="block text-sm font-medium text-gray-900">Department</label>
                                 <h1 id="TypeDeptName" class="mb-2 font-semibold"></h1>
                                     
@@ -386,12 +388,12 @@
                                 <h1 id="TypeDocTypeName" class="mb-2 font-semibold"></h1>
 
                                 <div class="mb-2">
-                                    <label for="docTypeFormIndex-name" class="block mb-2 text-sm font-medium text-gray-900">Index Name</label>
-                                    <input type="text" id="docTypeFormIndex-name" name="docTypeFormIndexName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <label for="docTypeFormIndexName" class="block mb-2 text-sm font-medium text-gray-900">Index Name</label>
+                                    <input type="text" id="docTypeFormIndexName" name="docTypeFormIndexName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="docTypeFormIndex-type" class="block mb-1 text-sm font-medium text-gray-900">Select a Document Type</label>
-                                    <select id="docTypeFormIndex-type" name="docTypeFormIndexType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <label for="docTypeFormIndexType" class="block mb-1 text-sm font-medium text-gray-900">Select a Document Type</label>
+                                    <select id="docTypeFormIndexType" name="docTypeFormIndexType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                         <option value="text">Text</option>
                                         <option value="date">Date</option>
                                     </select>
@@ -1117,21 +1119,22 @@
             });
 
             $(document).on('click', '.btnEditIndex', function(){
-                var editIndexId = $(this).data('id');
-                var editIndexName = $(this).data('name');
-                var editIndexType = $(this).data('type');
-                var selTypeId = $('#formSelectType option:selected').val();
-                var indexSelDeptName = $('#formSelectDept option:selected').html();
-                var indexSelTypeName = $('#formSelectType option:selected').html();
-                
                 $('#docTypeFormIndexModalTitle').html('Edit Index');
-                $('#TypeDeptName').html(indexSelDeptName);
-                $('#TypeDocTypeName').html(indexSelTypeName);
+                var editIndexId = $(this).data('id');
                 $('#hdnFormId').val(editIndexId);
+                var editIndexName = $(this).data('name');
+                $('#docTypeFormIndexName').val(editIndexName);
+                var editIndexType = $(this).data('type');
+                $('#docTypeFormIndexType').val(editIndexType);
+                var editIndexCol = $(this).data('col');
+                $('#hdnFormCol').val(editIndexCol);
+                var indexSelDeptName = $('#formSelectDept option:selected').html();
+                $('#TypeDeptName').html(indexSelDeptName);
+                var indexSelTypeName = $('#formSelectType option:selected').html();
+                $('#TypeDocTypeName').html(indexSelTypeName);
+                var selTypeId = $('#formSelectType option:selected').val();
                 $('#hdnFormType').val(selTypeId);
-                $('#docTypeFormIndex-name').val(editIndexName);
-                $('#docTypeFormIndex-type').val(editIndexType).change();
-                
+
                 $('#btnIndexAddEdit').addClass('btnIndexEdit');
                 $('#btnIndexAddEdit').removeClass('btnIndexAdd');
 
@@ -1150,16 +1153,20 @@
             });
 
             $(document).on('click', '.btnDeleteIndex', function(){
-                var deleteIndexId = $(this).data('id');
-                var deleteIndexName = $(this).data('name');
-                var selTypeId = $('#formSelectType option:selected').val();
-                var indexSelDeptName = $('#formSelectDept option:selected').html();
-                var indexSelTypeName = $('#formSelectType option:selected').html();
-                    
                 $('#deleteMessage').html('Are you sure you want to delete this index?');
-                $('#deleteName').html(deleteIndexName);
+
+                var deleteIndexId = $(this).data('id');
                 $('#hdnDeleteId').val(deleteIndexId);
+
+                var deleteIndexName = $(this).data('name');
+                $('#deleteName').html(deleteIndexName);
+
+                var deleteIndexCol = $(this).data('col');
+                $('#hdnCol').val(deleteIndexCol);
+
+                var selTypeId = $('#formSelectType option:selected').val();
                 $('#hdnSelected1').val(selTypeId);
+
                 $('#btnDeleteType').click();
 
                 $('#deleteAccept').addClass('btnIndexDelete');

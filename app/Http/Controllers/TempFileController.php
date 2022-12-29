@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TempFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -22,9 +23,16 @@ class TempFileController extends Controller
         }
 
         if($files = $request->file('file')){
+            $docID = DB::table('documents')->get()->count() + 1;
+            $docIDLength = 10 - strlen($docID);
+
+            for($x = 1; $x <= $docIDLength; $x++){
+                $docID = "0{$docID}";
+            }
+
             foreach($files as $file){
                 $filename = $file->getClientOriginalName();
-                $nameUnique = date('mdYHis').uniqid().'.'.$file->getClientOriginalExtension();
+                $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
                 $file->move('temporary', $nameUnique);
 
                 $temp = new TempFile();
@@ -32,7 +40,6 @@ class TempFileController extends Controller
                 $temp->unique_name = $nameUnique;
                 $temp->uploader = $user->id;
                 $temp->save();
-
             }
         }
 

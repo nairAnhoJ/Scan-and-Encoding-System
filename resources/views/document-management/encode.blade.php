@@ -194,7 +194,6 @@
                     $('#fillupFormdd').html(result);
                 }
             })
-            // $('#selectedFile').attr('src', '');
         });
 
         $(document).on('click', '#encodeSubmit', function(e){
