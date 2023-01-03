@@ -98,7 +98,7 @@ class ReportController extends Controller
             $ndeptID = $deptID;
         }
 
-        $documents = DB::select('SELECT documents.id, documents.dept_id, departments.name AS department, batches.name AS batch, doc_types.name AS docType, documents.name, documents.is_Checked, documents.created_at, accounts.name AS uploader FROM ((((documents INNER JOIN departments ON documents.dept_id = departments.id) INNER JOIN batches ON documents.batch_id = batches.id) INNER JOIN doc_types ON documents.doctype_id = doc_types.id) INNER JOIN accounts ON documents.uploader = accounts.id) WHERE documents.uploader LIKE ? AND documents.batch_id LIKE ? AND documents.doctype_id LIKE ? AND documents.dept_id LIKE ? AND documents.created_at BETWEEN ? AND ? ORDER BY documents.id DESC', [$nuserID, $nbatchID, $ndocTypeID, $ndeptID, $newDateStart, $newDateEnd]);
+        $documents = DB::select('SELECT documents.id, documents.dept_id, departments.name AS department, batches.name AS batch, doc_types.name AS docType, documents.name, documents.is_Encoded, documents.is_Checked, documents.created_at, accounts.name AS uploader FROM ((((documents INNER JOIN departments ON documents.dept_id = departments.id) INNER JOIN batches ON documents.batch_id = batches.id) INNER JOIN doc_types ON documents.doctype_id = doc_types.id) INNER JOIN accounts ON documents.uploader = accounts.id) WHERE documents.uploader LIKE ? AND documents.batch_id LIKE ? AND documents.doctype_id LIKE ? AND documents.dept_id LIKE ? AND documents.created_at BETWEEN ? AND ? ORDER BY documents.id DESC', [$nuserID, $nbatchID, $ndocTypeID, $ndeptID, $newDateStart, $newDateEnd]);
 
         $docCount = count($documents);
 
@@ -110,10 +110,9 @@ class ReportController extends Controller
         foreach ($documents as $doc){
             $uploadCount++;
             $docId = $doc->id;
-            $fileCount = DB::table('file_details')->where('document_id', $docId)->get()->count();
             $fileDetails  = DB::table('file_details')->where('document_id', $docId)->get();
             array_push($fileDetailsArray, $fileDetails);
-            if($fileCount > 0){
+            if($doc->is_Encoded == 1){
                 $EncodeCount++;
             }
             if($doc->is_Checked == 1){
@@ -121,13 +120,7 @@ class ReportController extends Controller
             }
         }
 
-        if($docCount > 0){
-            $maxArrayCount = count(max($fileDetailsArray));
-        }else{
-            $maxArrayCount = 0;
-        }
-
-        return view('reports/index', compact('user', 'batches', 'sbatches', 'depts', 'docTypes', 'users', 'documents', 'dateStart', 'dateEnd', 'batchID', 'docTypeID', 'userID', 'uploadCount', 'EncodeCount', 'CheckedCount', 'fileDetailsArray', 'maxArrayCount'));
+        return view('reports/index', compact('user', 'batches', 'sbatches', 'depts', 'docTypes', 'users', 'documents', 'dateStart', 'dateEnd', 'batchID', 'docTypeID', 'userID', 'uploadCount', 'EncodeCount', 'CheckedCount', 'fileDetailsArray'));
 
     }
 
@@ -177,32 +170,47 @@ class ReportController extends Controller
 
         $fileDetails = '';
 
-        $detailTitles = DB::table('encode_forms')->where('doctype_id', $doc[0]->doctype_id)->orderBy('id', 'asc')->get();
-        $detailValues = DB::table('file_details')->where('document_id', $doc[0]->id)->orderBy('id', 'asc')->get();
+        $detailTitles = DB::table('encode_forms')->where('doctype_id', $doc[0]->doctype_id)->get();
+        $detailValues = DB::table('file_details')->where('document_id', $doc[0]->id)->get();
 
         $valuesCount = $detailValues->count();
         if($valuesCount > 0){
-            $x = 0;
-            foreach($detailTitles as $detailTitle){
-                if(isset($detailValues[$x]->response)){
-                    if($detailValues[$x]->form_id == $detailTitle->id){
-                        $detailVal = $detailValues[$x]->response;
-                        $x++;
-                    }else{
-                        $detailVal = 'N/A';
-                    }
-                }else{
-                    $detailVal = 'N/A';
+            for($x = 1; $x <= 15; $x++){
+                $colName1 = 'field'.$x.'_name';
+                $colVal = 'field'.$x;
+
+                if($detailTitles[0]->$colName1 != null){
+                    $fileDetails .= '<h1 class="font-semibold my-0">'.$detailTitles[0]->$colName1.'</h1><h1 class="ml-5 mt-0 mb-2">'.$detailValues[0]->$colVal.'</h1>';
                 }
-                $fileDetails .= '
-                                    <h1 class="font-semibold my-0">'.$detailTitle->name.'</h1><h1 class="ml-5 mt-0 mb-2">'.$detailVal.'</h1>
-                                ';
             }
+
+
+
+
+            // $x = 0;
+            // foreach($detailTitles as $detailTitle){
+            //     if(isset($detailValues[$x]->response)){
+            //         if($detailValues[$x]->form_id == $detailTitle->id){
+            //             $detailVal = $detailValues[$x]->response;
+            //             $x++;
+            //         }else{
+            //             $detailVal = 'N/A';
+            //         }
+            //     }else{
+            //         $detailVal = 'N/A';
+            //     }
+            //     $fileDetails .= '
+            //                         <h1 class="font-semibold my-0">'.$detailTitle->name.'</h1><h1 class="ml-5 mt-0 mb-2">'.$detailVal.'</h1>
+            //                     ';
+            // }
         }else{
-            foreach($detailTitles as $detailTitle){
-                $fileDetails .= '
-                                    <h1 class="font-semibold my-0">'.$detailTitle->name.'</h1><h1 class="ml-5 mt-0 mb-2">N/A</h1>
-                                ';
+            for($x = 1; $x <= 15; $x++){
+                $colName1 = 'field'.$x.'_name';
+                $colVal = 'field'.$x;
+
+                if($detailTitles[0]->$colName1 != null){
+                    $fileDetails .= '<h1 class="font-semibold my-0">'.$detailTitles[0]->$colName1.'</h1><h1 class="ml-5 mt-0 mb-2">N/A</h1>';
+                }
             }
         }
 
@@ -215,8 +223,8 @@ class ReportController extends Controller
             'UploaderOut' => $doc[0]->uploader,
             'FileSrcOut' => 'documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name,
             
-            'detailTitle' => $detailTitles,
-            'detailValue' => $detailValues,
+            // 'detailTitle' => $detailTitles,
+            // 'detailValue' => $detailValues,
             'fileDetails' => $fileDetails,
         );
 

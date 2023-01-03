@@ -25,31 +25,14 @@ class HomeController extends Controller
     public function index()
     {
         if(auth()->user()->id == 1){
-            $documents = DB::table('documents')->get();
+            $uploadCount = (DB::table('documents')->get())->count();
+            $EncodeCount = (DB::table('documents')->where('is_Encoded', 1)->get())->count();
+            $CheckedCount = (DB::table('documents')->where('is_Checked', 1)->get())->count();
         }else{
-            $documents = DB::table('documents')->where('dept_id', auth()->user()->department)->get();
+            $uploadCount = (DB::table('documents')->where('dept_id', auth()->user()->department)->get())->count();
+            $EncodeCount = (DB::table('documents')->where('dept_id', auth()->user()->department)->where('is_Encoded', 1)->get())->count();
+            $CheckedCount = (DB::table('documents')->where('dept_id', auth()->user()->department)->where('is_Checked', 1)->get())->count();
         }
-
-        $docCount = count($documents);
-
-        $uploadCount = 0;
-        $EncodeCount = 0;
-        $CheckedCount = 0;
-
-        foreach ($documents as $doc){
-            $uploadCount++;
-            $docId = $doc->id;
-            $fileCount = DB::table('file_details')->where('document_id', $docId)->get()->count();
-            $fileDetails  = DB::table('file_details')->where('document_id', $docId)->get();
-            // array_push($fileDetailsArray, $fileDetails);
-            if($fileCount > 0){
-                $EncodeCount++;
-            }
-            if($doc->is_Checked == 1){
-                $CheckedCount++;
-            }
-        }
-
 
         return view('home', compact('uploadCount', 'EncodeCount', 'CheckedCount'));
     }
