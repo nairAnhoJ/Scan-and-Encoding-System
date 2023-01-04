@@ -341,11 +341,12 @@
                                         @php
                                             $colName = "field{$i}";
                                         @endphp
-                                        @if (isset($fileDetailsArray[$x][0]->$colName))
+                                        <td class="hidden">{{ $document->$colName }}</td>
+                                        {{-- @if (isset($fileDetailsArray[$x][0]->$colName))
                                             <td class="hidden">{{ $fileDetailsArray[$x][0]->$colName }}</td>
                                         @else
                                             <td class="hidden"></td>
-                                        @endif
+                                        @endif --}}
                                     @endfor
                                 </tr>
                                 @php
