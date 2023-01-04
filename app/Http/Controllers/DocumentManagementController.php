@@ -118,7 +118,7 @@ class DocumentManagementController extends Controller
         $output = '<option selected style="display: none"></option>';
 
         foreach($folders as $folder){
-            $output .= '<option value="'.$folder->name.'">'.$folder->name.'</option>';
+            $output .= '<option value="'.$folder->id.'">'.$folder->name.'</option>';
         }
         echo $output;
     }
@@ -132,11 +132,11 @@ class DocumentManagementController extends Controller
         $output = '';
 
         foreach($files as $file){
-            $fileID = $file->id;
+            $is_Encoded = $file->is_Encoded;
 
-            $fileCount = DB::table('file_details')->where('document_id', $fileID)->get()->count();
+            // $fileCount = DB::table('file_details')->where('document_id', $fileID)->get()->count();
 
-            if($fileCount > 0){
+            if($is_Encoded > 0){
                 $textColor = 'text-green-500';
             }else{
                 $textColor = '';
@@ -169,12 +169,24 @@ class DocumentManagementController extends Controller
                     $colVal = 'field'.$x;
 
                     if($forms[0]->$colName1 != null){
-                        $output .= '
-                                    <div class="mt-2">
-                                        <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
-                                        <input type="'.$forms[0]->$colName3.'" value="'.$details[0]->$colVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-                                    ';
+
+                        if($forms[0]->$colName3 == 'date' || $forms[0]->$colName3 == 'DATE'){
+                            $dateVal = date("Y-m-d", strtotime($details[0]->$colVal));
+
+                            $output .= '
+                                        <div class="mt-2">
+                                            <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
+                                            <input type="'.$forms[0]->$colName3.'" value="'.$dateVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        </div>
+                                        ';
+                        }else{
+                            $output .= '
+                                        <div class="mt-2">
+                                            <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
+                                            <input type="'.$forms[0]->$colName3.'" value="'.$details[0]->$colVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        </div>
+                                        ';
+                        }
                     }
                 }
             }else{
@@ -303,7 +315,7 @@ class DocumentManagementController extends Controller
         $output = '<option selected style="display: none"></option>';
 
         foreach($folders as $folder){
-            $output .= '<option value="'.$folder->name.'">'.$folder->name.'</option>';
+            $output .= '<option value="'.$folder->id.'">'.$folder->name.'</option>';
         }
         echo $output;
     }
@@ -350,12 +362,25 @@ class DocumentManagementController extends Controller
                     $colVal = 'field'.$x;
 
                     if($forms[0]->$colName1 != null){
-                        $output .= '
+
+                        if($forms[0]->$colName3 == 'date' || $forms[0]->$colName3 == 'DATE'){
+
+                            $dateVal = date("Y-m-d", strtotime($details[0]->$colVal));
+                            
+                            $output .= '
+                                    <div class="mt-2">
+                                        <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
+                                        <input readonly type="'.$forms[0]->$colName3.'" value="'.$dateVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+                                    ';
+                        }else{
+                            $output .= '
                                     <div class="mt-2">
                                         <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
                                         <input readonly type="'.$forms[0]->$colName3.'" value="'.$details[0]->$colVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                     ';
+                        }
                     }
                 }
             }else{
