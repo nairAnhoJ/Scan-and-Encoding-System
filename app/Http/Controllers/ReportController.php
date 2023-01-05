@@ -58,11 +58,10 @@ class ReportController extends Controller
         // $sbatches = DB::table('batches')->where('dept_id', $user->department)->get();
         $depts = DB::table('departments')->get();
 
-        $dateStart = $request->startDate;
-        $newDateStart = date("Y-m-d", strtotime($dateStart));  
-        $dateEnd = $request->endDate;
-        $nEndDate = $dateEnd.' 23:59:59';
-        $newDateEnd = date("Y-m-d H:i:s", strtotime($nEndDate));  
+        $dateStart = $request->startDate.' 00:00:00.000';
+        $newDateStart = date("Y-m-d H:i:s", strtotime($dateStart));
+        $dateEnd = $request->endDate.' 23:59:59';
+        $newDateEnd = date("Y-m-d H:i:s", strtotime($dateEnd));
         $batchID = $request->batch;
         $docTypeID = $request->docType;
         $userID = $request->user;
@@ -98,7 +97,7 @@ class ReportController extends Controller
             $ndeptID = $deptID;
         }
 
-        $documents = DB::select('SELECT documents.id, documents.dept_id, departments.name AS department, batches.name AS batch, doc_types.name AS docType, documents.name, documents.is_Encoded, documents.is_Checked, documents.created_at, accounts.name AS uploader, file_details.field1, file_details.field2, file_details.field3, file_details.field4, file_details.field5, file_details.field6, file_details.field7, file_details.field8, file_details.field9, file_details.field10, file_details.field11, file_details.field12, file_details.field13, file_details.field14, file_details.field15 FROM (((((documents INNER JOIN departments ON documents.dept_id = departments.id) INNER JOIN batches ON documents.batch_id = batches.id) INNER JOIN doc_types ON documents.doctype_id = doc_types.id) INNER JOIN accounts ON documents.uploader = accounts.id) RIGHT JOIN file_details ON documents.id = file_details.id) WHERE documents.uploader LIKE ? AND documents.batch_id LIKE ? AND documents.doctype_id LIKE ? AND documents.dept_id LIKE ? AND documents.created_at BETWEEN ? AND ? ORDER BY documents.id DESC', [$nuserID, $nbatchID, $ndocTypeID, $ndeptID, $newDateStart, $newDateEnd]);
+        $documents = DB::select('SELECT documents.id, documents.dept_id, departments.name AS department, batches.name AS batch, doc_types.name AS docType, documents.name, documents.is_Encoded, documents.is_Checked, documents.created_at, accounts.name AS uploader, file_details.field1, file_details.field2, file_details.field3, file_details.field4, file_details.field5, file_details.field6, file_details.field7, file_details.field8, file_details.field9, file_details.field10, file_details.field11, file_details.field12, file_details.field13, file_details.field14, file_details.field15 FROM (((((documents INNER JOIN departments ON documents.dept_id = departments.id) INNER JOIN batches ON documents.batch_id = batches.id) INNER JOIN doc_types ON documents.doctype_id = doc_types.id) INNER JOIN accounts ON documents.uploader = accounts.id) RIGHT JOIN file_details ON documents.id = file_details.id) WHERE documents.uploader LIKE ? AND documents.batch_id LIKE ? AND documents.doctype_id LIKE ? AND documents.dept_id LIKE ? AND documents.created_at BETWEEN CONVERT(?, DATETIME) AND CONVERT(?, DATETIME) ORDER BY documents.id DESC', [$nuserID, $nbatchID, $ndocTypeID, $ndeptID, $newDateStart, $newDateEnd]);
 
         $uploadCount = 0;
         $EncodeCount = 0;
