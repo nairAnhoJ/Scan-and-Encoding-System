@@ -32,6 +32,8 @@ class HomeController extends Controller
         $totalEncodeCount = (DB::select('SELECT COUNT(*) AS count FROM documents WHERE is_Encoded = ?', [1]))[0]->count;
         $totalCheckedCount = (DB::select('SELECT COUNT(*) AS count FROM documents WHERE is_Checked = ?', [1]))[0]->count;
 
+
+
         // if(auth()->user()->id == 1){
         //     $uploadCount = count((DB::select("SELECT * FROM documents WHERE created_at >= (LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH) AND created_at <  (LAST_DAY(NOW()) + INTERVAL 1 DAY)")));
         //     $EncodeCount = count((DB::select("SELECT * FROM documents WHERE is_Encoded = 1 AND created_at >= (LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH) AND created_at <  (LAST_DAY(NOW()) + INTERVAL 1 DAY)")));

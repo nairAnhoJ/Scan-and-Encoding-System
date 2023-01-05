@@ -151,7 +151,7 @@ class ReportController extends Controller
 
     public function view(Request $request){
         $docID = $request->docID;
-        $doc = DB::select('SELECT documents.id, documents.dept_id, departments.name AS dept_name, documents.batch_id, batches.name AS batch_name, documents.doctype_id, doc_types.name AS doctype_name, documents.name AS filename, documents.unique_name, documents.folder, accounts.name AS uploader, documents.created_at FROM documents INNER JOIN departments ON documents.dept_id = departments.id INNER JOIN batches ON documents.batch_id = batches.id INNER JOIN doc_types ON documents.doctype_id = doc_types.id INNER JOIN accounts ON documents.uploader = accounts.id WHERE documents.id = ?', [$docID]);
+        $doc = DB::select('SELECT documents.id, documents.dept_id, departments.name AS dept_name, documents.batch_id, batches.name AS batch_name, documents.doctype_id, doc_types.name AS doctype_name, documents.name AS filename, documents.unique_name, folder_lists.name AS folder, accounts.name AS uploader, documents.created_at FROM documents INNER JOIN departments ON documents.dept_id = departments.id INNER JOIN batches ON documents.batch_id = batches.id INNER JOIN doc_types ON documents.doctype_id = doc_types.id INNER JOIN accounts ON documents.uploader = accounts.id INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.id = ?', [$docID]);
 
         $fileDetails = '';
 
@@ -186,7 +186,7 @@ class ReportController extends Controller
             'DocTypeOut' => $doc[0]->doctype_name,
             'FilenameOut' => $doc[0]->filename,
             'UploaderOut' => $doc[0]->uploader,
-            'FileSrcOut' => 'documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name,
+            'FileSrcOut' => 'documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->doctype_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name,
             'fileDetails' => $fileDetails,
         );
 
