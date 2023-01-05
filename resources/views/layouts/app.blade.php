@@ -151,9 +151,6 @@
                                         <li>
                                             <a href={{ route('qc.index') }} class="{{ request()->path()=='quality-check' ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-100' }} block py-2 px-4 text-center">Quality Check</a>
                                         </li>
-                                        {{-- <li>
-                                            <a href={{ route('view.index') }} class="{{ request()->path()=='view' ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-100' }} block py-2 px-4 text-center">View</a>
-                                        </li> --}}
                                     </ul>
                                 </div>
                             </li>
@@ -165,10 +162,6 @@
                                     <a href={{ route('system.index') }} class="{{ request()->path()=='system-management' ? 'bg-blue-700 md:text-blue-700 text-white' : 'text-gray-700' }} md:bg-transparent block py-2 pr-4 pl-3 rounded md:p-0">System Management</a>
                                 </li>
                             @endif
-                            {{-- <li>
-                                <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">/////</a>
-                            </li> --}}
-                            {{-- <hr class="mb-2 md:hidden"> --}}
                             <li>
                                 <a href="#" class="md:hidden block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Signout</a>
                             </li>

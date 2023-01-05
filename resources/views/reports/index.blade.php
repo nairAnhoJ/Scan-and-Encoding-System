@@ -54,115 +54,6 @@
                             <embed id="selectedFile" src="documents/13/24/1/111720220639236375d71bebb69.pdf" frameborder="0" type="application/pdf" class="h-full w-full">
                         </div>
                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    {{-- <div class="border-b border-gray-200">
-                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#viewContent" role="tablist">
-                            <li class="mr-2" role="presentation">
-                                <button class="inline-block p-4 rounded-t-lg border-b-2" id="viewer-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Viewer</button>
-                            </li>
-                            <li class="mr-2" role="presentation">
-                                <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" id="details-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Details</button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div style="height: calc(100% - 78px);" id="viewContent"> --}}
-                        {{-- Viewer --}}
-                        {{-- <div class="hidden bg-gray-50 rounded-lg h-full w-full" id="profile" role="tabpanel" aria-labelledby="viewer-tab">
-                            <embed id="selectedFile" src="documents/13/24/1/111720220639236375d71bebb69.pdf" frameborder="0" type="application/pdf" class="h-full w-full">
-                        </div> --}}
-                        {{-- Details --}}
-                        {{-- <div class="hidden bg-white rounded-lg h-full w-full overflow-y-scroll" id="dashboard" role="tabpanel" aria-labelledby="details-tab">
-                            <div class="grid gap-6 mb-6 md:grid-cols-3">
-                                <div>
-                                    <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900">Department</label>
-                                    <input readonly type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="John" required>
-                                </div>
-                                <div>
-                                    <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900">Batch Name</label>
-                                    <input readonly type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="Doe" required>
-                                </div>
-                                <div>
-                                    <label for="company" class="block mb-2 text-sm font-medium text-gray-900">Document Type</label>
-                                    <input readonly type="text" id="company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="Flowbite" required>
-                                </div>
-                            </div>
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email867867 address</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 23513address</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 5345address</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email a678678ddress</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Emai2342l address</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 0890address</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 7854675address</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email a523452ddress</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email ad785684dress</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email234563 address</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email 64563address</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email ad12412dress</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email a35ddress</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                            <div class="mb-6">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email a1235ddress</label>
-                                <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
-                            </div> 
-                        </div>
-                    </div> --}}
                 </div>
                 <!-- Modal footer -->
                 <div class="flex items-center px-6 py-3 space-x-2 rounded-b border-t border-gray-200">
@@ -342,11 +233,6 @@
                                             $colName = "field{$i}";
                                         @endphp
                                         <td class="hidden">{{ $document->$colName }}</td>
-                                        {{-- @if (isset($fileDetailsArray[$x][0]->$colName))
-                                            <td class="hidden">{{ $fileDetailsArray[$x][0]->$colName }}</td>
-                                        @else
-                                            <td class="hidden"></td>
-                                        @endif --}}
                                     @endfor
                                 </tr>
                                 @php

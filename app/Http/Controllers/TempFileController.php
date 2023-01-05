@@ -23,15 +23,16 @@ class TempFileController extends Controller
         }
 
         if($files = $request->file('file')){
-            $docID = DB::table('documents')->get()->count() + 1;
-            $docIDLength = 10 - strlen($docID);
-
-            for($x = 1; $x <= $docIDLength; $x++){
-                $docID = "0{$docID}";
-            }
+            $docID = DB::table('documents')->get()->count();
 
             foreach($files as $file){
                 $filename = $file->getClientOriginalName();
+                $docID++;
+                $docIDLength = 10 - strlen($docID);
+    
+                for($x = 1; $x <= $docIDLength; $x++){
+                    $docID = "0{$docID}";
+                }
                 $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
                 $file->move('temporary', $nameUnique);
 

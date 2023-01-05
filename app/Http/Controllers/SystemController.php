@@ -25,7 +25,6 @@ class SystemController extends Controller
         $docTypes = DB::table('doc_types')->orderBy('name', 'asc')->get();
         $folders = DB::table('folder_lists')->get();
         $departments = DB::table('departments')->orderBy('name', 'asc')->get();
-        // $accounts = DB::table('accounts')->where('id','!=','1')->get();
         $accounts = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
 
         return view('/system-management/index', compact('batches','docTypes','folders','departments','accounts'))->with('tab', '1');

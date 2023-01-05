@@ -36,16 +36,12 @@ class DocumentManagementController extends Controller
     }
 
     public function uploadStore(Request $request){
-
         $user = auth()->user();
         $userId = auth()->user()->id;
-        $tempLast = TempFile::all()->last();
         $temps = TempFile::all()->where('uploader',$userId);
-        $batchID = $request->batch;
-        $folderRow = DB::table('folder_lists')->where('batch_id', $batchID)->orderBy('id','desc')->take(1)->first();
         $folder = date('mdY');
 
-        $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$folder;
+        $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
         if (!file_exists($dirDoc)) {
             File::makeDirectory($dirDoc,077,true);
             DB::insert('insert into folder_lists (dept_id, batch_id, name) values (?, ?, ?)', [$user->department, $request->batch, $folder]);
@@ -55,6 +51,8 @@ class DocumentManagementController extends Controller
             'batch' => 'required',
             'docType' => 'required',
         ]);
+
+        $folderID = (DB::table('folder_lists')->where('dept_id', $user->department)->where('batch_id', $request->batch)->where('name', $folder)->get())[0]->id;
 
         foreach($temps as $temp){
             // Save to Database
@@ -66,15 +64,21 @@ class DocumentManagementController extends Controller
             $document->unique_name = $temp->unique_name;
             $document->is_Encoded = '0';
             $document->is_Checked = '0';
-            $document->folder = $folder;
+            $document->folder = $folderID;
             $document->uploader = $user->id;
             $document->save();
+
+            $docID = (DB::table('documents')->latest('id')->first())->id;
+            $fileDetails = new FileDetail();
+            $fileDetails->document_id = $docID;
+            $fileDetails->encoder = $userId;
+            $fileDetails->save();
 
             // Move file from temporary to designated folder
             $filename = $temp->unique_name;
             $file = 'temporary/'.$filename;
 
-            File::move(public_path($file), public_path('documents/'.$user->department.'/'.$request->batch.'/'.$folder.'/'.$filename));
+            File::move(public_path($file), public_path('documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename));
         }
 
         // Delete specific rows from temporary table in database
@@ -127,22 +131,20 @@ class DocumentManagementController extends Controller
         $dept = auth()->user()->department;
         $selBatch = $request->batchValue;
         $selFolder = $request->folderValue;
-        $files = DB::table('documents')->where('batch_id', $selBatch)->where('folder', $selFolder)->orderBy('id', 'desc')->get();
+        $files = DB::select('SELECT documents.id, documents.doctype_id, documents.name, documents.unique_name, documents.is_Encoded, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.batch_id = ? AND documents.folder = ? ORDER BY documents.id DESC', [$selBatch, $selFolder]);
 
         $output = '';
 
         foreach($files as $file){
             $is_Encoded = $file->is_Encoded;
-
-            // $fileCount = DB::table('file_details')->where('document_id', $fileID)->get()->count();
-
+            
             if($is_Encoded > 0){
                 $textColor = 'text-green-500';
             }else{
                 $textColor = '';
             }
 
-            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$selFolder.'/'.$file->unique_name.'">'.$file->name.'</option>';
+            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$file->doctype_id.'/'.$file->folder.'/'.$file->unique_name.'">'.$file->name.'</option>';
         }
         echo $output;
     }
@@ -216,22 +218,10 @@ class DocumentManagementController extends Controller
 
     public function encodeStore(Request $request){
         $userId = auth()->user()->id;
-        // $selBatch = $request->selBatch;
         $selFile = $request->selFile;
         $details = DB::table('file_details')->where('document_id', $selFile)->orderBy('id', 'asc')->get();
-        // $detailsCount = $details->count();
         $thisFile = DB::table('documents')->where('id', $selFile)->get();
         $forms = DB::table('encode_forms')->where('doctype_id', $thisFile[0]->doctype_id)->orderBy('id', 'asc')->get();
-
-        // for($x = 1; $x <= 15; $x++){
-        //     $colName = "field{$x}_name_nospace";
-        //     if($forms[0]->$colName != null){
-        //         $inputName = $forms[0]->$colName;
-                // $request->validate([
-                //     $inputName => 'required',
-                // ]);
-        //     }
-        // }
 
         if($details->count() > 0){
             for($x = 1; $x <= 15; $x++){
@@ -239,7 +229,7 @@ class DocumentManagementController extends Controller
                 $col = "field{$x}";
                 if($forms[0]->$colName != null){
                     $inputName = $forms[0]->$colName;
-                    $inputVal = $request->$inputName;
+                    $inputVal = strtoupper($request->$inputName);
                     if($inputVal == ''){
                         $inputVal = null;
                     }
@@ -310,7 +300,6 @@ class DocumentManagementController extends Controller
 
     public function qcGetFolder(Request $request){
         $selBatch = $request->value;
-        // $batchs = Batch::orderby('name', 'asc')->get();
         $folders = DB::table('folder_lists')->where('batch_id', $selBatch)->orderBy('name', 'desc')->get();
         $output = '<option selected style="display: none"></option>';
 
@@ -324,7 +313,7 @@ class DocumentManagementController extends Controller
         $dept = auth()->user()->department;
         $selBatch = $request->batchValue;
         $selFolder = $request->folderValue;
-        $files = DB::table('documents')->where('batch_id', $selBatch)->where('folder', $selFolder)->orderBy('id', 'desc')->get();
+        $files = DB::select('SELECT documents.id, documents.doctype_id, documents.name, documents.unique_name, documents.is_Checked, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.batch_id = ? AND documents.folder = ? ORDER BY documents.id DESC', [$selBatch, $selFolder]);
 
         $output = '';
 
@@ -335,7 +324,7 @@ class DocumentManagementController extends Controller
                 $textColor = '';
             }
 
-            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$selFolder.'/'.$file->unique_name.'">'.$file->name.'</option>';
+            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$file->doctype_id.'/'.$file->folder.'/'.$file->unique_name.'">'.$file->name.'</option>';
         }
         echo $output;
     }
@@ -405,93 +394,6 @@ class DocumentManagementController extends Controller
             ';
 
             echo $output;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // $selBatch = $request->batchValue;
-
-        // if($selBatch == ''){
-        //     $output = '';
-        //     echo $output;
-        // }else{
-        //     $selectedFile = $request->selFile[0];
-        //     // $forms = DB::table('encode_forms')->where('batch_id', $selBatch)->orderBy('id', 'asc')->get();
-        //     $details = DB::table('file_details')->where('document_id', $selectedFile)->orderBy('id', 'asc')->get();
-        //     $document = DB::table('documents')->where('id', $selectedFile)->get();
-        //     $forms = DB::table('encode_forms')->where('doctype_id', $document[0]->doctype_id)->orderBy('id', 'asc')->get();
-        //     $isCheckDoc = $document[0]->is_Checked;
-        //     // echo $details[0];
-
-        //     if($isCheckDoc == 1){
-        //         $ddd = 'disabled';
-        //     }else{
-        //         $ddd = '';
-        //     }
-        //     $detailsCount = $details->count();
-
-        //     if($detailsCount > 0){
-        //         $output = ' <input type="hidden" name="selBatch" value="'.$selBatch.'"></input>
-        //                     <input type="hidden" id="selFileVal" name="selFile" value="'.$selectedFile.'"></input>';
-        //         $x = 0;
-        //         foreach($forms as $form){
-        //             if(isset($details[$x]->response)){
-        //                 if($details[$x]->form_id == $form->id){
-        //                     $detailVal = $details[$x]->response;
-        //                     $x++;
-        //                 }else{
-        //                     $detailVal = '';
-        //                 }
-        //             }else{
-        //                 $detailVal = '';
-        //             }
-        //             $output .= '
-        //                         <div class="mt-2">
-        //                             <label for="'.$form->name.'" class="block text-sm font-medium text-sky-600">'.$form->name.'</label>
-        //                             <input readonly type="'.$form->type.'" value="'.$detailVal.'" name="'.$form->name_nospace.'" id="'.$form->name_nospace.'" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
-        //                         </div>
-        //                         ';
-        //         }
-        //         $output .= '<button '.$ddd.' type="submit" id="qcSubmit" class="disabled:pointer-events-none disabled:opacity-75 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-1.5 mr-2 mb-2 mt-2 focus:outline-none">Check</button>
-        //         ';
-        //     }else{
-        //         $output = ' <input type="hidden" name="selBatch" value="'.$selBatch.'"></input>
-        //                     <input type="hidden" id="selFileVal" name="selFile" value="'.$selectedFile.'"></input>';
-
-        //         foreach($forms as $form){
-        //             $output .= '
-        //                         <div class="mt-2">
-        //                             <label for="'.$form->name.'" class="block text-sm font-medium text-sky-600">'.$form->name.'</label>
-        //                             <input readonly type="'.$form->type.'" name="'.$form->name_nospace.'" id="'.$form->name_nospace.'" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
-        //                         </div>
-        //                         ';
-        //         }
-        //         $output .= '<button type="button" id="qcSubmit" class="disabled:pointer-events-none disabled:opacity-75 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-1.5 mr-2 mb-2 mt-2 focus:outline-none">Check</button>
-        //         ';
-        //     }
-        //     echo $output;
         }
     }
 

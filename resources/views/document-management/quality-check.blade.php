@@ -88,7 +88,6 @@
 
         // FOR BATCH
         $('#batch').change(function(){
-            // document.getElementById("batchdd").submit();
             $('#folder').prop('disabled', false);
             $('#folder').val('');
             var value = $(this).val();
@@ -109,8 +108,8 @@
                 url:"{{ route('qc.getfiles') }}",
                 method:"POST",
                 data:{
-                    batchValue: '',
-                    folderValue: '',
+                    batchValue: '0',
+                    folderValue: '0',
                     _token: _token
                 },
                 success:function(result){
@@ -140,10 +139,10 @@
 
         // FOR FOLDER
         $('#folder').change(function(){
-            // document.getElementById("batchdd").submit();
             $('#file').prop('disabled', false);
             var batchValue = $('#batch').val();
             var folderValue = $(this).val();
+
             var _token = $('input[name="_token"]').val();
             $.ajax({
                 url:"{{ route('qc.getfiles') }}",
@@ -195,7 +194,6 @@
                     $('#fillupFormdd').html(result);
                 }
             })
-            // $('#selectedFile').attr('src', '');
         });
 
         $(document).on('click', '#qcSubmit', function(e){
