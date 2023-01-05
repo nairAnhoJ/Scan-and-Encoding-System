@@ -24,13 +24,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $totalUploadCount = DB::select('SELECT COUNT(*) FROM documents');
-        $totalEncodeCount = DB::select('SELECT COUNT(*) FROM documents WHERE is_Encoded = ?', [1]);
-        $totalCheckedCount = DB::select('SELECT COUNT(*) FROM documents WHERE is_Checked = ?', [1]);
-
         $uploadCount = 0;
         $EncodeCount = 0;
         $CheckedCount = 0;
+
+        $totalUploadCount = (DB::select('SELECT COUNT(*) AS count FROM documents'))[0]->count;
+        $totalEncodeCount = (DB::select('SELECT COUNT(*) AS count FROM documents WHERE is_Encoded = ?', [1]))[0]->count;
+        $totalCheckedCount = (DB::select('SELECT COUNT(*) AS count FROM documents WHERE is_Checked = ?', [1]))[0]->count;
 
         // if(auth()->user()->id == 1){
         //     $uploadCount = count((DB::select("SELECT * FROM documents WHERE created_at >= (LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH) AND created_at <  (LAST_DAY(NOW()) + INTERVAL 1 DAY)")));
