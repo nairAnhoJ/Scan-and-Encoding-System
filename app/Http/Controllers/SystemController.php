@@ -543,7 +543,7 @@ class SystemController extends Controller
         }else{
             $output =   '
                             <tr class="bg-white border-b">
-                                <td colspan="4" class="py-4 px-6 text-center">No data test.</td>
+                                <td colspan="4" class="py-4 px-6 text-center">No Data.</td>
                             </tr>
                         ';
         }
