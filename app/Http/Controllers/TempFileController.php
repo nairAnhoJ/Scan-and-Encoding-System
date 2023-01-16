@@ -21,8 +21,6 @@ class TempFileController extends Controller
             File::makeDirectory($dirTemp);
         }
 
-        dd($request->file('file'));
-
         if($files = $request->file('file')){
             $docID = DB::table('documents')->get()->count();
 
