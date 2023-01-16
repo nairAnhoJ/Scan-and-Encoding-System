@@ -14,13 +14,14 @@ class TempFileController extends Controller
 {
     public function store(Request $request){
 
-        $image = array();
         $user = auth()->user();
 
         $dirTemp = public_path().'/temporary';
         if (!file_exists($dirTemp)) {
             File::makeDirectory($dirTemp);
         }
+
+        dd($request->file('file'));
 
         if($files = $request->file('file')){
             $docID = DB::table('documents')->get()->count();
