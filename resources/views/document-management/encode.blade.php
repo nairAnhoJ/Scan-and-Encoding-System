@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Scan And Encoding System - Encode
+    Encode
 @endsection
 
 @section('content')

@@ -39,7 +39,7 @@
                     <form method="POST" action="{{ route('postlogin') }}">
                         @csrf
                         <div class="text-center font-bold text-3xl">
-                            Scan And Encoding System
+                            Data Management System
                         </div>
     
                         <div class="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5"></div>
