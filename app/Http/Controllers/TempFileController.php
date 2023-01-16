@@ -34,7 +34,7 @@ class TempFileController extends Controller
                     $docID = "0{$docID}";
                 }
                 $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
-                $file->move('temporary', $nameUnique);
+                // $file->move('temporary', $nameUnique);
 
                 $temp = new TempFile();
                 $temp->name = $filename;
