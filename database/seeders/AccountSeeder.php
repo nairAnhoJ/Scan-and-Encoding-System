@@ -22,21 +22,7 @@ class AccountSeeder extends Seeder
                 'password' => '$2y$10$.rnvTPzupHdrYSbmV4wWdeF5Y6cHjo0TvX3asRH3t6UBWrt.M6/GG',
                 'department' => 'ADMIN',
                 'role' => '1',
-            ],
-            [
-                'name' => 'John Arian Malondras',
-                'username' => 'j.malondras',
-                'password' => '$2y$10$MivzruHbhGc0n2HbzQhl3ekKEf9VSF1/jyL075YS78eoy2/rr6tey',
-                'department' => 'IT',
-                'role' => '0',
-            ],
-            [
-                'name' => 'Angus Oinal',
-                'username' => 'a.oinal',
-                'password' => '$2y$10$OslWIrXAu4sOFeYUwzPP.utVit3s0Wwaq.JQ5PAgh25iQ72SM6j52',
-                'department' => 'Audit',
-                'role' => '0',
-            ],
+            ]
         ];
 
         foreach($accounts as $key => $value){
