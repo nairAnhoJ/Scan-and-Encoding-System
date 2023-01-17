@@ -41,7 +41,8 @@ class DocumentManagementController extends Controller
         $temps = TempFile::all()->where('uploader',$userId);
         $folder = date('mdY');
 
-        $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
+        // $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
+        $dirDoc = 'C:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
         if (!file_exists($dirDoc)) {
             File::makeDirectory($dirDoc,077,true);
             DB::insert('insert into folder_lists (dept_id, batch_id, name) values (?, ?, ?)', [$user->department, $request->batch, $folder]);
@@ -76,9 +77,11 @@ class DocumentManagementController extends Controller
 
             // Move file from temporary to designated folder
             $filename = $temp->unique_name;
-            $file = 'temporary/'.$filename;
+            $file = "temporary\\".$filename;
+            $f1 = str_replace('\\', '/', public_path($file));
 
-            File::move(public_path($file), public_path('documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename));
+            // File::move(public_path($file), public_path('C:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename));
+            rename($f1, 'C:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename);
         }
 
         // Delete specific rows from temporary table in database

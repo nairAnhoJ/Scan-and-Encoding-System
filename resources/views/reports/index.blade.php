@@ -51,7 +51,7 @@
                     {{-- Right Content --}}
                     <div style="margin: 0px" class="w-4/6 h-full pl-5">
                         <div class="h-full w-full">
-                            <embed id="selectedFile" src="documents/13/24/1/111720220639236375d71bebb69.pdf" frameborder="0" type="application/pdf" class="h-full w-full">
+                            <embed id="selectedFile" src="" frameborder="0" type="application/pdf" class="h-full w-full">
                         </div>
                     </div>
                 </div>

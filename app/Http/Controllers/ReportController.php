@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class ReportController extends Controller
 {
@@ -179,6 +180,15 @@ class ReportController extends Controller
             }
         }
 
+        $dirView = public_path().'/viewing';
+        if (!file_exists($dirView)) {
+            File::makeDirectory($dirView);
+        }else{
+            File::deleteDirectory($dirView);
+            File::makeDirectory($dirView);
+        }
+        copy('C:/DMS/documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->doctype_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name, public_path().'/viewing/'.$doc[0]->unique_name);
+
         $response = array(
             'DateUploadedOut' => $doc[0]->created_at,
             'DepartmentOut' => $doc[0]->dept_name,
@@ -186,7 +196,7 @@ class ReportController extends Controller
             'DocTypeOut' => $doc[0]->doctype_name,
             'FilenameOut' => $doc[0]->filename,
             'UploaderOut' => $doc[0]->uploader,
-            'FileSrcOut' => 'documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->doctype_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name,
+            'FileSrcOut' => 'viewing/'.$doc[0]->unique_name,
             'fileDetails' => $fileDetails,
         );
 

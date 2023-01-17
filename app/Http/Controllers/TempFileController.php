@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
@@ -21,6 +22,8 @@ class TempFileController extends Controller
             File::makeDirectory($dirTemp);
         }
 
+        // dd($request->file('file')[0]->getPathName());
+
         if($files = $request->file('file')){
             $docID = DB::table('documents')->get()->count();
 
@@ -33,6 +36,8 @@ class TempFileController extends Controller
                 //     $docID = "0{$docID}";
                 // }
                 $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
+                // move_uploaded_file($file->getPathName(), "C:/DMS/".$nameUnique);
+                // Storage::disk('dms')->put($nameUnique, $request->file('file'));
                 $file->move('temporary', $nameUnique);
 
                 $temp = new TempFile();
