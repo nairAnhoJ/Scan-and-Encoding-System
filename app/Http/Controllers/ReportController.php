@@ -188,7 +188,7 @@ class ReportController extends Controller
             File::deleteDirectory($dirView);
             File::makeDirectory($dirView,077,true);
         }
-        copy('C:/DMS/documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->doctype_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name, public_path().'/viewing/'.$userID.'/'.$doc[0]->unique_name);
+        copy('F:/DMS/documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->doctype_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name, public_path().'/viewing/'.$userID.'/'.$doc[0]->unique_name);
 
         for($i=0; $i<45; $i++){
             if(file_exists(public_path().'/viewing/'.$userID.'/'.$doc[0]->unique_name)){

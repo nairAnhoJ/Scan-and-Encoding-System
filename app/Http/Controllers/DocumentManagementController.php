@@ -42,7 +42,7 @@ class DocumentManagementController extends Controller
         $folder = date('mdY');
 
         // $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
-        $dirDoc = 'C:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
+        $dirDoc = 'F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
         if (!file_exists($dirDoc)) {
             File::makeDirectory($dirDoc,077,true);
             DB::insert('insert into folder_lists (dept_id, batch_id, name) values (?, ?, ?)', [$user->department, $request->batch, $folder]);
@@ -80,8 +80,8 @@ class DocumentManagementController extends Controller
             $file = "temporary\\".$filename;
             $f1 = str_replace('\\', '/', public_path($file));
 
-            // File::move(public_path($file), public_path('C:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename));
-            rename($f1, 'C:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename);
+            // File::move(public_path($file), public_path('F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename));
+            rename($f1, 'F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename);
         }
 
         // Delete specific rows from temporary table in database
@@ -176,7 +176,7 @@ class DocumentManagementController extends Controller
     
             $thisDoc = DB::select('SELECT documents.id, documents.dept_id, documents.batch_id, documents.doctype_id, documents.unique_name, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.id = ?', [$selectedFile]);
 
-            copy('C:/DMS/documents/'.$thisDoc[0]->dept_id.'/'.$thisDoc[0]->batch_id.'/'.$thisDoc[0]->doctype_id.'/'.$thisDoc[0]->folder.'/'.$thisDoc[0]->unique_name, public_path().'/encoding/'.$userID.'/'.$thisDoc[0]->unique_name);
+            copy('F:/DMS/documents/'.$thisDoc[0]->dept_id.'/'.$thisDoc[0]->batch_id.'/'.$thisDoc[0]->doctype_id.'/'.$thisDoc[0]->folder.'/'.$thisDoc[0]->unique_name, public_path().'/encoding/'.$userID.'/'.$thisDoc[0]->unique_name);
 
 
             for($i=0; $i<45; $i++){
@@ -380,7 +380,7 @@ class DocumentManagementController extends Controller
     
             $thisDoc = DB::select('SELECT documents.id, documents.dept_id, documents.batch_id, documents.doctype_id, documents.unique_name, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.id = ?', [$selectedFile]);
 
-            copy('C:/DMS/documents/'.$thisDoc[0]->dept_id.'/'.$thisDoc[0]->batch_id.'/'.$thisDoc[0]->doctype_id.'/'.$thisDoc[0]->folder.'/'.$thisDoc[0]->unique_name, public_path().'/checking/'.$userID.'/'.$thisDoc[0]->unique_name);
+            copy('F:/DMS/documents/'.$thisDoc[0]->dept_id.'/'.$thisDoc[0]->batch_id.'/'.$thisDoc[0]->doctype_id.'/'.$thisDoc[0]->folder.'/'.$thisDoc[0]->unique_name, public_path().'/checking/'.$userID.'/'.$thisDoc[0]->unique_name);
 
 
             for($i=0; $i<45; $i++){
