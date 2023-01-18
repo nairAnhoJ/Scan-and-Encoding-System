@@ -116,7 +116,7 @@ class DocumentManagementController extends Controller
         TempFile::where('uploader',$user)->delete();
 
 
-        return view('document-management/encode', compact('batchs'));
+        return view('document-management.encode', compact('batchs'));
     }
 
     public function encodeGetFolder(Request $request){
@@ -132,6 +132,7 @@ class DocumentManagementController extends Controller
 
     public function encodeGetFiles(Request $request){
         $dept = auth()->user()->department;
+        $userID = auth()->user()->id;
         $selBatch = $request->batchValue;
         $selFolder = $request->folderValue;
         $files = DB::select('SELECT documents.id, documents.doctype_id, documents.name, documents.unique_name, documents.is_Encoded, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.batch_id = ? AND documents.folder = ? ORDER BY documents.id DESC', [$selBatch, $selFolder]);
@@ -147,7 +148,8 @@ class DocumentManagementController extends Controller
                 $textColor = '';
             }
 
-            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$file->doctype_id.'/'.$file->folder.'/'.$file->unique_name.'">'.$file->name.'</option>';
+            // $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$file->doctype_id.'/'.$file->folder.'/'.$file->unique_name.'">'.$file->name.'</option>';
+            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="encoding/'.$userID.'/'.$file->unique_name.'">'.$file->name.'</option>';
         }
         echo $output;
     }
@@ -155,11 +157,36 @@ class DocumentManagementController extends Controller
     public function encodeGetForm(Request $request){
         $selBatch = $request->batchValue;
 
+
         if($selBatch == ''){
             $output = '';
             echo $output;
         }else{
+
+            $userID = auth()->user()->id;
             $selectedFile = $request->selFile[0];
+
+            $dirView = public_path().'/encoding/'.$userID;
+            if (!file_exists($dirView)) {
+                File::makeDirectory($dirView,077,true);
+            }else{
+                File::deleteDirectory($dirView);
+                File::makeDirectory($dirView,077,true);
+            }
+    
+            $thisDoc = DB::select('SELECT documents.id, documents.dept_id, documents.batch_id, documents.doctype_id, documents.unique_name, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.id = ?', [$selectedFile]);
+
+            copy('C:/DMS/documents/'.$thisDoc[0]->dept_id.'/'.$thisDoc[0]->batch_id.'/'.$thisDoc[0]->doctype_id.'/'.$thisDoc[0]->folder.'/'.$thisDoc[0]->unique_name, public_path().'/encoding/'.$userID.'/'.$thisDoc[0]->unique_name);
+
+
+            for($i=0; $i<45; $i++){
+                if(file_exists(public_path().'/encoding/'.$userID.'/'.$thisDoc[0]->unique_name)){
+                    break;
+                }
+                sleep(1);
+            }
+
+
             $details = DB::table('file_details')->where('document_id', $selectedFile)->orderBy('id', 'asc')->get();
             $docType = (DB::table('documents')->where('id', $selectedFile)->get())[0]->doctype_id;
             $forms = DB::table('encode_forms')->where('doctype_id', $docType)->orderBy('id', 'asc')->get();
@@ -313,7 +340,7 @@ class DocumentManagementController extends Controller
     }
 
     public function qcGetFiles(Request $request){
-        $dept = auth()->user()->department;
+        $userID = auth()->user()->id;
         $selBatch = $request->batchValue;
         $selFolder = $request->folderValue;
         $files = DB::select('SELECT documents.id, documents.doctype_id, documents.name, documents.unique_name, documents.is_Checked, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.batch_id = ? AND documents.folder = ? ORDER BY documents.id DESC', [$selBatch, $selFolder]);
@@ -327,7 +354,7 @@ class DocumentManagementController extends Controller
                 $textColor = '';
             }
 
-            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$file->doctype_id.'/'.$file->folder.'/'.$file->unique_name.'">'.$file->name.'</option>';
+            $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="checking/'.$userID.'/'.$file->unique_name.'">'.$file->name.'</option>';
         }
         echo $output;
     }
@@ -339,6 +366,31 @@ class DocumentManagementController extends Controller
             $output = '';
             echo $output;
         }else{
+
+            $userID = auth()->user()->id;
+            $selectedFile = $request->selFile[0];
+
+            $dirView = public_path().'/checking/'.$userID;
+            if (!file_exists($dirView)) {
+                File::makeDirectory($dirView,077,true);
+            }else{
+                File::deleteDirectory($dirView);
+                File::makeDirectory($dirView,077,true);
+            }
+    
+            $thisDoc = DB::select('SELECT documents.id, documents.dept_id, documents.batch_id, documents.doctype_id, documents.unique_name, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.id = ?', [$selectedFile]);
+
+            copy('C:/DMS/documents/'.$thisDoc[0]->dept_id.'/'.$thisDoc[0]->batch_id.'/'.$thisDoc[0]->doctype_id.'/'.$thisDoc[0]->folder.'/'.$thisDoc[0]->unique_name, public_path().'/checking/'.$userID.'/'.$thisDoc[0]->unique_name);
+
+
+            for($i=0; $i<45; $i++){
+                if(file_exists(public_path().'/checking/'.$userID.'/'.$thisDoc[0]->unique_name)){
+                    break;
+                }
+                sleep(1);
+            }
+
+
             $selectedFile = $request->selFile[0];
             $details = DB::table('file_details')->where('document_id', $selectedFile)->orderBy('id', 'asc')->get();
             $docType = (DB::table('documents')->where('id', $selectedFile)->get())[0]->doctype_id;

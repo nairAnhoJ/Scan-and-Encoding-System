@@ -175,7 +175,6 @@
         // For FILE
         $('#file').change(function(){
             var filePath = $('option:selected',this).data("filepath");
-            $('#selectedFile').attr('src', filePath);
 
             var selFile = $('#file').val();
             var batchValue = $('#batch').val();
@@ -191,8 +190,10 @@
                 },
                 success:function(result){
                     $('#fillupFormdd').html(result);
+                    $('#selectedFile').attr('src', filePath);
                 }
-            })
+            });
+            
         });
 
         $(document).on('click', '#encodeSubmit', function(e){

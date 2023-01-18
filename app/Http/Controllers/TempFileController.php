@@ -19,7 +19,7 @@ class TempFileController extends Controller
 
         $dirTemp = public_path().'/temporary';
         if (!file_exists($dirTemp)) {
-            File::makeDirectory($dirTemp);
+            File::makeDirectory($dirTemp,077,true);
         }
 
         // dd($request->file('file')[0]->getPathName());
