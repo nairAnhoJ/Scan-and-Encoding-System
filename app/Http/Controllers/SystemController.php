@@ -107,29 +107,29 @@ class SystemController extends Controller
             $batch->name = strtoupper($request->batchName);
             $batch->save();
 
-            $lastBatch = DB::table('batches')->get()->last();
+            // $lastBatch = DB::table('batches')->get()->last();
 
-            $folder = New FolderList();
-            $folder->dept_id = $batchDeptID;
-            $folder->batch_id = $lastBatch->id;
-            $folder->name = '1';
-            $folder->save();
+            // $folder = New FolderList();
+            // $folder->dept_id = $batchDeptID;
+            // $folder->batch_id = $lastBatch->id;
+            // $folder->name = '1';
+            // $folder->save();
 
-            $dirDoc = public_path().'/documents';
-            if (!file_exists($dirDoc)) {
-                File::makeDirectory($dirDoc);
-            }
+            // $dirDoc = public_path().'/documents';
+            // if (!file_exists($dirDoc)) {
+            //     File::makeDirectory($dirDoc);
+            // }
 
-            $dirDept = $dirDoc.'/'.$batchDeptID;
-            if (!file_exists($dirDept)) {
-                File::makeDirectory($dirDept);
-            }
+            // $dirDept = $dirDoc.'/'.$batchDeptID;
+            // if (!file_exists($dirDept)) {
+            //     File::makeDirectory($dirDept);
+            // }
 
-            $dir2 = $dirDept.'/'.$lastBatch->id;
-            File::makeDirectory($dir2);
+            // $dir2 = $dirDept.'/'.$lastBatch->id;
+            // File::makeDirectory($dir2);
 
-            $dir3 = $dir2.'/1';
-            File::makeDirectory($dir3);
+            // $dir3 = $dir2.'/1';
+            // File::makeDirectory($dir3);
 
             $deptBatches = DB::table('batches')->where('dept_id', $batchDeptID)->orderBy('name', 'asc')->get();
 
