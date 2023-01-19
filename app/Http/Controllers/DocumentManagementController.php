@@ -206,7 +206,7 @@ class DocumentManagementController extends Controller
                             if($details[0]->$colVal != null){
                                 $dateVal = date("Y-m-d", strtotime($details[0]->$colVal));
                             }else{
-                                $dateVal = date('Y-m-d');
+                                $dateVal = null;
                             }
 
                             $output .= '
