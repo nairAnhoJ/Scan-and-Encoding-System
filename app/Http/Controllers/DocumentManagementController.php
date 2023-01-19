@@ -212,10 +212,11 @@ class DocumentManagementController extends Controller
                                         </div>
                                         ';
                         }else{
+                            $dateVal = date('Y-m-d');
                             $output .= '
                                         <div class="mt-2">
                                             <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
-                                            <input type="'.$forms[0]->$colName3.'" value="'.$details[0]->$colVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                            <input type="'.$forms[0]->$colName3.'" value="'.$dateVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
                                         </div>
                                         ';
                         }
