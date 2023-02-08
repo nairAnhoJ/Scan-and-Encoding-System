@@ -109,7 +109,7 @@ class DocumentManagementController extends Controller
 
         foreach($temps as $temp){
             $filename = $temp->unique_name;
-            $file = 'temporary/'.$filename;
+            $file = 'temporary/'.$user.'/'.$filename;
             File::delete($file);
         }
 
@@ -323,7 +323,7 @@ class DocumentManagementController extends Controller
 
         foreach($temps as $temp){
             $filename = $temp->unique_name;
-            $file = 'temporary/'.$filename;
+            $file = 'temporary/'.$user.'/'.$filename;
             File::delete($file);
         }
 
@@ -478,35 +478,5 @@ class DocumentManagementController extends Controller
     }
 
     // QC END
-
-
-
-
-
-
-    // VIEW CONTROLLER
-
-    public function viewIndex(){
-
-        $user = auth()->user()->id;
-        $temps = TempFile::all()->where('uploader',$user);
-
-        foreach($temps as $temp){
-            $filename = $temp->unique_name;
-            $file = 'temporary/'.$filename;
-            File::delete($file);
-        }
-
-        TempFile::where('uploader',$user)->delete();
-
-        return view('document-management/view');
-    }
-
-    // VIEW END
-
-
-
-
-    
 
 }

@@ -38,7 +38,7 @@ class TempFileController extends Controller
                 $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
                 // move_uploaded_file($file->getPathName(), "F:/DMS/".$nameUnique);
                 // Storage::disk('dms')->put($nameUnique, $request->file('file'));
-                $file->move('temporary', $nameUnique);
+                $file->move('temporary/'.$user->id, $nameUnique);
 
                 $temp = new TempFile();
                 $temp->name = $filename;
@@ -58,7 +58,7 @@ class TempFileController extends Controller
 
         foreach($temps as $temp){
             $filename = $temp->unique_name;
-            $file = 'temporary/'.$filename;
+            $file = 'temporary/'.$user.'/'.$filename;
             File::delete($file);
         }
 
