@@ -77,7 +77,7 @@ class DocumentManagementController extends Controller
 
             // Move file from temporary to designated folder
             $filename = $temp->unique_name;
-            $file = "temporary\\".$userId.$filename;
+            $file = "temporary\\".$userId.'\\'.$filename;
             $f1 = str_replace('\\', '/', public_path($file));
 
             // File::move(public_path($file), public_path('F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename));
