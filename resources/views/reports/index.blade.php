@@ -221,7 +221,7 @@
                         @if (isset($documents))
                             @foreach ($documents as $document)
                                 <tr>
-                                    <td><a data-id="{{ $document->id }}" class=" {{ ($document->is_Checked == 0 ? 'hidden' : '') }} btnView text-blue-500 font-bold">View</a></td>
+                                    <td><button {{ ($document->is_Checked == 0 ? 'disabled' : '') }} data-id="{{ $document->id }}" class="btnView disabled:text-neutral-500 disabled:pointer-events-none text-blue-500 font-bold">View</button></td>
                                     <td>{{ $document->department }}</td>
                                     <td>{{ $document->batch }}</td>
                                     <td>{{ $document->docType }}</td>
