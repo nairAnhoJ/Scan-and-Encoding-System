@@ -205,6 +205,7 @@
                             <th>Batch</th>
                             <th>Document Type</th>
                             <th>File Name</th>
+                            <th>Status</th>
                             <th>Date Uploaded</th>
                             <th>Uploader</th>
 
@@ -220,11 +221,22 @@
                         @if (isset($documents))
                             @foreach ($documents as $document)
                                 <tr>
-                                    <td><a href="#" data-id="{{ $document->id }}" class="btnView text-blue-500 font-bold">View</a></td>
+                                    <td><a {{ ($document->is_Checked == 0 ? 'disabled' : '') }} href="#" data-id="{{ $document->id }}" class="btnView text-blue-500 font-bold">View</a></td>
                                     <td>{{ $document->department }}</td>
                                     <td>{{ $document->batch }}</td>
                                     <td>{{ $document->docType }}</td>
                                     <td>{{ $document->name }}</td>
+                                    <td>
+                                        {{ 
+                                            if($document->is_Encoded == 1 && $document->is_Checked == 0){
+                                                ENCODED
+                                            }elseif($document->is_Encoded == 1 && $document->is_Checked == 1){
+                                                CHECKED
+                                            }elseif($document->is_Encoded == 0 && $document->is_Checked == 0){
+                                                UPLOADED
+                                            }
+                                        }}
+                                    </td>
                                     <td>{{ $document->created_at }}</td>
                                     <td>{{ $document->uploader }}</td>
                                     
