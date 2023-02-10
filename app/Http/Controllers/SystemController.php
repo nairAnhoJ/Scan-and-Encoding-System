@@ -25,7 +25,7 @@ class SystemController extends Controller
         $docTypes = DB::table('doc_types')->orderBy('name', 'asc')->get();
         $folders = DB::table('folder_lists')->get();
         $departments = DB::table('departments')->orderBy('name', 'asc')->get();
-        $accounts = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
+        $accounts = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department, accounts.viewing_only FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
 
         return view('/system-management/index', compact('batches','docTypes','folders','departments','accounts'))->with('tab', '1');
     }
@@ -911,7 +911,7 @@ class SystemController extends Controller
         $userUsername = $request->userUsername;
         $userPass = $request->userPass;
         $userDept = $request->userDept;
-
+        $viewing_only = $request->input('viewing_only', 0);
 
         $request->validate([
             'userName' => 'required',
@@ -927,22 +927,29 @@ class SystemController extends Controller
         $user->password = Hash::make($userPass);
         $user->department = $userDept;
         $user->role = '0';
+        $user->viewing_only = $viewing_only;
         $user->save();
 
         
-        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
+        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.viewing_only, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
 
         $output = '';
 
         $x = 1;
 
         foreach ($users as $user){
+            if($user->viewing_only == 1){
+                $permission = 'Viewing Only';
+            }else{
+                $permission = 'Full Control';
+            }
             $output .=  '
                             <tr class="bg-white border-b">
                                 <td class="py-4 px-6">'.$x++.'</td>
                                 <td class="py-4 px-6">'.$user->name.'</td>
                                 <td class="py-4 px-6">'.$user->username.'</td>
                                 <td class="py-4 px-6">'.$user->department.'</td>
+                                <td class="py-4 px-6">'.$permission.'</td>
                                 <td class="py-4 px-6">
                                     <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" data-name="'.$user->username.'" data-dept="'.$user->deptid.'" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
                                     <span> | </span>
@@ -961,6 +968,7 @@ class SystemController extends Controller
         $userPass = $request->userPass;
         $userDept = $request->userDept;
         $thisUserId = $request->thisUserId;
+        $viewing_only = $request->input('viewing_only', 0);
 
         if($userPass == ''){
             $request->validate([
@@ -968,7 +976,7 @@ class SystemController extends Controller
                 'userUsername' => 'required',
                 'userDept' => 'required'
             ]);
-            DB::update('update accounts SET name = ? , username = ? , department = ? WHERE id = ?', [$userName, $userUsername, $userDept, $thisUserId]);
+            DB::update('update accounts SET name = ? , username = ? , department = ? , viewing_only = ? WHERE id = ?', [$userName, $userUsername, $userDept, $viewing_only, $thisUserId]);
         }else{
             $request->validate([
                 'userName' => 'required',
@@ -976,22 +984,28 @@ class SystemController extends Controller
                 'userPass' => 'required_with:userPass_confirmation|same:userPass_confirmation',
                 'userDept' => 'required'
             ]);
-            DB::update('update accounts SET name = ? , username = ? , password = ? , department = ? WHERE id = ?', [$userName, $userUsername, Hash::make($userPass), $userDept, $thisUserId]);
+            DB::update('update accounts SET name = ? , username = ? , password = ? , department = ? , viewing_only = ? WHERE id = ?', [$userName, $userUsername, Hash::make($userPass), $userDept, $viewing_only, $thisUserId]);
         }
         
-        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
+        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.viewing_only, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
 
         $output = '';
 
         $x = 1;
 
         foreach ($users as $user){
+            if($user->viewing_only == 1){
+                $permission = 'Viewing Only';
+            }else{
+                $permission = 'Full Control';
+            }
             $output .=  '
                             <tr class="bg-white border-b">
                                 <td class="py-4 px-6">'.$x++.'</td>
                                 <td class="py-4 px-6">'.$user->name.'</td>
                                 <td class="py-4 px-6">'.$user->username.'</td>
                                 <td class="py-4 px-6">'.$user->department.'</td>
+                                <td class="py-4 px-6">'.$permission.'</td>
                                 <td class="py-4 px-6">
                                     <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" data-username="'.$user->username.'" data-dept="'.$user->deptid.'" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
                                     <span> | </span>
@@ -1009,19 +1023,25 @@ class SystemController extends Controller
 
         Account::where('id',$userId)->delete();
         
-        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
+        $users = DB::select('SELECT accounts.id, accounts.name, accounts.username, accounts.viewing_only, accounts.department AS deptid, departments.name AS department FROM (accounts INNER JOIN departments ON accounts.department = departments.id) WHERE accounts.id != "1"');
 
         $output = '';
 
         $x = 1;
 
         foreach ($users as $user){
+            if($user->viewing_only == 1){
+                $permission = 'Viewing Only';
+            }else{
+                $permission = 'Full Control';
+            }
             $output .=  '
                             <tr class="bg-white border-b">
                                 <td class="py-4 px-6">'.$x++.'</td>
                                 <td class="py-4 px-6">'.$user->name.'</td>
                                 <td class="py-4 px-6">'.$user->username.'</td>
                                 <td class="py-4 px-6">'.$user->department.'</td>
+                                <td class="py-4 px-6">'.$permission.'</td>
                                 <td class="py-4 px-6">
                                     <a type="button" data-id="'.$user->id.'" data-name="'.$user->name.'" data-username="'.$user->username.'" data-dept="'.$user->deptid.'" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
                                     <span> | </span>

@@ -500,6 +500,13 @@
                                 <div class="p-6">
                                     <input type="hidden" id="thisUserId" name="thisUserId">
                                     <div class="mb-2">
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" name="viewing_only" id="viewing_only" value="1" class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-0 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                            <span class="ml-3 text-sm font-medium text-gray-900">Viewing Only</span>
+                                        </label>
+                                    </div>
+                                    <div class="mb-2">
                                         <label for="default-input" class="block mb-2 text-sm font-medium text-gray-900">Full Name</label>
                                         <input type="text" id="user-fullname" name="userName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     </div>
@@ -507,7 +514,7 @@
                                         <label for="default-input" class="block mb-2 text-sm font-medium text-gray-900">Username</label>
                                         <input type="text" id="user-username" name="userUsername" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     </div>
-                                    <div class="mb-2">
+                                    <div class="mb-4">
                                         <label for="user-slcDept" class="block mb-1 text-sm font-medium text-gray-900">Select a Department</label>
                                         <select id="user-slcDept" name="userDept" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                             <option style="display: none;" selected>Choose a Department</option>
@@ -564,6 +571,9 @@
                                         Department
                                     </th>
                                     <th scope="col" class="py-3 px-6">
+                                        Permission
+                                    </th>
+                                    <th scope="col" class="py-3 px-6">
                                         Action
                                     </th>
                                 </tr>
@@ -587,7 +597,16 @@
                                             {{ $account->department }}
                                         </td>
                                         <td class="py-4 px-6">
-                                            <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" data-username="{{ $account->username }}" data-dept="{{ $account->deptid }}" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                            @php
+                                                if($account->viewing_only == 1){
+                                                    echo 'Viewing Only';
+                                                }else{
+                                                    echo 'Full Control';
+                                                }
+                                            @endphp
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" data-username="{{ $account->username }}" data-dept="{{ $account->deptid }}" data-viewing_only="{{ $account->viewing_only }}" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
                                             <span> | </span>
                                             <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" class="btnDeleteThisUser font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
                                         </td>
@@ -985,6 +1004,7 @@
                     $('#user-username').val('');
                     $('#user-pass').val('');
                     $('#user-cpass').val('');
+                    $('#viewing_only').prop('checked', false);
                     $('#btnUserAddEdit').addClass('btnUserAdd');
                     $('#btnUserAddEdit').removeClass('btnUserEdit');
                 });
@@ -1006,14 +1026,19 @@
                     var thisUserName = $(this).data('name');
                     var thisUserUsername = $(this).data('username');
                     var thisUserDept = $(this).data('dept');
+                    var thisUserViewingOnly = $(this).data('viewing_only');
 
                     $('#deptModalTitle').html('Edit Batch');
                     $('#thisUserId').val(thisUserId);
                     $('#user-fullname').val(thisUserName);
                     $('#user-username').val(thisUserUsername);
                     $('#user-slcDept').val(thisUserDept).change();
+                    $('#userModalTitle').html('Edit User');
                     $('#user-pass').val('');
                     $('#user-cpass').val('');
+                    if(thisUserViewingOnly == 1){
+                        $('#viewing_only').prop('checked', true);
+                    }
 
                     $('#btnEditUser').click();
                     $('#btnUserAddEdit').removeClass('btnUserAdd');
