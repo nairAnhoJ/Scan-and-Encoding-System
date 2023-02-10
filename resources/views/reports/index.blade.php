@@ -221,7 +221,7 @@
                         @if (isset($documents))
                             @foreach ($documents as $document)
                                 <tr>
-                                    <td><a {{ ($document->is_Checked == 0 ? 'disabled' : '') }} href="#" data-id="{{ $document->id }}" class="btnView text-blue-500 font-bold">View</a></td>
+                                    <td><a data-id="{{ $document->id }}" class=" {{ ($document->is_Checked == 0 ? 'hidden' : '') }} btnView text-blue-500 font-bold">View</a></td>
                                     <td>{{ $document->department }}</td>
                                     <td>{{ $document->batch }}</td>
                                     <td>{{ $document->docType }}</td>
