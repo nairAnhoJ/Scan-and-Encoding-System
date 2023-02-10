@@ -227,15 +227,15 @@
                                     <td>{{ $document->docType }}</td>
                                     <td>{{ $document->name }}</td>
                                     <td>
-                                        {{ 
+                                        @php
                                             if(($document->is_Encoded == 1) && ($document->is_Checked == 0)){
-                                                ENCODED
+                                                echo 'ENCODED';
                                             }elseif(($document->is_Encoded == 1) && ($document->is_Checked == 1)){
-                                                CHECKED
+                                                echo 'CHECKED';
                                             }elseif(($document->is_Encoded == 0) && ($document->is_Checked == 0)){
-                                                UPLOADED
+                                                echo 'UPLOADED';
                                             }
-                                        }}
+                                        @endphp
                                     </td>
                                     <td>{{ $document->created_at }}</td>
                                     <td>{{ $document->uploader }}</td>
