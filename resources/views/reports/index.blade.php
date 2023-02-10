@@ -228,11 +228,11 @@
                                     <td>{{ $document->name }}</td>
                                     <td>
                                         {{ 
-                                            if($document->is_Encoded == 1 && $document->is_Checked == 0){
+                                            if(($document->is_Encoded == 1) && ($document->is_Checked == 0)){
                                                 ENCODED
-                                            }elseif($document->is_Encoded == 1 && $document->is_Checked == 1){
+                                            }elseif(($document->is_Encoded == 1) && ($document->is_Checked == 1)){
                                                 CHECKED
-                                            }elseif($document->is_Encoded == 0 && $document->is_Checked == 0){
+                                            }elseif(($document->is_Encoded == 0) && ($document->is_Checked == 0)){
                                                 UPLOADED
                                             }
                                         }}
