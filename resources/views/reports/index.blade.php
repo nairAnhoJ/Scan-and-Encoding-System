@@ -141,11 +141,11 @@
                 </div>
                 <div class="flex items-center justify-center">
                     <div class="flex items-center mr-4">
-                        <input id="encodedCB" name="encodedCB" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                        <input {{ ($encodedCB == 1) ? 'checked' : '' }} id="encodedCB" name="encodedCB" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
                         <label for="encodedCB" class="ml-1 text-sm font-medium text-gray-900">Encoded</label>
                     </div>
                     <div class="flex items-center mr-4">
-                        <input checked id="checkedCB" name="checkedCB" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                        <input {{ ($checkedCB == 1) ? 'checked' : '' }} id="checkedCB" name="checkedCB" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
                         <label for="checkedCB" class="ml-1 text-sm font-medium text-gray-900">Checked</label>
                     </div>
                 </div>

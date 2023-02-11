@@ -32,12 +32,14 @@ class ReportController extends Controller
         $EncodeCount = '0';
         $CheckedCount = '0';
         $maxArrayCount = '0';
+        $encodedCB = '0';
+        $checkedCB = '1';
         $fileDetailsArray = '';
         $dateStart = date('m-d-Y');
         $dateEnd = date('m-d-Y');
 
 
-        return view('reports/index', compact('user', 'sbatches', 'depts', 'docTypes', 'users', 'docTypeID', 'batchID', 'userID', 'dateStart', 'dateEnd', 'uploadCount', 'EncodeCount', 'CheckedCount', 'fileDetailsArray', 'maxArrayCount'));
+        return view('reports/index', compact('user', 'sbatches', 'depts', 'docTypes', 'users', 'docTypeID', 'batchID', 'userID', 'dateStart', 'dateEnd', 'uploadCount', 'EncodeCount', 'CheckedCount', 'fileDetailsArray', 'maxArrayCount', 'encodedCB', 'checkedCB'));
     }
 
     public function genReport(Request $request){
@@ -64,15 +66,14 @@ class ReportController extends Controller
         
         $status = '';
         if($encodedCB == 0 && $checkedCB == 0){
-            $status = `AND is_Encoded = 0 AND is_Checked = 0`;
+            $status = 'AND is_Encoded=0 AND is_Checked=0';
         }elseif($encodedCB == 0 && $checkedCB == 1){
-            $status = `AND is_Encoded = 1 AND is_Checked = 1`;
+            $status = 'AND is_Encoded=1 AND is_Checked=1';
         }elseif($encodedCB == 1 && $checkedCB == 0){
-            $status = `AND is_Encoded = 1 AND is_Checked = 0`;
+            $status = 'AND is_Encoded=1 AND is_Checked=0';
         }elseif($encodedCB == 1 && $checkedCB == 1){
-            $status = ``;
+            $status = '';
         }
-        
 
         if($user->id == 1){
             $users = DB::table('accounts')->where('id', '!=', '1')->get();
@@ -121,7 +122,7 @@ class ReportController extends Controller
             }
         }
 
-        return view('reports/index', compact('user', 'batches', 'sbatches', 'depts', 'docTypes', 'users', 'documents', 'dateStart', 'dateEnd', 'batchID', 'docTypeID', 'userID', 'uploadCount', 'EncodeCount', 'CheckedCount'));
+        return view('reports/index', compact('user', 'batches', 'sbatches', 'depts', 'docTypes', 'users', 'documents', 'dateStart', 'dateEnd', 'batchID', 'docTypeID', 'userID', 'uploadCount', 'EncodeCount', 'CheckedCount', 'encodedCB', 'checkedCB'));
 
     }
 
@@ -156,7 +157,7 @@ class ReportController extends Controller
         $response = array(
             'batchOut' => $bOutput,
             'docTypeOut'  => $dOutput,
-            'userOut'  => $uOutput
+            'userOut'  => $uOutput,
         );
 
 
