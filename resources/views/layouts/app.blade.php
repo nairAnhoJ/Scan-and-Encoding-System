@@ -157,7 +157,7 @@
                                     </li>
                                 @endif
                                 <li>
-                                    <a href={{ route('report.index') }} class="{{ request()->path()=='reports' ? 'bg-blue-700 md:text-blue-700 text-white' : 'text-gray-700' }} md:bg-transparent block py-2 pr-4 pl-3 rounded md:p-0">Reports</a>
+                                    <a href={{ route('report.index') }} class="{{ request()->path()=='reports' ? 'bg-blue-700 md:text-blue-700 text-white' : 'text-gray-700' }} md:bg-transparent block py-2 pr-4 pl-3 rounded md:p-0">Viewing</a>
                                 </li>
                                 @if (auth()->user()->role == '1')
                                     <li>

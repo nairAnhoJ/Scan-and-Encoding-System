@@ -105,7 +105,7 @@
 
 
     <div class="p-5 h-full">
-        <h1 class="text-sky-600 text-xl font-bold mb-3 text-center">Documents Report</h1>
+        <h1 class="text-sky-600 text-xl font-bold mb-3 text-center">Documents Viewing</h1>
         <form id="frmGenerate" method="POST" action="{{ route('report.generate') }}" enctype="multipart/form-data" class="flex h-24 items-center">
             @csrf
             <div class="w-full h-24 grid grid-cols-4 grid-rows-2 gap-x-3 text-center">
