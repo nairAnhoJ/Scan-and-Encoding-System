@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Reports
+    Document Viewing
 @endsection
 
 
