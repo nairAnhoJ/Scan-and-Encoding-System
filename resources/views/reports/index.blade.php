@@ -200,6 +200,7 @@
         <div class="flex flex-row-reverse">
             <div class="w-2/5">
                 <form method="GET" action="" id="searchForm" class="w-full">
+                    @csrf
                     <label for="searchInput" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -419,7 +420,6 @@
 
             jQuery(document).on( "click", ".viewButton", function(){
                 var docID = $(this).data('id');
-                alert(docID);
                 var _token = $('input[name="_token"]').val();
 
                 $.ajax({
@@ -431,15 +431,14 @@
                         _token: _token
                     },
                     success:function(res){
-                        // alert(res.id);
-                        // $('#viewDateUploaded').html(res.DateUploadedOut);
-                        // $('#viewDepartment').html(res.DepartmentOut);
-                        // $('#viewBatch').html(res.BatchOut);
-                        // $('#viewDocType').html(res.DocTypeOut);
-                        // $('#viewFilename').html(res.FilenameOut);
-                        // $('#viewUploader').html(res.UploaderOut);
-                        // $('#selectedFile').prop('src', res.FileSrcOut);
-                        // $('#fileDetails').html(res.fileDetails);
+                        $('#viewDateUploaded').html(res.DateUploadedOut);
+                        $('#viewDepartment').html(res.DepartmentOut);
+                        $('#viewBatch').html(res.BatchOut);
+                        $('#viewDocType').html(res.DocTypeOut);
+                        $('#viewFilename').html(res.FilenameOut);
+                        $('#viewUploader').html(res.UploaderOut);
+                        $('#selectedFile').prop('src', res.FileSrcOut);
+                        $('#fileDetails').html(res.fileDetails);
                         $('#btnViewingModal').click();
                     }
                 })
