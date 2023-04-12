@@ -90,10 +90,6 @@ class ReportController extends Controller
     }
 
     public function search($page, $search){
-        $currentUrl = url()->current();
-        $currentPath = request()->path();
-        $currentUrlWithoutQuery = url('/reports');
-        dd($currentUrlWithoutQuery);
 
         $documents = DB::table('file_details')
             ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
