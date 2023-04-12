@@ -340,8 +340,8 @@ class ReportController extends Controller
         //     sleep(1);
         // }
 
-        $response = array(
-            'id' => $docID,
+        // $response = array(
+            // 'id' => $docID,
             // 'DateUploadedOut' => $doc[0]->created_at,
             // 'DepartmentOut' => $doc[0]->dept_name,
             // 'BatchOut' => $doc[0]->batch_name,
@@ -350,8 +350,8 @@ class ReportController extends Controller
             // 'UploaderOut' => $doc[0]->uploader,
             // 'FileSrcOut' => 'viewing/'.$userID.'/'.$doc[0]->unique_name,
             // 'fileDetails' => $fileDetails,
-        );
+        // );
 
-        echo json_encode($response);
+        // echo json_encode($response);
     }
 }

@@ -431,7 +431,7 @@
                         _token: _token
                     },
                     success:function(res){
-                        alert(res.id);
+                        // alert(res.id);
                         // $('#viewDateUploaded').html(res.DateUploadedOut);
                         // $('#viewDepartment').html(res.DepartmentOut);
                         // $('#viewBatch').html(res.BatchOut);
