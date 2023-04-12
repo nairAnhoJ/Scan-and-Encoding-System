@@ -353,7 +353,7 @@ class ReportController extends Controller
             'DocTypeOut' => $doc[0]->doctype_name,
             'FilenameOut' => $doc[0]->filename,
             'UploaderOut' => $doc[0]->uploader,
-            'FileSrcOut' => url('/reports').'/viewing/'.$userID.'/'.$doc[0]->unique_name,
+            'FileSrcOut' => 'viewing/'.$userID.'/'.$doc[0]->unique_name,
             'fileDetails' => $fileDetails,
         );
 
