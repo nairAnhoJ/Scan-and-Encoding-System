@@ -420,29 +420,29 @@
             jQuery(document).on( "click", ".viewButton", function(){
                 var docID = $(this).data('id');
                 alert(docID);
-                // var _token = $('input[name="_token"]').val();
+                var _token = $('input[name="_token"]').val();
 
-                // $.ajax({
-                //     url: "{{ route('report.view') }}",
-                //     method: "POST",
-                //     dataType: 'json',
-                //     data: {
-                //         docID: docID,
-                //         _token: _token
-                //     },
-                //     success:function(res){
-                //         alert(res.id);
-                //         $('#viewDateUploaded').html(res.DateUploadedOut);
-                //         $('#viewDepartment').html(res.DepartmentOut);
-                //         $('#viewBatch').html(res.BatchOut);
-                //         $('#viewDocType').html(res.DocTypeOut);
-                //         $('#viewFilename').html(res.FilenameOut);
-                //         $('#viewUploader').html(res.UploaderOut);
-                //         $('#selectedFile').prop('src', res.FileSrcOut);
-                //         $('#fileDetails').html(res.fileDetails);
-                //         $('#btnViewingModal').click();
-                //     }
-                // })
+                $.ajax({
+                    url: "{{ route('report.view') }}",
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        docID: docID,
+                        _token: _token
+                    },
+                    success:function(res){
+                        alert(res.id);
+                        // $('#viewDateUploaded').html(res.DateUploadedOut);
+                        // $('#viewDepartment').html(res.DepartmentOut);
+                        // $('#viewBatch').html(res.BatchOut);
+                        // $('#viewDocType').html(res.DocTypeOut);
+                        // $('#viewFilename').html(res.FilenameOut);
+                        // $('#viewUploader').html(res.UploaderOut);
+                        // $('#selectedFile').prop('src', res.FileSrcOut);
+                        // $('#fileDetails').html(res.fileDetails);
+                        $('#btnViewingModal').click();
+                    }
+                })
             });
             // $('#table_id').DataTable();
 

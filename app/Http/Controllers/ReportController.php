@@ -295,50 +295,50 @@ class ReportController extends Controller
 
     public function view(Request $request){
         $docID = $request->docID;
-        $userID = auth()->user()->id;
-        $doc = DB::select('SELECT documents.id, documents.dept_id, departments.name AS dept_name, documents.batch_id, batches.name AS batch_name, documents.doctype_id, doc_types.name AS doctype_name, documents.name AS filename, documents.unique_name, folder_lists.name AS folder, accounts.name AS uploader, documents.created_at FROM documents INNER JOIN departments ON documents.dept_id = departments.id INNER JOIN batches ON documents.batch_id = batches.id INNER JOIN doc_types ON documents.doctype_id = doc_types.id INNER JOIN accounts ON documents.uploader = accounts.id INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.id = ?', [$docID]);
+        // $userID = auth()->user()->id;
+        // $doc = DB::select('SELECT documents.id, documents.dept_id, departments.name AS dept_name, documents.batch_id, batches.name AS batch_name, documents.doctype_id, doc_types.name AS doctype_name, documents.name AS filename, documents.unique_name, folder_lists.name AS folder, accounts.name AS uploader, documents.created_at FROM documents INNER JOIN departments ON documents.dept_id = departments.id INNER JOIN batches ON documents.batch_id = batches.id INNER JOIN doc_types ON documents.doctype_id = doc_types.id INNER JOIN accounts ON documents.uploader = accounts.id INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.id = ?', [$docID]);
 
-        $fileDetails = '';
+        // $fileDetails = '';
 
-        $detailTitles = DB::table('encode_forms')->where('doctype_id', $doc[0]->doctype_id)->get();
-        $detailValues = DB::table('file_details')->where('document_id', $doc[0]->id)->get();
+        // $detailTitles = DB::table('encode_forms')->where('doctype_id', $doc[0]->doctype_id)->get();
+        // $detailValues = DB::table('file_details')->where('document_id', $doc[0]->id)->get();
 
-        $valuesCount = $detailValues->count();
-        if($valuesCount > 0){
-            for($x = 1; $x <= 15; $x++){
-                $colName1 = 'field'.$x.'_name';
-                $colVal = 'field'.$x;
+        // $valuesCount = $detailValues->count();
+        // if($valuesCount > 0){
+        //     for($x = 1; $x <= 15; $x++){
+        //         $colName1 = 'field'.$x.'_name';
+        //         $colVal = 'field'.$x;
 
-                if($detailTitles[0]->$colName1 != null){
-                    $fileDetails .= '<h1 class="font-semibold my-0">'.$detailTitles[0]->$colName1.'</h1><h1 class="ml-5 mt-0 mb-2">'.$detailValues[0]->$colVal.'</h1>';
-                }
-            }
-        }else{
-            for($x = 1; $x <= 15; $x++){
-                $colName1 = 'field'.$x.'_name';
-                $colVal = 'field'.$x;
+        //         if($detailTitles[0]->$colName1 != null){
+        //             $fileDetails .= '<h1 class="font-semibold my-0">'.$detailTitles[0]->$colName1.'</h1><h1 class="ml-5 mt-0 mb-2">'.$detailValues[0]->$colVal.'</h1>';
+        //         }
+        //     }
+        // }else{
+        //     for($x = 1; $x <= 15; $x++){
+        //         $colName1 = 'field'.$x.'_name';
+        //         $colVal = 'field'.$x;
 
-                if($detailTitles[0]->$colName1 != null){
-                    $fileDetails .= '<h1 class="font-semibold my-0">'.$detailTitles[0]->$colName1.'</h1><h1 class="ml-5 mt-0 mb-2">N/A</h1>';
-                }
-            }
-        }
+        //         if($detailTitles[0]->$colName1 != null){
+        //             $fileDetails .= '<h1 class="font-semibold my-0">'.$detailTitles[0]->$colName1.'</h1><h1 class="ml-5 mt-0 mb-2">N/A</h1>';
+        //         }
+        //     }
+        // }
 
-        $dirView = public_path().'/viewing/'.$userID;
-        if (!file_exists($dirView)) {
-            File::makeDirectory($dirView,077,true);
-        }else{
-            File::deleteDirectory($dirView);
-            File::makeDirectory($dirView,077,true);
-        }
-        copy('F:/DMS/documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->doctype_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name, public_path().'/viewing/'.$userID.'/'.$doc[0]->unique_name);
+        // $dirView = public_path().'/viewing/'.$userID;
+        // if (!file_exists($dirView)) {
+        //     File::makeDirectory($dirView,077,true);
+        // }else{
+        //     File::deleteDirectory($dirView);
+        //     File::makeDirectory($dirView,077,true);
+        // }
+        // copy('F:/DMS/documents/'.$doc[0]->dept_id.'/'.$doc[0]->batch_id.'/'.$doc[0]->doctype_id.'/'.$doc[0]->folder.'/'.$doc[0]->unique_name, public_path().'/viewing/'.$userID.'/'.$doc[0]->unique_name);
 
-        for($i=0; $i<45; $i++){
-            if(file_exists(public_path().'/viewing/'.$userID.'/'.$doc[0]->unique_name)){
-                break;
-            }
-            sleep(1);
-        }
+        // for($i=0; $i<45; $i++){
+        //     if(file_exists(public_path().'/viewing/'.$userID.'/'.$doc[0]->unique_name)){
+        //         break;
+        //     }
+        //     sleep(1);
+        // }
 
         $response = array(
             'id' => $docID,
