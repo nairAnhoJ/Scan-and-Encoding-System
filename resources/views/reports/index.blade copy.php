@@ -63,6 +63,7 @@
         </div>
     </div>
 
+
     <div id="loadingOverlay" class="inset-0 bg-white fixed flex w-full h-full items-center justify-center duration-300 transition-opacity" style="z-index: 6000">
         <div class="flex-col">
           <div class="w-24 h-24">
@@ -105,7 +106,7 @@
 
     <div class="p-5 h-full">
         <h1 class="text-sky-600 text-xl font-bold mb-3 text-center">Documents Viewing</h1>
-        {{-- <form id="frmGenerate" method="POST" action="{{ route('report.generate') }}" enctype="multipart/form-data" class="flex h-24 items-center">
+        <form id="frmGenerate" method="POST" action="{{ route('report.generate') }}" enctype="multipart/form-data" class="flex h-24 items-center">
             @csrf
             <div class="w-full h-24 grid grid-cols-4 grid-rows-2 gap-x-3 text-center">
                 <div class="self-center">
@@ -194,26 +195,10 @@
                     <button type="submit" id="btnGenerate" class="self-center h-8 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-px focus:outline-none">Generate</button>
                 </div>
             </div>
-        </form> --}}
-
-
-        <div class="flex flex-row-reverse">
-            <div class="w-2/5">
-                <form method="GET" action="" id="searchForm" class="w-full">
-                    <label for="searchInput" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </div>
-                        <input type="search" id="searchInput" class="block z-10 w-full px-4 py-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="SEARCH" value="{{ $search }}" autocomplete="off">
-                        <button id="clearButton" type="button" class=" absolute right-20 bottom-1">
-                            <i class="uil uil-times text-2xl"></i>
-                        </button>
-                        <button id="searchButton" type="button" style="bottom: 5px; right: 5px;" type="submit" class="text-white absolute bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+            {{-- <div class="w-1/5 p-3 h-24 flex items-center">
+                <button type="submit" id="btnGenerate" class="self-center h-4/5 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 focus:outline-none">Generate</button>
+            </div> --}}
+        </form>
 
         <div class="w-full mt-3">
             <div id="generateResult" class="w-full grid grid-cols-3 text-center">
@@ -223,112 +208,7 @@
             </div>
             <hr class="my-3">
 
-            <div>
-                <div>
-                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <table class="w-full text-sm text-left text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-center">
-                                        Action
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-center">
-                                        Department
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-center">
-                                        Batch
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-center">
-                                        Document Type
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-center">
-                                        File Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-center">
-                                        Status
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-center">
-                                        Date Uploaded
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $x = 1;
-                                @endphp
-                                @foreach ($documents as $document)
-                                    <tr class=" {{ ($x++ % 2 == 0)? 'bg-gray-50' : 'bg-white'; }} border-b">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
-                                            <button data-id="{{$document->id}}" class="viewButton text-blue-500 font-bold tracking-wide">View</button>
-                                        </th>
-                                        <td>{{ $document->department }}</td>
-                                        <td>{{ $document->batch }}</td>
-                                        <td>{{ $document->docType }}</td>
-                                        <td>{{ $document->name }}</td>
-                                        <td>
-                                            @php
-                                                if($document->is_Encoded == '1' && $document->is_Checked == '0'){
-                                                    echo 'ENCODED';
-                                                }elseif($document->is_Encoded == '1' && $document->is_Checked == '1'){
-                                                    echo 'CHECKED';
-                                                }elseif($document->is_Encoded == '0' && $document->is_Checked == '0'){
-                                                    echo 'UPLOADED';
-                                                }
-                                            @endphp
-                                        </td>
-                                        <td>{{ $document->created_at }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            {{-- PAGINATION --}}
-                <div class="grid md:grid-cols-2 mt-3 px-3">
-                    @php
-                        $prev = $page - 1;
-                        $next = $page + 1;
-                        $from = ($prev * 100) + 1;
-                        $to = $page * 100;
-                        if($to > $documentCounts){
-                            $to = $documentCounts;
-                        }if($documentCounts == 0){
-                            $from = 0;
-                        }
-                    @endphp
-                    <div class="justify-self-center md:justify-self-start self-center">
-                        <span class="text-sm text-gray-700">
-                            Showing <span class="font-semibold text-gray-900">{{ $from }}</span> to <span class="font-semibold text-gray-900">{{ $to }}</span> of <span class="font-semibold text-gray-900">{{ $documentCounts }}</span> Items
-                        </span>
-                    </div>
-
-                    <div class="justify-self-center md:justify-self-end">
-                        <nav aria-label="Page navigation example" class="h-8 mb-0.5 shadow-xl">
-                            <ul class="inline-flex items-center -space-x-px">
-                                <li>
-                                    <a href="{{ ($search == '') ? url('/reports/'.$prev) : url('/reports/'.$prev.'/'.$search);  }}"  class="{{ ($page == 1) ? 'pointer-events-none' : ''; }} block w-9 h-9 leading-9 text-center text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
-                                        <i class="uil uil-angle-left-b"></i>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <p class="block w-9 h-9 leading-9 text-center z-10 text-gray-500 border border-gray-300 bg-white font-semibold">{{ $page }}</p>
-                                </li>
-                                <li>
-                                    <a href="{{ ($search == '') ? url('/reports/'.$next) : url('/reports/'.$next.'/'.$search); }}" class="{{ ($to == $documentCounts) ? 'pointer-events-none' : ''; }} block w-9 h-9 leading-9 text-center text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
-                                        <i class="uil uil-angle-right-b"></i>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            {{-- PAGINATION END --}}
-
-            {{-- <div class="pb-5">
+            <div class="pb-5">
                 <table id="table_id" class="stripe hover nowrap row-border dt-body-center" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
                     <thead>
                         <tr>
@@ -386,7 +266,7 @@
                         @endif
                     </tbody>
                 </table>
-            </div> --}}
+            </div>
         </div>
     </div>
 
@@ -394,30 +274,35 @@
 
     <script type="text/javascript">
         $(document).ready( function () {
+            $('#table_id').DataTable();
             $('#loadingOverlay').addClass('hidden');
 
-            $('#searchButton').click(function(){
-                var search = $('#searchInput').val();
-                if(search != ""){
-                    $('#searchForm').prop('action', `{{ url('/reports/1/${search}') }}`);
-                }else{
-                    $('#searchForm').prop('action', `{{ url('/reports/1') }}`);
-                }
-                $('#searchForm').submit();
+            $(document).on('click', '#btnGenerate', function(){
+                $('#user').prop('disabled', false);
+                $('#docType').prop('disabled', false);
+                $('#batch').prop('disabled', false);
             });
 
-            $('#searchInput').on('keydown', function(event) {
-                if (event.keyCode === 13) {
-                    $('#searchButton').click();
-                    event.preventDefault();
-                }
+            $('#department').change(function(){
+                var dept = $('#department option:selected').val();
+                var _token = $('input[name="_token"]').val();
+                    
+                $.ajax({
+                    url: "{{ route('report.get.batch') }}",
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        dept: dept,
+                        _token: _token
+                    },
+                    success:function(res){
+                        $('#batch').html(res.batchOut);
+                        $('#docType').html(res.docTypeOut);
+                        $('#user').html(res.userOut);
+                    }
+                })
             });
-
-            $('#clearButton').click(function(){
-                $('#searchInput').val('');
-            });
-
-            jQuery(document).on( "click", ".viewButton", function(){
+            jQuery(document).on( "click", ".btnView", function(){
                 var docID = $(this).data('id');
                 var _token = $('input[name="_token"]').val();
 
@@ -442,33 +327,6 @@
                     }
                 })
             });
-            // $('#table_id').DataTable();
-
-            // $(document).on('click', '#btnGenerate', function(){
-            //     $('#user').prop('disabled', false);
-            //     $('#docType').prop('disabled', false);
-            //     $('#batch').prop('disabled', false);
-            // });
-
-            // $('#department').change(function(){
-            //     var dept = $('#department option:selected').val();
-            //     var _token = $('input[name="_token"]').val();
-                    
-            //     $.ajax({
-            //         url: "",
-            //         method: "POST",
-            //         dataType: 'json',
-            //         data: {
-            //             dept: dept,
-            //             _token: _token
-            //         },
-            //         success:function(res){
-            //             $('#batch').html(res.batchOut);
-            //             $('#docType').html(res.docTypeOut);
-            //             $('#user').html(res.userOut);
-            //         }
-            //     })
-            // });
         } );
     </script>
 @endsection
