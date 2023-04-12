@@ -43,43 +43,73 @@ class ReportController extends Controller
     // }
 
     public function index(){
+        if(auth()->user()->id == 1){
+            $documents = DB::table('documents')
+                ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->orderBy('id', 'desc')
+                ->paginate(100);
+    
+            $documentCounts = (DB::table('documents')->get())->count();
+            $uploadCount = $documentCounts;
+            $EncodeCount = (DB::table('documents')->where('is_Encoded', 1)->get())->count();
+            $CheckedCount = (DB::table('documents')->where('is_Checked', 1)->get())->count();
+        }else{
+            $documents = DB::table('documents')
+                ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->where('documents.dept_id', auth()->user()->department)
+                ->orderBy('id', 'desc')
+                ->paginate(100);
 
-
-        $documents = DB::table('documents')
-            ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
-            ->join('departments' , 'documents.dept_id', '=', 'departments.id')
-            ->join('batches' , 'documents.batch_id', '=', 'batches.id')
-            ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
-            ->where('documents.dept_id', auth()->user()->department)
-            ->orderBy('id', 'desc')
-            ->paginate(100);
+            $documentCounts = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->get())->count();
+            $uploadCount = $documentCounts;
+            $EncodeCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->get())->count();
+            $CheckedCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Checked', 1)->get())->count();
+        }
 
         $search = "";
         $page = "1";
-        $documentCounts = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->get())->count();
-        $uploadCount = $documentCounts;
-        $EncodeCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->get())->count();
-        $CheckedCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Checked', 1)->get())->count();
 
         return view('reports/index', compact('documents', 'search', 'page', 'documentCounts', 'uploadCount', 'EncodeCount', 'CheckedCount'));
     }
 
     public function paginate($page){
-        $documents = DB::table('documents')
-            ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
-            ->join('departments' , 'documents.dept_id', '=', 'departments.id')
-            ->join('batches' , 'documents.batch_id', '=', 'batches.id')
-            ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
-            ->where('documents.dept_id', auth()->user()->department)
-            ->orderBy('id', 'desc')
-            ->paginate(100,'*','page',$page);
+
+        if(auth()->user()->id == 1){
+            $documents = DB::table('documents')
+                ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->orderBy('id', 'desc')
+                ->paginate(100,'*','page',$page);
+    
+            $documentCounts = (DB::table('documents')->get())->count();
+            $uploadCount = $documentCounts;
+            $EncodeCount = (DB::table('documents')->where('is_Encoded', 1)->get())->count();
+            $CheckedCount = (DB::table('documents')->where('is_Checked', 1)->get())->count();
+        }else{
+            $documents = DB::table('documents')
+                ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->where('documents.dept_id', auth()->user()->department)
+                ->orderBy('id', 'desc')
+                ->paginate(100,'*','page',$page);
+    
+            $documentCounts = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->get())->count();
+            $uploadCount = $documentCounts;
+            $EncodeCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->get())->count();
+            $CheckedCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Checked', 1)->get())->count();
+        }
 
         $search = "";
-        $page = "1";
-        $documentCounts = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->get())->count();
-        $uploadCount = $documentCounts;
-        $EncodeCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->get())->count();
-        $CheckedCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Checked', 1)->get())->count();
 
         return view('reports/index', compact('documents', 'search', 'page', 'documentCounts', 'uploadCount', 'EncodeCount', 'CheckedCount'));
 
@@ -90,54 +120,96 @@ class ReportController extends Controller
     }
 
     public function search($page, $search){
+        if(auth()->user()->id == 1){
+            $documents = DB::table('file_details')
+                ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('documents', 'file_details.document_id', '=', 'documents.id')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+                ->orderBy('id', 'desc')
+                ->paginate(100,'*','page',$page);
+    
+            $documentCounts = DB::table('file_details')
+                ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('documents', 'file_details.document_id', '=', 'documents.id')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+                ->count();
+    
+            $uploadCount = $documentCounts;
+    
+            $EncodeCount = DB::table('file_details')
+                ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('documents', 'file_details.document_id', '=', 'documents.id')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+                ->where('is_Encoded', 1)
+                ->count();
+    
+            $CheckedCount = DB::table('file_details')
+                ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('documents', 'file_details.document_id', '=', 'documents.id')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+                ->where('is_Checked', 1)
+                ->count();
+        }else{
+            $documents = DB::table('file_details')
+                ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('documents', 'file_details.document_id', '=', 'documents.id')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+                ->where('documents.dept_id', auth()->user()->department)
+                ->orderBy('id', 'desc')
+                ->paginate(100,'*','page',$page);
+    
+            $documentCounts = DB::table('file_details')
+                ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('documents', 'file_details.document_id', '=', 'documents.id')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+                ->where('documents.dept_id', auth()->user()->department)
+                ->count();
+    
+            $uploadCount = $documentCounts;
+    
+            $EncodeCount = DB::table('file_details')
+                ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('documents', 'file_details.document_id', '=', 'documents.id')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+                ->where('documents.dept_id', auth()->user()->department)
+                ->where('is_Encoded', 1)
+                ->count();
+    
+            $CheckedCount = DB::table('file_details')
+                ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
+                ->join('documents', 'file_details.document_id', '=', 'documents.id')
+                ->join('departments' , 'documents.dept_id', '=', 'departments.id')
+                ->join('batches' , 'documents.batch_id', '=', 'batches.id')
+                ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
+                ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+                ->where('documents.dept_id', auth()->user()->department)
+                ->where('is_Checked', 1)
+                ->count();
 
-        $documents = DB::table('file_details')
-            ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
-            ->join('documents', 'file_details.document_id', '=', 'documents.id')
-            ->join('departments' , 'documents.dept_id', '=', 'departments.id')
-            ->join('batches' , 'documents.batch_id', '=', 'batches.id')
-            ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
-            ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
-            ->where('documents.dept_id', auth()->user()->department)
-            ->orderBy('id', 'desc')
-            ->paginate(100,'*','page',$page);
-
-        $documentCounts = DB::table('file_details')
-            ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
-            ->join('documents', 'file_details.document_id', '=', 'documents.id')
-            ->join('departments' , 'documents.dept_id', '=', 'departments.id')
-            ->join('batches' , 'documents.batch_id', '=', 'batches.id')
-            ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
-            ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
-            ->where('documents.dept_id', auth()->user()->department)
-            ->count();
-
-        $uploadCount = $documentCounts;
-
-        $EncodeCount = DB::table('file_details')
-            ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
-            ->join('documents', 'file_details.document_id', '=', 'documents.id')
-            ->join('departments' , 'documents.dept_id', '=', 'departments.id')
-            ->join('batches' , 'documents.batch_id', '=', 'batches.id')
-            ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
-            ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
-            ->where('documents.dept_id', auth()->user()->department)
-            ->where('is_Encoded', 1)
-            ->count();
-
-        $CheckedCount = DB::table('file_details')
-            ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
-            ->join('documents', 'file_details.document_id', '=', 'documents.id')
-            ->join('departments' , 'documents.dept_id', '=', 'departments.id')
-            ->join('batches' , 'documents.batch_id', '=', 'batches.id')
-            ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
-            ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
-            ->where('documents.dept_id', auth()->user()->department)
-            ->where('is_Checked', 1)
-            ->count();
+        }
     
         return view('reports/index', compact('documents', 'search', 'page', 'documentCounts', 'uploadCount', 'EncodeCount', 'CheckedCount'));
-        // return view('admin.system-management.users.index', compact('users', 'userCount', 'page', 'search'));
     }
 
 
