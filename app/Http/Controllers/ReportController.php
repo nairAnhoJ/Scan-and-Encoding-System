@@ -43,6 +43,8 @@ class ReportController extends Controller
     // }
 
     public function index(){
+
+
         $documents = DB::table('documents')
             ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
             ->join('departments' , 'documents.dept_id', '=', 'departments.id')
@@ -88,6 +90,10 @@ class ReportController extends Controller
     }
 
     public function search($page, $search){
+        $currentUrl = url()->current();
+        $currentPath = request()->path();
+        $currentUrlWithoutQuery = url($currentPath);
+        dd($currentUrlWithoutQuery);
 
         $documents = DB::table('file_details')
             ->select('file_details.document_id', 'documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
@@ -96,6 +102,7 @@ class ReportController extends Controller
             ->join('batches' , 'documents.batch_id', '=', 'batches.id')
             ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
             ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+            ->where('documents.dept_id', auth()->user()->department)
             ->orderBy('id', 'desc')
             ->paginate(100,'*','page',$page);
 
@@ -106,6 +113,7 @@ class ReportController extends Controller
             ->join('batches' , 'documents.batch_id', '=', 'batches.id')
             ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
             ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+            ->where('documents.dept_id', auth()->user()->department)
             ->count();
 
         $uploadCount = $documentCounts;
@@ -117,6 +125,7 @@ class ReportController extends Controller
             ->join('batches' , 'documents.batch_id', '=', 'batches.id')
             ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
             ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+            ->where('documents.dept_id', auth()->user()->department)
             ->where('is_Encoded', 1)
             ->count();
 
@@ -127,6 +136,7 @@ class ReportController extends Controller
             ->join('batches' , 'documents.batch_id', '=', 'batches.id')
             ->join('doc_types' , 'documents.doctype_id', '=', 'doc_types.id')
             ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
+            ->where('documents.dept_id', auth()->user()->department)
             ->where('is_Checked', 1)
             ->count();
     
