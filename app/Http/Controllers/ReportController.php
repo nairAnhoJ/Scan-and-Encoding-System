@@ -280,6 +280,19 @@ class ReportController extends Controller
         echo json_encode($response);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function view(Request $request){
         $docID = $request->docID;
         $userID = auth()->user()->id;
@@ -328,14 +341,15 @@ class ReportController extends Controller
         }
 
         $response = array(
-            'DateUploadedOut' => $doc[0]->created_at,
-            'DepartmentOut' => $doc[0]->dept_name,
-            'BatchOut' => $doc[0]->batch_name,
-            'DocTypeOut' => $doc[0]->doctype_name,
-            'FilenameOut' => $doc[0]->filename,
-            'UploaderOut' => $doc[0]->uploader,
-            'FileSrcOut' => 'viewing/'.$userID.'/'.$doc[0]->unique_name,
-            'fileDetails' => $fileDetails,
+            'id' => $docID,
+            // 'DateUploadedOut' => $doc[0]->created_at,
+            // 'DepartmentOut' => $doc[0]->dept_name,
+            // 'BatchOut' => $doc[0]->batch_name,
+            // 'DocTypeOut' => $doc[0]->doctype_name,
+            // 'FilenameOut' => $doc[0]->filename,
+            // 'UploaderOut' => $doc[0]->uploader,
+            // 'FileSrcOut' => 'viewing/'.$userID.'/'.$doc[0]->unique_name,
+            // 'fileDetails' => $fileDetails,
         );
 
         echo json_encode($response);
