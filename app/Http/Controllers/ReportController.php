@@ -92,7 +92,7 @@ class ReportController extends Controller
     public function search($page, $search){
         $currentUrl = url()->current();
         $currentPath = request()->path();
-        $currentUrlWithoutQuery = url($currentPath);
+        $currentUrlWithoutQuery = url('/reports');
         dd($currentUrlWithoutQuery);
 
         $documents = DB::table('file_details')
