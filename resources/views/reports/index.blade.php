@@ -260,7 +260,7 @@
                                 @foreach ($documents as $document)
                                     <tr class=" {{ ($x++ % 2 == 0)? 'bg-gray-50' : 'bg-white'; }} border-b">
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
-                                            <button data-id="{{$document->id}}" class="viewButton text-blue-500 font-bold tracking-wide">View</button>
+                                            <button {{ ($document->is_Encoded == 0 ? 'disabled' : '') }} data-id="{{$document->id}}" class="viewButton disabled:text-neutral-500 disabled:pointer-events-none text-blue-500 font-bold tracking-wide">View</button>
                                         </th>
                                         <td>{{ $document->department }}</td>
                                         <td>{{ $document->batch }}</td>

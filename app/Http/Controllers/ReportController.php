@@ -206,7 +206,6 @@ class ReportController extends Controller
                 ->where('documents.dept_id', auth()->user()->department)
                 ->where('is_Checked', 1)
                 ->count();
-
         }
     
         return view('reports/index', compact('documents', 'search', 'page', 'documentCounts', 'uploadCount', 'EncodeCount', 'CheckedCount'));
