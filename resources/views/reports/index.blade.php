@@ -262,11 +262,11 @@
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
                                             <button {{ ($document->is_Encoded == 0 ? 'disabled' : '') }} data-id="{{$document->id}}" class="viewButton disabled:text-neutral-500 disabled:pointer-events-none text-blue-500 font-bold tracking-wide">View</button>
                                         </th>
-                                        <td>{{ $document->department }}</td>
-                                        <td>{{ $document->batch }}</td>
-                                        <td>{{ $document->docType }}</td>
-                                        <td>{{ $document->name }}</td>
-                                        <td>
+                                        <td class=" whitespace-nowrap text-center">{{ $document->department }}</td>
+                                        <td class=" whitespace-nowrap text-center">{{ $document->batch }}</td>
+                                        <td class=" whitespace-nowrap text-center">{{ $document->docType }}</td>
+                                        <td class=" whitespace-nowrap text-center">{{ $document->name }}</td>
+                                        <td class=" whitespace-nowrap text-center">
                                             @php
                                                 if($document->is_Encoded == '1' && $document->is_Checked == '0'){
                                                     echo 'ENCODED';
@@ -277,7 +277,7 @@
                                                 }
                                             @endphp
                                         </td>
-                                        <td>{{ $document->created_at }}</td>
+                                        <td class=" whitespace-nowrap text-center">{{ $document->created_at }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
