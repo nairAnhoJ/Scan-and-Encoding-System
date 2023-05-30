@@ -67,8 +67,8 @@ class ReportController extends Controller
                 ->paginate(100);
 
 
-            $documentCounts = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->get())->count();
-            dd($documents);
+            $documentCounts = DB::table('documents')->where('documents.dept_id', auth()->user()->department)->count();
+            dd($documentCounts);
             $uploadCount = $documentCounts;
             $EncodeCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->get())->count();
             $CheckedCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Checked', 1)->get())->count();
