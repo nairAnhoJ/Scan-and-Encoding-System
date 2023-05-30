@@ -90,10 +90,10 @@ class ReportController extends Controller
                 ->orderBy('id', 'desc')
                 ->paginate(100,'*','page',$page);
     
-            $documentCounts = (DB::table('documents')->get())->count();
+            $documentCounts = DB::table('documents')->count();
             $uploadCount = $documentCounts;
-            $EncodeCount = (DB::table('documents')->where('is_Encoded', 1)->get())->count();
-            $CheckedCount = (DB::table('documents')->where('is_Checked', 1)->get())->count();
+            $EncodeCount = DB::table('documents')->where('is_Encoded', 1)->count();
+            $CheckedCount = DB::table('documents')->where('is_Checked', 1)->count();
         }else{
             $documents = DB::table('documents')
                 ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
@@ -104,10 +104,10 @@ class ReportController extends Controller
                 ->orderBy('id', 'desc')
                 ->paginate(100,'*','page',$page);
     
-            $documentCounts = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->get())->count();
+            $documentCounts = DB::table('documents')->where('documents.dept_id', auth()->user()->department)->count();
             $uploadCount = $documentCounts;
-            $EncodeCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->get())->count();
-            $CheckedCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Checked', 1)->get())->count();
+            $EncodeCount = DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->count();
+            $CheckedCount = DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Checked', 1)->count();
         }
 
         $search = "";
