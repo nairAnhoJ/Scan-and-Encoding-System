@@ -66,6 +66,8 @@ class ReportController extends Controller
                 ->orderBy('id', 'desc')
                 ->paginate(100);
 
+            dd($documents);
+
             $documentCounts = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->get())->count();
             $uploadCount = $documentCounts;
             $EncodeCount = (DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->get())->count();
