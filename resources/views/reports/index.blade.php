@@ -105,6 +105,73 @@
 
     <div class="p-5 h-full">
         <h1 class="text-sky-600 text-xl font-bold mb-3 text-center">Documents Viewing</h1>
+        <div class="flex items-end justify-between">
+            <form disabled action="{{ url('/reports/1') }}" method="GET">
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input {{ ($start != '') ? 'checked' : '' }} type="checkbox" id="filter" value="" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <span class="ml-3 text-sm font-medium text-gray-900">Filter</span>
+                </label>
+                <div class="flex items-center gap-x-3">
+                    <div date-rangepicker class="flex items-center">
+                        <div class="relative w-40">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <input {{ ($start != '') ? '' : 'disabled' }} id="start" name="start" type="text" class="disabled:pointer-events-none disabled:opacity-75 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Start Date" autocomplete="off" value="{{ ($start != '') ? $start : date('m/d/Y') }}">
+                        </div>
+                        <span class="mx-4 text-gray-500">to</span>
+                        <div class="relative w-40">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <input {{ ($start != '') ? '' : 'disabled' }} id="end" name="end" type="text" class="disabled:pointer-events-none disabled:opacity-75 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="End Date" autocomplete="off" value="{{ ($start != '') ? $end : date('m/d/Y') }}">
+                        </div>
+                    </div>
+                    <div class="flex items-center ml-3">
+                        <label for="user" class="block mr-2 text-sm font-medium text-gray-900">User:</label>
+                        <select {{ ($start != '') ? '' : 'disabled' }} id="user" name="user" class="disabled:pointer-events-none disabled:opacity-75 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5">
+                            <option {{ ($start != '') ? ($filterUser == '0') ? 'selected' : '' : '' }} value="0" selected>All</option>
+                            @foreach ($users as $user)
+                                <option {{ ($start != '') ? ($filterUser == $user->id) ? 'selected' : '' : '' }} value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                          </select>
+                    </div>
+                    <div class="inline">
+                        <button {{ ($start != '') ? '' : 'disabled' }} id="generateButton" type="submit" class="disabled:pointer-events-none disabled:opacity-75 bg-blue-500 px-5 h-10 rounded-lg text-white font-bold hover:scale-105">
+                            Generate
+                        </button>
+                        <button {{ ($start != '') ? '' : 'disabled' }} id="clearFilterButton" type="button" class="disabled:pointer-events-none disabled:opacity-75 bg-blue-500 px-5 h-10 rounded-lg text-white font-bold hover:scale-105">
+                            Clear Filter
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="flex flex-row-reverse">
+                <div class="w-[500px]">
+                    <form method="GET" action="" id="searchForm" class="w-full">
+                        @csrf
+                        <label for="searchInput" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <input type="search" id="searchInput" class="block z-10 w-full px-4 py-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="SEARCH" value="{{ $search }}" autocomplete="off">
+                            <button id="clearButton" type="button" class=" absolute right-20 bottom-1">
+                                <i class="uil uil-times text-2xl"></i>
+                            </button>
+                            <button id="searchButton" type="button" style="bottom: 5px; right: 5px;" type="submit" class="text-white absolute bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         {{-- <form id="frmGenerate" method="POST" action="{{ route('report.generate') }}" enctype="multipart/form-data" class="flex h-24 items-center">
             @csrf
             <div class="w-full h-24 grid grid-cols-4 grid-rows-2 gap-x-3 text-center">
@@ -197,24 +264,6 @@
         </form> --}}
 
 
-        <div class="flex flex-row-reverse">
-            <div class="w-2/5">
-                <form method="GET" action="" id="searchForm" class="w-full">
-                    @csrf
-                    <label for="searchInput" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </div>
-                        <input type="search" id="searchInput" class="block z-10 w-full px-4 py-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="SEARCH" value="{{ $search }}" autocomplete="off">
-                        <button id="clearButton" type="button" class=" absolute right-20 bottom-1">
-                            <i class="uil uil-times text-2xl"></i>
-                        </button>
-                        <button id="searchButton" type="button" style="bottom: 5px; right: 5px;" type="submit" class="text-white absolute bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
 
         <div class="w-full mt-3">
             <div id="generateResult" class="w-full grid grid-cols-3 text-center">
@@ -309,7 +358,7 @@
                         <nav aria-label="Page navigation example" class="h-8 mb-0.5 shadow-xl">
                             <ul class="inline-flex items-center -space-x-px">
                                 <li>
-                                    <a href="{{ ($search == '') ? url('/reports/'.$prev) : url('/reports/'.$prev.'/'.$search);  }}"  class="{{ ($page == 1) ? 'pointer-events-none' : ''; }} block w-9 h-9 leading-9 text-center text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                                    <a href="{{ ($search == '') ? route('view.paginate', ['page' => $prev, 'start' => $prev, 'end' => $end]) : url('/reports/'.$prev.'/'.$search);  }}"  class="{{ ($page == 1) ? 'pointer-events-none' : ''; }} block w-9 h-9 leading-9 text-center text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
                                         <i class="uil uil-angle-left-b"></i>
                                         <span class="sr-only">Previous</span>
                                     </a>
@@ -318,7 +367,7 @@
                                     <p class="block w-9 h-9 leading-9 text-center z-10 text-gray-500 border border-gray-300 bg-white font-semibold">{{ $page }}</p>
                                 </li>
                                 <li>
-                                    <a href="{{ ($search == '') ? url('/reports/'.$next) : url('/reports/'.$next.'/'.$search); }}" class="{{ ($to == $documentCounts) ? 'pointer-events-none' : ''; }} block w-9 h-9 leading-9 text-center text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                                    <a href="{{ ($search == '') ? ($start == '') ? route('view.paginate', ['page' => $next]) : route('view.paginate', ['page' => $next, 'start' => $start, 'end' => $end]) : url('/reports/'.$next.'/'.$search); }}" class="{{ ($to == $documentCounts) ? 'pointer-events-none' : ''; }} block w-9 h-9 leading-9 text-center text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
                                         <i class="uil uil-angle-right-b"></i>
                                         <span class="sr-only">Next</span>
                                     </a>
@@ -397,6 +446,9 @@
         $(document).ready( function () {
             $('#loadingOverlay').addClass('hidden');
 
+            var url = new URL(window.location.href);
+            var currentPage = parseInt(url.pathname.split('/').pop(), 10);
+
             $('#searchButton').click(function(){
                 var search = $('#searchInput').val();
                 if(search != ""){
@@ -443,6 +495,33 @@
                     }
                 })
             });
+            $('#generateButton').click(function(){
+                $('#loadingOverlay').removeClass('hidden');
+            });
+
+            $('#filter').click(function(){
+                if ($(this).is(":checked")) {
+                    $('#start').prop('disabled', false);
+                    $('#end').prop('disabled', false);
+                    $('#user').prop('disabled', false);
+                    $('#generateButton').prop('disabled', false);
+                    $('#clearFilterButton').prop('disabled', false);
+                } else {
+                    $('#start').prop('disabled', true);
+                    $('#end').prop('disabled', true);
+                    $('#user').prop('disabled', true);
+                    $('#generateButton').prop('disabled', true);
+                    $('#clearFilterButton').prop('disabled', true);
+                }
+            });
+
+            $('#clearFilterButton').click(function(){  
+                window.location.href = '/reports';
+            });
+
+
+
+
             // $('#table_id').DataTable();
 
             // $(document).on('click', '#btnGenerate', function(){
