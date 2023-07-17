@@ -134,7 +134,7 @@
                     </div>
                     <div class="flex items-center ml-3">
                         <label for="user" class="block mr-2 text-sm font-medium text-gray-900">User:</label>
-                        <select {{ ($start != '') ? '' : 'disabled' }} id="user" name="user" class="disabled:pointer-events-none disabled:opacity-75 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5">
+                        <select {{ ($start != '') ? '' : 'disabled' }} id="user" name="user" class="disabled:pointer-events-none disabled:opacity-75 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5">
                             <option {{ ($start != '') ? ($filterUser == '0') ? 'selected' : '' : '' }} value="0" selected>All</option>
                             @foreach ($users as $user)
                                 <option {{ ($start != '') ? ($filterUser == $user->id) ? 'selected' : '' : '' }} value="{{ $user->id }}">{{ $user->name }}</option>
