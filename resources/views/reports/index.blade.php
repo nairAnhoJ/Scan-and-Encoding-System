@@ -365,14 +365,15 @@
                 e.preventDefault();
 
                 var url = new URL(window.location.href);
-                var firstAmpersandIndex = url.indexOf('&');
-                if (firstAmpersandIndex !== -1) {
-                    var newUrl = url.substring(firstAmpersandIndex + 1);
-                    console.log(newUrl);
-                } else {
-                    console.log(url);
-                }
-                alert(url);
+                var newUrl = parts.slice(1).join('&');
+                alert(newUrl);
+                // var firstAmpersandIndex = url.indexOf('&');
+                // if (firstAmpersandIndex !== -1) {
+                //     var newUrl = url.substring(firstAmpersandIndex + 1);
+                //     console.log(newUrl);
+                // } else {
+                //     console.log(url);
+                // }
             });
 
 
