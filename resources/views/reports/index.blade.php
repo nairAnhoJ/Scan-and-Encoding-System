@@ -364,10 +364,13 @@
             jQuery(document).on( "click", "nav[role='navigation'] > div:eq(1) > div:eq(1) > span > a", function(e){
                 e.preventDefault();
 
-                var surl = window.location.search.substring(1);
-                // var url = 'http://192.168.20.105:8001/reports?page=1&start=10%2F02%2F2023&end=10%2F10%2F2023&uploader=0&_token=Z2Ussra3P1eYjBdGh7ZXBivyJ2ZIERLeSJaAbbdN&search=';
-                var endUrl = surl.split("&").pop();
-                alert(endUrl);
+                var url = window.location.search.substring(1);
+                var firstAmpersandIndex = url.indexOf('&');
+                if (firstAmpersandIndex !== -1) {
+                    // Extract the substring starting from the first '&' character
+                    var newUrl = url.substring(firstAmpersandIndex + 1);
+                }
+                alert(newUrl);
                 // var firstAmpersandIndex = url.indexOf('&');
                 // if (firstAmpersandIndex !== -1) {
                 //     var newUrl = url.substring(firstAmpersandIndex + 1);
