@@ -365,8 +365,8 @@
                 e.preventDefault();
 
                 var url = new URL(window.location.href);
-                var firstAmpersandIndex = url.indexOf('&');
                 alert(url);
+                var firstAmpersandIndex = url.indexOf('&');
                 // var firstAmpersandIndex = url.indexOf('&');
                 // if (firstAmpersandIndex !== -1) {
                 //     var newUrl = url.substring(firstAmpersandIndex + 1);
