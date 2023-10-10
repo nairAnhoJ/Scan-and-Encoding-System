@@ -44,7 +44,7 @@ class ReportController extends Controller {
                     ->whereBetween('documents.created_at', [$nStart, $nEnd])
                     ->orderBy('id', 'desc');
 
-                if ($uploader == 0) {
+                if ($uploader != 0) {
                     $documentsQuery = $documentsQuery->where('documents.uploader', $uploader);
                 }
             }
@@ -74,7 +74,7 @@ class ReportController extends Controller {
                     ->orderBy('id', 'desc');
 
 
-                if ($uploader == 0) {
+                if ($uploader != 0) {
                     $documentsQuery = $documentsQuery->where('documents.uploader', $uploader);
                 }
             }
