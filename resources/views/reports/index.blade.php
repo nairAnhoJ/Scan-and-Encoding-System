@@ -365,7 +365,7 @@
                 e.preventDefault();
 
                 var surl = new URL(window.location.href);
-                var url = 'ect your jquery &first selector. Correct w';
+                var url = 'http://192.168.20.105:8001/reports?page=1&start=10%2F02%2F2023&end=10%2F10%2F2023&uploader=0&_token=Z2Ussra3P1eYjBdGh7ZXBivyJ2ZIERLeSJaAbbdN&search=';
                 var endUrl = url.split("&").pop();
                 alert(endUrl);
                 // var firstAmpersandIndex = url.indexOf('&');
