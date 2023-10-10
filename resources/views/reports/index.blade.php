@@ -360,7 +360,7 @@
 
 
 
-            jQuery(document).on( "click", "nav[role="pagination"] a", function(e){
+            jQuery(document).on( "click", "nav[role='pagination'] a", function(e){
                 alert('test');
                 // e.preventDefault();
             });
