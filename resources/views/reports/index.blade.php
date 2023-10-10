@@ -359,13 +359,16 @@
             $('#loadingOverlay').addClass('hidden');
             
             // Capture the current URL and its query parameters
-            var currentUrl = window.location.href;
-            var currentParams = new URLSearchParams(window.location.search);
 
             // Listen for clicks on pagination links
-            $('.pagination a').on('click', function(event) {
-                $('#loadingOverlay').removeClass('hidden');
+            $('nav[role="pagination"] a').on('click', function(event) {
+                alert('test');
                 event.preventDefault(); // Prevent the default link behavior
+
+                $('#loadingOverlay').removeClass('hidden');
+
+                var currentUrl = window.location.href;
+                var currentParams = new URLSearchParams(window.location.search);
                 
                 // // Get the href attribute of the clicked pagination link
                 // var nextPageUrl = $(this).attr('href');
