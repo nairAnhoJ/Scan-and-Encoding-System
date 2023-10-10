@@ -243,7 +243,7 @@
                 </div>
             </div>
 
-            <div class="w-full px-3 my-3">
+            <div class="w-full p-3">
                 {{ $documents->links() }}
             </div>
 
