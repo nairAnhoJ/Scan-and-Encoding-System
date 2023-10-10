@@ -365,7 +365,13 @@
                 e.preventDefault();
 
                 var url = new URL(window.location.href);
-                var currentPage = parseInt(url.pathname.split('/').pop(), 10);
+                var firstAmpersandIndex = url.indexOf('&');
+                if (firstAmpersandIndex !== -1) {
+                    var newUrl = url.substring(firstAmpersandIndex + 1);
+                    console.log(newUrl);
+                } else {
+                    console.log(url);
+                }
                 alert(url);
             });
 
