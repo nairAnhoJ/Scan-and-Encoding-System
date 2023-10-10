@@ -361,8 +361,8 @@
 
 
             jQuery(document).on( "click", "nav[role='pagination'] a", function(e){
+                e.preventDefault();
                 alert('test');
-                // e.preventDefault();
             });
 
             var url = new URL(window.location.href);
