@@ -367,14 +367,14 @@
                 $('#loadingOverlay').removeClass('hidden');
                 event.preventDefault(); // Prevent the default link behavior
                 
-                // Get the href attribute of the clicked pagination link
-                var nextPageUrl = $(this).attr('href');
+                // // Get the href attribute of the clicked pagination link
+                // var nextPageUrl = $(this).attr('href');
                 
-                // Append the captured query parameters back to the URL
-                var newUrl = nextPageUrl + (currentParams.toString() ? '?' + currentParams.toString() : '');
+                // // Append the captured query parameters back to the URL
+                // var newUrl = nextPageUrl + (currentParams.toString() ? '?' + currentParams.toString() : '');
 
-                // Navigate to the new URL
-                window.location.href = newUrl;
+                // // Navigate to the new URL
+                // window.location.href = newUrl;
             });
 
             var url = new URL(window.location.href);
