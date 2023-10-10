@@ -87,7 +87,7 @@ class ReportController extends Controller {
         $EncodeCount = $documentsQuery->where('is_Encoded', 1)->count();
         $CheckedCount = $documentsQuery->where('is_Checked', 1)->count();
 
-        dd($documentsQuery);
+        dd($documentsQuery->where('is_Encoded', 1)->get());
 
         return view('reports/index', compact('documents', 'search', 'documentCounts', 'uploadCount', 'EncodeCount', 'CheckedCount', 'users', 'uploader', 'start', 'end'));
     }
