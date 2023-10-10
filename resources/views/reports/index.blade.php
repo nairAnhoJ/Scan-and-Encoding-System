@@ -365,7 +365,7 @@
                 e.preventDefault();
 
                 var surl = new URL(window.location.href);
-                var url = surl;
+                var url = 'ect your jquery &first selector. Correct w';
                 var endUrl = url.split("&").pop();
                 alert(endUrl);
                 // var firstAmpersandIndex = url.indexOf('&');
