@@ -365,7 +365,7 @@
                 e.preventDefault();
 
                 var url = new URL(window.location.href);
-                var newUrl = parts.slice(1).join('&');
+                var newUrl = url.slice(1).join('&');
                 alert(newUrl);
                 // var firstAmpersandIndex = url.indexOf('&');
                 // if (firstAmpersandIndex !== -1) {
