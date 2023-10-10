@@ -114,6 +114,7 @@
                 </label>
                 <div class="flex items-center gap-x-3">
                     <div date-rangepicker class="flex items-center">
+                        <span class="mr-2 text-sm font-medium text-gray-900">Date Uploaded: </span>
                         <div class="relative w-40">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -242,7 +243,9 @@
                 </div>
             </div>
 
-            {{ $documents->links() }}
+            <div class="w-full px-3 mt-3">
+                {{ $documents->links() }}
+            </div>
 
             {{-- PAGINATION --}}
                 {{-- <div class="grid px-3 mt-3 md:grid-cols-2">
