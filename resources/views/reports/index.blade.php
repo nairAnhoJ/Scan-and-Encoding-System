@@ -365,7 +365,7 @@
 
                 var url = new URL(window.location.href);
                 var currentPage = parseInt(url.pathname.split('/').pop(), 10);
-                alert(currentPage);
+                alert(url);
             });
 
 
