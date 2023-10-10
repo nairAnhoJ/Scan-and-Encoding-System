@@ -368,22 +368,13 @@
                 var firstAmpersandIndex = url.indexOf('&');
                 if (firstAmpersandIndex !== -1) {
                     // Extract the substring starting from the first '&' character
-                    var newUrl = url.substring(firstAmpersandIndex + 1);
+                    var getExt = url.substring(firstAmpersandIndex + 1);
                 }else{
-                    var newUrl = '';
+                    var getExt = '';
                 }
-                alert(newUrl);
 
                 var currentHref = $(this).prop('href');
-                
-                alert(currentHref);
-                // var firstAmpersandIndex = url.indexOf('&');
-                // if (firstAmpersandIndex !== -1) {
-                //     var newUrl = url.substring(firstAmpersandIndex + 1);
-                //     console.log(newUrl);
-                // } else {
-                //     console.log(url);
-                // }
+                window.location.href = currentHref+'&'+getExt;
             });
 
 
