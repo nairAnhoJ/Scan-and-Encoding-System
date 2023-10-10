@@ -362,11 +362,12 @@
 
             jQuery(document).on( "click", "nav[role='navigation'] > div:eq(1) > div:eq(1) > span > a", function(e){
                 e.preventDefault();
-                alert('test');
+
+                var url = new URL(window.location.href);
+                var currentPage = parseInt(url.pathname.split('/').pop(), 10);
+                alert(currentPage);
             });
 
-            var url = new URL(window.location.href);
-            var currentPage = parseInt(url.pathname.split('/').pop(), 10);
 
             $('#searchButton').click(function(){
                 $('#loadingOverlay').removeClass('hidden');
