@@ -357,27 +357,12 @@
     <script type="text/javascript">
         $(document).ready( function () {
             $('#loadingOverlay').addClass('hidden');
-            
-            // Capture the current URL and its query parameters
 
-            // Listen for clicks on pagination links
-            $('nav[role="pagination"] a').on('click', function(event) {
+
+
+            jQuery(document).on( "click", "nav[role="pagination"] a", function(e){
                 alert('test');
-                event.preventDefault(); // Prevent the default link behavior
-
-                $('#loadingOverlay').removeClass('hidden');
-
-                var currentUrl = window.location.href;
-                var currentParams = new URLSearchParams(window.location.search);
-                
-                // // Get the href attribute of the clicked pagination link
-                // var nextPageUrl = $(this).attr('href');
-                
-                // // Append the captured query parameters back to the URL
-                // var newUrl = nextPageUrl + (currentParams.toString() ? '?' + currentParams.toString() : '');
-
-                // // Navigate to the new URL
-                // window.location.href = newUrl;
+                // e.preventDefault();
             });
 
             var url = new URL(window.location.href);
@@ -423,6 +408,7 @@
                     }
                 })
             });
+
             $('#generateButton').click(function(){
                 $('#loadingOverlay').removeClass('hidden');
             });
