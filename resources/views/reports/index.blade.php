@@ -106,6 +106,7 @@
     <div class="h-full p-5">
         <h1 class="mb-3 text-xl font-bold text-center text-sky-600">Documents Viewing</h1>
         <form disabled action="{{ url('/reports') }}" method="GET" class="flex items-end justify-between">
+            <input type="hidden" name="page" value="1">
             <div>
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input {{ ($start != '') ? 'checked' : '' }} type="checkbox" id="filter" value="" class="sr-only peer">
