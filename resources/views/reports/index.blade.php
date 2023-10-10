@@ -165,7 +165,7 @@
                             <button id="clearButton" type="button" class="absolute right-20 bottom-1">
                                 <i class="text-2xl uil uil-times"></i>
                             </button>
-                            <button id="" style="bottom: 5px; right: 5px;" type="submit" class="text-white absolute bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5">Search</button>
+                            <button id="searchButton" style="bottom: 5px; right: 5px;" type="submit" class="text-white absolute bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5">Search</button>
                         </div>
                     </div>
                 </div>
@@ -358,29 +358,9 @@
             var url = new URL(window.location.href);
             var currentPage = parseInt(url.pathname.split('/').pop(), 10);
 
-            // $('#searchButton').click(function(){
-            //     var search = $('#searchInput').val();
-            //     var start = $('#start').val();
-            //     var end = $('#end').val();
-            //     var user = $('#user').val();
-            //     if(search != ""){
-            //         if ($('#filter').prop('checked')) {
-            //             var filter = `${search}?start=${start}&end=${end}&user=${user}`;
-            //             filter = filter.replace(/\//g, '%2F');
-            //             $('#searchForm').prop('action', `{{ url('/reports/1/${filter}') }}`);
-            //         } else {
-            //             $('#searchForm').prop('action', `{{ url('/reports/1/${search}') }}`);
-            //         }
-            //     }else{
-            //         if ($('#filter').prop('checked')) {
-            //             $('#searchForm').prop('action', `{{ url('/reports/1/${search}') }}`);
-            //         } else {
-            //             $('#searchForm').prop('action', `{{ url('/reports/1') }}`);
-            //         }
-            //     }
-            //     alert($('#searchForm').prop('action'));
-            //     $('#searchForm').submit();
-            // });
+            $('#searchButton').click(function(){
+                $('#loadingOverlay').removeClass('hidden');
+            });
 
             $('#searchInput').on('keydown', function(event) {
                 if (event.keyCode === 13) {

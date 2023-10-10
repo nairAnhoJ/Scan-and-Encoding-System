@@ -42,8 +42,11 @@ class ReportController extends Controller {
                     ->join('doc_types', 'documents.doctype_id', '=', 'doc_types.id')
                     ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
                     ->whereBetween('documents.created_at', [$nStart, $nEnd])
-                    ->where('documents.uploader', $uploader)
                     ->orderBy('id', 'desc');
+
+                if ($uploader == 0) {
+                    $documentsQuery = $documentsQuery->where('documents.uploader', $uploader);
+                }
             }
         } else {
             $users = DB::table('accounts')->where('id', '!=', '1')->where('department', $user->department)->where('viewing_only', '0')->get();
@@ -67,9 +70,13 @@ class ReportController extends Controller {
                     ->join('doc_types', 'documents.doctype_id', '=', 'doc_types.id')
                     ->whereRaw("CONCAT_WS(' ', field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13, field14, field15) LIKE '%{$search}%'")
                     ->whereBetween('documents.created_at', [$nStart, $nEnd])
-                    ->where('documents.uploader', $uploader)
                     ->where('documents.dept_id', auth()->user()->department)
                     ->orderBy('id', 'desc');
+
+
+                if ($uploader == 0) {
+                    $documentsQuery = $documentsQuery->where('documents.uploader', $uploader);
+                }
             }
 
             // $documents = DB::table('documents')
