@@ -364,7 +364,8 @@
             jQuery(document).on( "click", "nav[role='navigation'] > div:eq(1) > div:eq(1) > span > a", function(e){
                 e.preventDefault();
 
-                var url = new URL(window.location.href);
+                var surl = new URL(window.location.href);
+                var url = surl;
                 var endUrl = url.split("&").pop();
                 alert(endUrl);
                 // var firstAmpersandIndex = url.indexOf('&');
