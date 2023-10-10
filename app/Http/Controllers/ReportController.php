@@ -78,20 +78,6 @@ class ReportController extends Controller {
                     $documentsQuery = $documentsQuery->where('documents.uploader', $uploader);
                 }
             }
-
-            // $documents = DB::table('documents')
-            //     ->select('documents.id', 'documents.dept_id', 'departments.name AS department', 'batches.name AS batch', 'doc_types.name AS docType', 'documents.name', 'documents.is_Encoded', 'documents.is_Checked', 'documents.created_at')
-            //     ->join('departments', 'documents.dept_id', '=', 'departments.id')
-            //     ->join('batches', 'documents.batch_id', '=', 'batches.id')
-            //     ->join('doc_types', 'documents.doctype_id', '=', 'doc_types.id')
-            //     ->where('documents.dept_id', auth()->user()->department)
-            //     ->orderBy('id', 'desc')
-            //     ->paginate(100);
-
-            // $documentCounts = DB::table('documents')->where('documents.dept_id', auth()->user()->department)->count();
-            // $uploadCount = $documentCounts;
-            // $EncodeCount = DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Encoded', 1)->count();
-            // $CheckedCount = DB::table('documents')->where('documents.dept_id', auth()->user()->department)->where('is_Checked', 1)->count();
         }
 
         $documents = $documentsQuery->paginate(100);
@@ -101,11 +87,7 @@ class ReportController extends Controller {
         $EncodeCount = $documentsQuery->where('is_Encoded', 1)->count();
         $CheckedCount = $documentsQuery->where('is_Checked', 1)->count();
 
-        // $search = "";
-        // $start = "";
-        // $filterUser = "";
-        // $end = "";
-        // $page = "1";
+        dd($documentsQuery);
 
         return view('reports/index', compact('documents', 'search', 'documentCounts', 'uploadCount', 'EncodeCount', 'CheckedCount', 'users', 'uploader', 'start', 'end'));
     }

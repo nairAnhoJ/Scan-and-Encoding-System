@@ -367,7 +367,6 @@
                 var url = window.location.search.substring(1);
                 var firstAmpersandIndex = url.indexOf('&');
                 if (firstAmpersandIndex !== -1) {
-                    // Extract the substring starting from the first '&' character
                     var getExt = url.substring(firstAmpersandIndex + 1);
                 }else{
                     var getExt = '';
