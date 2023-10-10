@@ -7,24 +7,24 @@
 
 
 @section('content')
-    <div class="p-5 h-full">
+    <div class="h-full p-5">
         @if (auth()->user()->role == '1')
-            <h1 class="text-sky-600 text-xl font-bold mb-3 text-center">System Management</h1>
+            <h1 class="mb-3 text-xl font-bold text-center text-sky-600">System Management</h1>
 
             {{-- ================================== DELETE MODAL ================================== --}}
-            <div id="deleteModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
-                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+            <div id="deleteModal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                <div class="relative w-full h-full max-w-md p-4 md:h-auto">
                     <div class="relative bg-white rounded-lg shadow">
                         <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="deleteModal">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                             <span class="sr-only">Close modal</span>
                         </button>
-                        <form id="frmDeleteModal" method="POST" enctype="multipart/form-data" class=" p-6 text-center">
+                        <form id="frmDeleteModal" method="POST" enctype="multipart/form-data" class="p-6 text-center ">
                             @csrf
                             <input type="hidden" id="hdnDeleteId" name="hdnDeleteId">
                             <input type="hidden" id="hdnSelected1" name="hdnSelected1">
                             <input type="hidden" id="hdnCol" name="hdnCol">
-                            <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             <h3 id="deleteMessage" class="text-lg font-normal text-gray-500"></h3>
                             <h3 id="deleteName" class="mb-8 text-lg font-semibold text-gray-500"></h3>
                             <button type="button" id="deleteAccept" data-modal-toggle="deleteModal" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
@@ -42,60 +42,60 @@
                     <li class="mr-2" role="presentation">
                         @if(session()->has('tab'))
                             @if(session()->get('tab') == '1')
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="batch-tab" data-tabs-target="#batch" type="button" role="tab" aria-controls="batch" aria-selected="true">
+                            <button class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg hover:text-blue-600" id="batch-tab" data-tabs-target="#batch" type="button" role="tab" aria-controls="batch" aria-selected="true">
                             @else 
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="batch-tab" data-tabs-target="#batch" type="button" role="tab" aria-controls="batch" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="batch-tab" data-tabs-target="#batch" type="button" role="tab" aria-controls="batch" aria-selected="false">
                             @endif
                         @else
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="batch-tab" data-tabs-target="#batch" type="button" role="tab" aria-controls="batch" aria-selected="true">
+                            <button class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg hover:text-blue-600" id="batch-tab" data-tabs-target="#batch" type="button" role="tab" aria-controls="batch" aria-selected="true">
                         @endif
                         Batch</button>
                     </li>
                     <li class="mr-2" role="presentation">
                         @if(session()->has('tab'))
                             @if(session()->get('tab') == '2')
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="docType-tab" data-tabs-target="#docType" type="button" role="tab" aria-controls="docType" aria-selected="true">
+                            <button class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg hover:text-blue-600" id="docType-tab" data-tabs-target="#docType" type="button" role="tab" aria-controls="docType" aria-selected="true">
                             @else 
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="docType-tab" data-tabs-target="#docType" type="button" role="tab" aria-controls="docType" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="docType-tab" data-tabs-target="#docType" type="button" role="tab" aria-controls="docType" aria-selected="false">
                             @endif
                         @else
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="docType-tab" data-tabs-target="#docType" type="button" role="tab" aria-controls="docType" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="docType-tab" data-tabs-target="#docType" type="button" role="tab" aria-controls="docType" aria-selected="false">
                         @endif
                         Document Types</button>
                     </li>
                     <li class="mr-2" role="presentation">
                         @if(session()->has('tab'))
                             @if(session()->get('tab') == '3')
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="docTypeFormIndex-tab" data-tabs-target="#docTypeFormIndexTab" type="button" role="tab" aria-controls="docTypeFormIndexTab" aria-selected="true">
+                            <button class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg hover:text-blue-600" id="docTypeFormIndex-tab" data-tabs-target="#docTypeFormIndexTab" type="button" role="tab" aria-controls="docTypeFormIndexTab" aria-selected="true">
                             @else 
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="docTypeFormIndex-tab" data-tabs-target="#docTypeFormIndexTab" type="button" role="tab" aria-controls="docTypeFormIndexTab" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="docTypeFormIndex-tab" data-tabs-target="#docTypeFormIndexTab" type="button" role="tab" aria-controls="docTypeFormIndexTab" aria-selected="false">
                             @endif
                         @else
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="docTypeFormIndex-tab" data-tabs-target="#docTypeFormIndexTab" type="button" role="tab" aria-controls="docTypeFormIndexTab" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="docTypeFormIndex-tab" data-tabs-target="#docTypeFormIndexTab" type="button" role="tab" aria-controls="docTypeFormIndexTab" aria-selected="false">
                         @endif
                         Document Type Form</button>
                     </li>
                     <li class="mr-2" role="presentation">
                         @if(session()->has('tab'))
                             @if(session()->get('tab') == '5')
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="department-tab" data-tabs-target="#department" type="button" role="tab" aria-controls="department" aria-selected="true">
+                            <button class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg hover:text-blue-600" id="department-tab" data-tabs-target="#department" type="button" role="tab" aria-controls="department" aria-selected="true">
                             @else 
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="department-tab" data-tabs-target="#department" type="button" role="tab" aria-controls="department" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="department-tab" data-tabs-target="#department" type="button" role="tab" aria-controls="department" aria-selected="false">
                             @endif
                         @else
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="department-tab" data-tabs-target="#department" type="button" role="tab" aria-controls="department" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="department-tab" data-tabs-target="#department" type="button" role="tab" aria-controls="department" aria-selected="false">
                         @endif
                         Departments</button>
                     </li>
                     <li role="presentation">
                         @if(session()->has('tab'))
                             @if(session()->get('tab') == '6')
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 border-blue-600" id="user-tab" data-tabs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="true">
+                            <button class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg hover:text-blue-600" id="user-tab" data-tabs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="true">
                             @else 
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="user-tab" data-tabs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="user-tab" data-tabs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="false">
                             @endif
                         @else
-                            <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 text-gray-500 border-gray-100" id="user-tab" data-tabs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="false">
+                            <button class="inline-block p-4 text-gray-500 border-b-2 border-transparent border-gray-100 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="user-tab" data-tabs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="false">
                         @endif
                         Users</button>
                     </li>
@@ -105,16 +105,16 @@
             <div id="myTabContent" class="w-full">
 
                 {{-- ===================================== BATCH TAB ===================================== --}}
-                <div class="w-full p-4 bg-gray-50 rounded-lg" id="batch" role="tabpanel" aria-labelledby="batch-tab">
+                <div class="w-full p-4 rounded-lg bg-gray-50" id="batch" role="tabpanel" aria-labelledby="batch-tab">
 
                     {{-- ---------------------------------- Add/Edit Modal ---------------------------------- --}}
-                    <div id="batchModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-                        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+                    <div id="batchModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                        <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
                             <!-- Modal content -->
                             <form method="POST" id="batchForm" class="relative bg-white rounded-lg shadow">
                                 <!-- Modal header -->
                                 @csrf
-                                <div class="flex justify-between items-start p-4 rounded-t border-b">
+                                <div class="flex items-start justify-between p-4 border-b rounded-t">
                                     <h3 id="batchModalTitle" class="text-xl font-semibold text-gray-900"></h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="batchModal">
                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
                                 <!-- Modal footer -->
-                                <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+                                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
                                     <button id="btnBatchAddEdit" data-modal-toggle="batchModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
                                     <button data-modal-toggle="batchModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
                                 </div>
@@ -145,7 +145,7 @@
                     {{-- ---------------------------------- Modal End ---------------------------------- --}}
 
                     {{-- ---------------------------------- Modal Button ---------------------------------- --}}
-                    <div class="w-full h-16 flex">
+                    <div class="flex w-full h-16">
                         <form id="selectDeptBatch" enctype="multipart/form-data" class="w-2/5">
                             @csrf
                             <label for="slcDeptBatch" class="block mb-1 text-sm font-medium text-gray-900">Select a Department</label>
@@ -156,7 +156,7 @@
                                 @endforeach
                             </select>
                         </form>
-                        <div class="w-3/5 self-end">
+                        <div class="self-end w-3/5">
                             <button id="btnAddBatch" disabled class="disabled:bg-opacity-50 disabled:border-opacity-0 disabled:pointer-events-none block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 text-center float-right" type="button" data-modal-toggle="batchModal">
                                 Add
                             </button>
@@ -171,24 +171,24 @@
 
                     {{-- ---------------------------------- Modal Button End ---------------------------------- --}}
 
-                    <div class="overflow-x-auto relative shadow-md sm:rounded-lg w-full mt-3 border-t-2">
+                    <div class="relative w-full mt-3 overflow-x-auto border-t-2 shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         #
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Batch Name
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Action
                                     </th>
                                 </tr>
                             </thead>
                             <tbody id="tblBatchBody">
                                 <tr>
-                                    <td colspan="3" class="text-center p-5 text-lg">Please Select a Department</td>
+                                    <td colspan="3" class="p-5 text-lg text-center">Please Select a Department</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -196,16 +196,16 @@
                 </div>
 
                 {{-- ===================================== DOCUMENT TYPES TAB ===================================== --}}
-                <div class="hidden p-4 bg-gray-50 rounded-lg" id="docType" role="tabpanel" aria-labelledby="docType-tab">
+                <div class="hidden p-4 rounded-lg bg-gray-50" id="docType" role="tabpanel" aria-labelledby="docType-tab">
 
                     {{-- ---------------------------------- Add Modal ---------------------------------- --}}
-                    <div id="docTypeModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-                        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+                    <div id="docTypeModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                        <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
                             <!-- Modal content -->
                             <form method="POST" id="docTypeForm" class="relative bg-white rounded-lg shadow">
                                 <!-- Modal header -->
                                 @csrf
-                                <div class="flex justify-between items-start p-4 rounded-t border-b">
+                                <div class="flex items-start justify-between p-4 border-b rounded-t">
                                     <h3 id="docTypeModalTitle" class="text-xl font-semibold text-gray-900"></h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="docTypeModal">
                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -227,7 +227,7 @@
                                     </div>
                                 </div>
                                 <!-- Modal footer -->
-                                <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+                                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
                                     <button id="btnTypeAddEdit" data-modal-toggle="docTypeModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
                                     <button data-modal-toggle="docTypeModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
                                 </div>
@@ -236,7 +236,7 @@
                     </div>
                     {{-- ---------------------------------- Modal End ---------------------------------- --}}
                     {{-- ---------------------------------- Modal Button ---------------------------------- --}}
-                    <div class="w-full h-16 flex">
+                    <div class="flex w-full h-16">
                         <form id="selectDept" enctype="multipart/form-data" class="w-2/5">
                             @csrf
                             <label for="slcDept" class="block mb-1 text-sm font-medium text-gray-900">Select a Department</label>
@@ -247,7 +247,7 @@
                                 @endforeach
                             </select>
                         </form>
-                        <div class="w-3/5 self-end">
+                        <div class="self-end w-3/5">
                             <button id="btnAddType" disabled class="disabled:bg-opacity-50 disabled:border-opacity-0 disabled:pointer-events-none block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 text-center h-10 border border-blue-700 float-right" type="button" data-modal-toggle="docTypeModal">
                                 Add
                             </button>
@@ -260,24 +260,24 @@
                         </div>
                     </div>
                     {{-- ---------------------------------- Modal Button End ---------------------------------- --}}
-                    <div class="overflow-x-auto relative shadow-md sm:rounded-lg w-full mt-3 border-t-2">
+                    <div class="relative w-full mt-3 overflow-x-auto border-t-2 shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         #
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Document Type Name
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Action
                                     </th>
                                 </tr>
                             </thead>
                             <tbody id="tblDocTypeBody">
                                 <tr>
-                                    <td colspan="3" class="text-center p-5 text-lg">Please Select a Department</td>
+                                    <td colspan="3" class="p-5 text-lg text-center">Please Select a Department</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -285,16 +285,16 @@
                 </div>
 
                 {{-- ===================================== DOCUMENT TYPES FORM TAB ===================================== --}}
-                <div class="hidden p-4 bg-gray-50 rounded-lg" id="docTypeFormIndexTab" role="tabpanel" aria-labelledby="docTypeFormIndex-tab">
+                <div class="hidden p-4 rounded-lg bg-gray-50" id="docTypeFormIndexTab" role="tabpanel" aria-labelledby="docTypeFormIndex-tab">
 
                     {{-- ---------------------------------- Add Modal ---------------------------------- --}}
-                    <div id="docTypeFormIndexModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-                        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+                    <div id="docTypeFormIndexModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                        <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
                             <!-- Modal content -->
                             <form id="docTypeFormIndex" enctype="multipart/form-data" class="relative bg-white rounded-lg shadow">
                                 @csrf
                                 <!-- Modal header -->
-                                <div class="flex justify-between items-start p-4 rounded-t border-b">
+                                <div class="flex items-start justify-between p-4 border-b rounded-t">
                                     <h3 id="docTypeFormIndexModalTitle" class="text-xl font-semibold text-gray-900"></h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="docTypeFormIndexModal">
                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -325,7 +325,7 @@
                                     </div>
                                 </div>
                                 <!-- Modal footer -->
-                                <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+                                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
                                     <button id="btnIndexAddEdit" data-modal-toggle="docTypeFormIndexModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
                                     <button data-modal-toggle="docTypeFormIndexModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
                                 </div>
@@ -334,7 +334,7 @@
                     </div>
                     {{-- ---------------------------------- Modal End ---------------------------------- --}}
                     {{-- ---------------------------------- Modal Button ---------------------------------- --}}
-                    <div class="w-full h-16 flex gap-10">
+                    <div class="flex w-full h-16 gap-10">
                         <form id="frmFormSelectDept" enctype="multipart/form-data" class="w-2/5">
                             @csrf
                             <label for="formSelectDept" class="block mb-1 text-sm font-medium text-gray-900">Select a Department</label>
@@ -353,7 +353,7 @@
                                 <option style="display: none;" selected>Choose a Document Type</option>
                             </select>
                         </form>
-                        <div class="w-1/5 self-end">
+                        <div class="self-end w-1/5">
                             <button id="btnAddIndex" disabled class="disabled:bg-opacity-50 disabled:border-opacity-0 disabled:pointer-events-none block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 text-center h-10 border border-blue-700 float-right" type="button" data-modal-toggle="docTypeFormIndexModal">
                                 Add
                             </button>
@@ -366,27 +366,27 @@
                         </div>
                     </div>
                     {{-- ---------------------------------- Modal Button End ---------------------------------- --}}
-                    <div class="overflow-x-auto relative shadow-md sm:rounded-lg w-full mt-3 border-t-2">
+                    <div class="relative w-full mt-3 overflow-x-auto border-t-2 shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         #
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Index Name
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Type
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Action
                                     </th>
                                 </tr>
                             </thead>
                             <tbody id="docTypeFormTableBody">
                                 <tr>
-                                    <td colspan="4" class="text-center p-5 text-lg">Please Select a Department and Document Type</td>
+                                    <td colspan="4" class="p-5 text-lg text-center">Please Select a Department and Document Type</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -394,16 +394,16 @@
                 </div>
 
                 {{-- ===================================== DEPARTMENT TAB ===================================== --}}
-                <div class="hidden p-4 bg-gray-50 rounded-lg" id="department" role="tabpanel" aria-labelledby="department-tab">
+                <div class="hidden p-4 rounded-lg bg-gray-50" id="department" role="tabpanel" aria-labelledby="department-tab">
 
                     {{-- ---------------------------------- Add Modal ---------------------------------- --}}
-                    <div id="deptModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-                        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+                    <div id="deptModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                        <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
                             <!-- Modal content -->
                             <form method="POST" id="deptForm" class="relative bg-white rounded-lg shadow">
                                 <!-- Modal header -->
                                 @csrf
-                                <div class="flex justify-between items-start p-4 rounded-t border-b">
+                                <div class="flex items-start justify-between p-4 border-b rounded-t">
                                     <h3 id="deptModalTitle" class="text-xl font-semibold text-gray-900"></h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="deptModal">
                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -419,7 +419,7 @@
                                     </div>
                                 </div>
                                 <!-- Modal footer -->
-                                <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+                                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
                                     <button id="btnDeptAddEdit" data-modal-toggle="deptModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
                                     <button data-modal-toggle="deptModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
                                 </div>
@@ -440,17 +440,17 @@
                         </button>
                     </div>
                     {{-- ---------------------------------- Modal Button End ---------------------------------- --}}
-                    <div class="overflow-x-auto relative shadow-md sm:rounded-lg w-full mt-3 border-t-2">
+                    <div class="relative w-full mt-3 overflow-x-auto border-t-2 shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         #
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Department Name
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Action
                                     </th>
                                 </tr>
@@ -461,16 +461,16 @@
                                 @endphp
                                 @foreach ($departments as $department)
                                     <tr class="bg-white border-b">
-                                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             {{ $x++ }}
                                         </th>
-                                        <td class="py-4 px-6">
+                                        <td class="px-6 py-4">
                                             {{ $department->name }}
                                         </td>
-                                        <td class="py-4 px-6">
-                                            <a type="button" data-id="{{ $department->id }}" data-name="{{ $department->name }}" class="btnEditThisDept cursor-pointer font-medium text-blue-600 hover:underline">Edit</a>
+                                        <td class="px-6 py-4">
+                                            <a type="button" data-id="{{ $department->id }}" data-name="{{ $department->name }}" class="font-medium text-blue-600 cursor-pointer btnEditThisDept hover:underline">Edit</a>
                                             <span> | </span>
-                                            <a type="submit" data-id="{{ $department->id }}" data-name="{{ $department->name }}" class="btnDeleteThisDept cursor-pointer font-medium text-red-600 hover:underline">Delete</a>
+                                            <a type="submit" data-id="{{ $department->id }}" data-name="{{ $department->name }}" class="font-medium text-red-600 cursor-pointer btnDeleteThisDept hover:underline">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -480,16 +480,16 @@
                 </div>
 
                 {{-- ===================================== USER TAB ===================================== --}}
-                <div class="hidden p-4 bg-gray-50 rounded-lg" id="user" role="tabpanel" aria-labelledby="user-tab">
+                <div class="hidden p-4 rounded-lg bg-gray-50" id="user" role="tabpanel" aria-labelledby="user-tab">
 
                     {{-- ---------------------------------- Add Modal ---------------------------------- --}}
-                    <div id="userModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-                        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+                    <div id="userModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                        <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
                             <!-- Modal content -->
                             <form method="POST" id="userForm" enctype="multipart/form-data" class="relative bg-white rounded-lg shadow">
                                 <!-- Modal header -->
                                 @csrf
-                                <div class="flex justify-between items-start p-4 rounded-t border-b">
+                                <div class="flex items-start justify-between p-4 border-b rounded-t">
                                     <h3 id="userModalTitle" class="text-xl font-semibold text-gray-900"></h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="userModal">
                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -518,8 +518,9 @@
                                         <label for="user-slcDept" class="block mb-1 text-sm font-medium text-gray-900">Select a Department</label>
                                         <select id="user-slcDept" name="userDept" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                             <option style="display: none;" selected>Choose a Department</option>
+                                            <option value="ALL">All</option>
                                             @foreach ($departments as $department)
-                                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                                <option value="{{ $department->id }}">{{ $department->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -533,7 +534,7 @@
                                     </div>
                                 </div>
                                 <!-- Modal footer -->
-                                <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+                                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
                                     <button id="btnUserAddEdit" data-modal-toggle="userModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
                                     <button data-modal-toggle="userModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Close</button>
                                 </div>
@@ -554,26 +555,26 @@
                         </button>
                     </div>
                     {{-- ---------------------------------- Modal Button End ---------------------------------- --}}
-                    <div class="overflow-x-auto relative shadow-md sm:rounded-lg w-full mt-3 border-t-2">
+                    <div class="relative w-full mt-3 overflow-x-auto border-t-2 shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         #
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Full Name
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Username
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Department
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Permission
                                     </th>
-                                    <th scope="col" class="py-3 px-6">
+                                    <th scope="col" class="px-6 py-3">
                                         Action
                                     </th>
                                 </tr>
@@ -584,19 +585,19 @@
                                 @endphp
                                 @foreach ($accounts as $account)
                                     <tr class="bg-white border-b">
-                                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             {{ $x++ }}
                                         </th>
-                                        <td class="py-4 px-6">
+                                        <td class="px-6 py-4">
                                             {{ $account->name }}
                                         </td>
-                                        <td class="py-4 px-6">
+                                        <td class="px-6 py-4">
                                             {{ $account->username }}
                                         </td>
-                                        <td class="py-4 px-6">
+                                        <td class="px-6 py-4">
                                             {{ $account->department }}
                                         </td>
-                                        <td class="py-4 px-6">
+                                        <td class="px-6 py-4">
                                             @php
                                                 if($account->viewing_only == 1){
                                                     echo 'Viewing Only';
@@ -605,10 +606,10 @@
                                                 }
                                             @endphp
                                         </td>
-                                        <td class="py-4 px-6">
-                                            <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" data-username="{{ $account->username }}" data-dept="{{ $account->deptid }}" data-viewing_only="{{ $account->viewing_only }}" class="btnEditThisUser font-medium text-blue-600 hover:underline cursor-pointer">Edit</a>
+                                        <td class="px-6 py-4">
+                                            <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" data-username="{{ $account->username }}" data-dept="{{ $account->deptid }}" data-viewing_only="{{ $account->viewing_only }}" class="font-medium text-blue-600 cursor-pointer btnEditThisUser hover:underline">Edit</a>
                                             <span> | </span>
-                                            <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" class="btnDeleteThisUser font-medium text-red-600 hover:underline cursor-pointer">Delete</a>
+                                            <a type="button" data-id="{{ $account->id }}" data-name="{{ $account->name }}" class="font-medium text-red-600 cursor-pointer btnDeleteThisUser hover:underline">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach

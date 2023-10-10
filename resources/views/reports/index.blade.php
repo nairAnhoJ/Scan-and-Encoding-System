@@ -14,12 +14,12 @@
     </button>
 
     {{-- MAIN MODAL --}}
-    <div id="viewingModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 p-10 w-screen md:inset-0 h-screen">
+    <div id="viewingModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-screen h-screen p-10 overflow-x-hidden overflow-y-auto md:inset-0">
         <div class="relative w-full h-full">
             <!-- Modal content -->
             <div class="relative w-full h-full bg-white rounded-lg shadow">
                 <!-- Modal header -->
-                <div class="flex justify-between items-start px-4 py-2 rounded-t border-b">
+                <div class="flex items-start justify-between px-4 py-2 border-b rounded-t">
                     <h3 class="text-xl font-semibold text-blue-500">
                         Document
                     </h3>
@@ -32,7 +32,7 @@
                 <div style="height: calc(100% - 116px);" class="px-6 pt-2.5 space-y-6 pb-3 m-0 flex flex-row">
 
                     {{-- Left Content --}}
-                    <div class="w-2/6 min-h-full h-full">
+                    <div class="w-2/6 h-full min-h-full">
                         <div style="border: 1px solid #0284c7;" class="h-full p-2 overflow-auto">
                             <div class="w-full">
                                 <h1><span class="font-semibold">Date Uploaded: </span><span id="viewDateUploaded"></span></h1>
@@ -43,27 +43,27 @@
                                 <h1><span class="font-semibold">Uploader: </span><span id="viewUploader"></span></h1>
                             </div>
                             <hr class="my-1">
-                            <div id="fileDetails" class="w-full pb-3 pt-1 leading-4">
+                            <div id="fileDetails" class="w-full pt-1 pb-3 leading-4">
                             </div>
                         </div>
                     </div>
 
                     {{-- Right Content --}}
                     <div style="margin: 0px" class="w-4/6 h-full pl-5">
-                        <div class="h-full w-full">
-                            <embed id="selectedFile" src="" frameborder="0" type="application/pdf" class="h-full w-full">
+                        <div class="w-full h-full">
+                            <embed id="selectedFile" src="" frameborder="0" type="application/pdf" class="w-full h-full">
                         </div>
                     </div>
                 </div>
                 <!-- Modal footer -->
-                <div class="flex items-center px-6 py-3 space-x-2 rounded-b border-t border-gray-200">
+                <div class="flex items-center px-6 py-3 space-x-2 border-t border-gray-200 rounded-b">
                     <button data-modal-toggle="viewingModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="loadingOverlay" class="inset-0 bg-white fixed flex w-full h-full items-center justify-center duration-300 transition-opacity" style="z-index: 6000">
+    <div id="loadingOverlay" class="fixed inset-0 flex items-center justify-center w-full h-full transition-opacity duration-300 bg-white" style="z-index: 6000">
         <div class="flex-col">
           <div class="w-24 h-24">
             <svg viewBox="0 0 860.1 876.5">
@@ -98,15 +98,15 @@
               />
             </svg>
           </div>
-          <div class="mt-3 text-gray-900 font-mono text-sm sm:text-xs">Loading...</div>
+          <div class="mt-3 font-mono text-sm text-gray-900 sm:text-xs">Loading...</div>
         </div>
     </div>
 
 
-    <div class="p-5 h-full">
-        <h1 class="text-sky-600 text-xl font-bold mb-3 text-center">Documents Viewing</h1>
-        <div class="flex items-end justify-between">
-            <form disabled action="{{ url('/reports/1') }}" method="GET">
+    <div class="h-full p-5">
+        <h1 class="mb-3 text-xl font-bold text-center text-sky-600">Documents Viewing</h1>
+        <form disabled action="{{ url('/reports') }}" method="GET" class="flex items-end justify-between">
+            <div>
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input {{ ($start != '') ? 'checked' : '' }} type="checkbox" id="filter" value="" class="sr-only peer">
                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -133,140 +133,47 @@
                         </div>
                     </div>
                     <div class="flex items-center ml-3">
-                        <label for="user" class="block mr-2 text-sm font-medium text-gray-900">User:</label>
-                        <select {{ ($start != '') ? '' : 'disabled' }} id="user" name="user" class="disabled:pointer-events-none disabled:opacity-75 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5">
-                            <option {{ ($start != '') ? ($filterUser == '0') ? 'selected' : '' : '' }} value="0" selected>All</option>
+                        <label for="user" class="block mr-2 text-sm font-medium text-gray-900">Uploader:</label>
+                        <select {{ ($start != '') ? '' : 'disabled' }} id="user" name="uploader" class="disabled:pointer-events-none disabled:opacity-75 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5">
+                            <option {{ ($start != '') ? ($uploader == '0') ? 'selected' : '' : '' }} value="0" selected>All</option>
                             @foreach ($users as $user)
-                                <option {{ ($start != '') ? ($filterUser == $user->id) ? 'selected' : '' : '' }} value="{{ $user->id }}">{{ $user->name }}</option>
+                                <option {{ ($start != '') ? ($uploader == $user->id) ? 'selected' : '' : '' }} value="{{ $user->id }}">{{ $user->name }}</option>
                             @endforeach
                           </select>
                     </div>
                     <div class="inline">
-                        <button {{ ($start != '') ? '' : 'disabled' }} id="generateButton" type="submit" class="disabled:pointer-events-none disabled:opacity-75 bg-blue-500 px-5 h-10 rounded-lg text-white font-bold hover:scale-105">
+                        <button {{ ($start != '') ? '' : 'disabled' }} id="generateButton" type="submit" class="h-10 px-5 font-bold text-white bg-blue-500 rounded-lg disabled:pointer-events-none disabled:opacity-75 hover:scale-105">
                             Generate
                         </button>
-                        <button {{ ($start != '') ? '' : 'disabled' }} id="clearFilterButton" type="button" class="disabled:pointer-events-none disabled:opacity-75 bg-blue-500 px-5 h-10 rounded-lg text-white font-bold hover:scale-105">
+                        {{-- <button {{ ($start != '') ? '' : 'disabled' }} id="clearFilterButton" type="button" class="h-10 px-5 font-bold text-white bg-blue-500 rounded-lg disabled:pointer-events-none disabled:opacity-75 hover:scale-105">
                             Clear Filter
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
-            </form>
+            </div>
 
             <div class="flex flex-row-reverse">
                 <div class="w-[500px]">
-                    <form method="GET" action="" id="searchForm" class="w-full">
+                    <div class="w-full">
                         @csrf
                         <label for="searchInput" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </div>
-                            <input type="search" id="searchInput" class="block z-10 w-full px-4 py-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="SEARCH" value="{{ $search }}" autocomplete="off">
-                            <button id="clearButton" type="button" class=" absolute right-20 bottom-1">
-                                <i class="uil uil-times text-2xl"></i>
+                            <input type="search" id="searchInput" name="search" class="block z-10 w-full px-4 py-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="SEARCH" value="{{ $search }}" autocomplete="off">
+                            <button id="clearButton" type="button" class="absolute right-20 bottom-1">
+                                <i class="text-2xl uil uil-times"></i>
                             </button>
-                            <button id="searchButton" type="button" style="bottom: 5px; right: 5px;" type="submit" class="text-white absolute bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5">Search</button>
+                            <button id="" style="bottom: 5px; right: 5px;" type="submit" class="text-white absolute bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5">Search</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        {{-- <form id="frmGenerate" method="POST" action="{{ route('report.generate') }}" enctype="multipart/form-data" class="flex h-24 items-center">
-            @csrf
-            <div class="w-full h-24 grid grid-cols-4 grid-rows-2 gap-x-3 text-center">
-                <div class="self-center">
-                    <div class="relative">
-                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                          <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                        </div>
-                        <input datepicker type="text" name="startDate" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-1.5" placeholder="Select Start Date" value="{{ $dateStart }}">
-                    </div>
-                </div>
-                <div class="self-center">
-                    <div class="relative">
-                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                          <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                        </div>
-                        <input datepicker type="text" name="endDate" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-1.5" placeholder="Select End Date" value="{{ $dateEnd }}">
-                    </div>
-                </div>
-                <div class="self-center">
-                    <div class="flex w-full">
-                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-32 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
-                            Department
-                        </div>
-                        <label for="batch" class="sr-only">Choose a Department</label>
-                        <select {{ $user->role == '0' ? 'disabled' : '' }} id="department" name="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
-                            <option value="0">All</option>
-                            @foreach ($depts as $dept)
-                                <option {{ ($user->role == '0') ? (($user->department == $dept->id) ? 'selected' : '') : '' }} value="{{ $dept->id }}">{{ $dept->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center">
-                    <div class="flex items-center mr-4">
-                        <input {{ ($encodedCB == 1) ? 'checked' : '' }} id="encodedCB" name="encodedCB" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
-                        <label for="encodedCB" class="ml-1 text-sm font-medium text-gray-900">Encoded</label>
-                    </div>
-                    <div class="flex items-center mr-4">
-                        <input {{ ($checkedCB == 1) ? 'checked' : '' }} id="checkedCB" name="checkedCB" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
-                        <label for="checkedCB" class="ml-1 text-sm font-medium text-gray-900">Checked</label>
-                    </div>
-                </div>
-                <div class="self-center">
-                    <div class="flex w-full">
-                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-32 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
-                            Batch
-                        </div>
-                        <label for="batch" class="sr-only">Choose a Batch</label>
-                        <select id="batch" name="batch" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
-                                <option value="0">All</option>
-                                @foreach ($sbatches as $sbatch)
-                                    <option value="{{ $sbatch->id }}" @if($batchID == $sbatch->id) selected @endif>{{ $sbatch->name }}</option>
-                                @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="self-center">
-                    <div class="flex w-full">
-                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-32 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
-                            Doc Type
-                        </div>
-                        <label for="docType" class="sr-only">Choose a Document Type</label>
-                        <select id="docType" name="docType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
-                            <option value="0">All</option>
-                            @foreach ($docTypes as $docType)
-                                <option value="{{ $docType->id }}" @if($docTypeID == $docType->id) selected @endif>{{ $docType->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="self-center">
-                    <div class="flex w-full">
-                        <div id="states-button" class="cursor-default inline-flex justify-center items-center py-1.5 px-2 w-32 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
-                            Uploader
-                        </div>
-                        <label for="user" class="sr-only">Choose a Uploader</label>
-                        <select id="user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5">
-                            <option value="0">All</option>
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}" @if($userID == $user->id) selected @endif>{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="self-center">
-                    <button type="submit" id="btnGenerate" class="self-center h-8 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-px focus:outline-none">Generate</button>
-                </div>
-            </div>
-        </form> --}}
-
-
+        </form>
 
         <div class="w-full mt-3">
-            <div id="generateResult" class="w-full grid grid-cols-3 text-center">
+            <div id="generateResult" class="grid w-full grid-cols-3 text-center">
                 <div><span class="tracking-wide">Total Uploaded: </span><span class="font-bold tracking-wide">{{ $uploadCount }}</span></div>
                 <div><span class="tracking-wide">Total Encoded: </span><span class="font-bold tracking-wide">{{ $EncodeCount }}</span></div>
                 <div><span class="tracking-wide">Total Checked: </span><span class="font-bold tracking-wide">{{ $CheckedCount }}</span></div>
@@ -308,14 +215,14 @@
                                 @endphp
                                 @foreach ($documents as $document)
                                     <tr class=" {{ ($x++ % 2 == 0)? 'bg-gray-50' : 'bg-white'; }} border-b">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-center">
-                                            <button {{ ($document->is_Encoded == 0 ? 'disabled' : '') }} data-id="{{$document->id}}" class="viewButton disabled:text-neutral-500 disabled:pointer-events-none text-blue-500 font-bold tracking-wide">View</button>
+                                        <th scope="row" class="px-6 py-4 font-medium text-center text-gray-900 whitespace-nowrap">
+                                            <button {{ ($document->is_Encoded == 0 ? 'disabled' : '') }} data-id="{{$document->id}}" class="font-bold tracking-wide text-blue-500 viewButton disabled:text-neutral-500 disabled:pointer-events-none">View</button>
                                         </th>
-                                        <td class=" whitespace-nowrap text-center">{{ $document->department }}</td>
-                                        <td class=" whitespace-nowrap text-center">{{ $document->batch }}</td>
-                                        <td class=" whitespace-nowrap text-center">{{ $document->docType }}</td>
-                                        <td class=" whitespace-nowrap text-center">{{ $document->name }}</td>
-                                        <td class=" whitespace-nowrap text-center">
+                                        <td class="text-center whitespace-nowrap">{{ $document->department }}</td>
+                                        <td class="text-center whitespace-nowrap">{{ $document->batch }}</td>
+                                        <td class="text-center whitespace-nowrap">{{ $document->docType }}</td>
+                                        <td class="text-center whitespace-nowrap">{{ $document->name }}</td>
+                                        <td class="text-center whitespace-nowrap">
                                             @php
                                                 if($document->is_Encoded == '1' && $document->is_Checked == '0'){
                                                     echo 'ENCODED';
@@ -326,7 +233,7 @@
                                                 }
                                             @endphp
                                         </td>
-                                        <td class=" whitespace-nowrap text-center">{{ $document->created_at }}</td>
+                                        <td class="text-center whitespace-nowrap">{{ $document->created_at }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -335,8 +242,10 @@
                 </div>
             </div>
 
+            {{ $documents->links() }}
+
             {{-- PAGINATION --}}
-                <div class="grid md:grid-cols-2 mt-3 px-3">
+                {{-- <div class="grid px-3 mt-3 md:grid-cols-2">
                     @php
                         $prev = $page - 1;
                         $next = $page + 1;
@@ -348,7 +257,7 @@
                             $from = 0;
                         }
                     @endphp
-                    <div class="justify-self-center md:justify-self-start self-center">
+                    <div class="self-center justify-self-center md:justify-self-start">
                         <span class="text-sm text-gray-700">
                             Showing <span class="font-semibold text-gray-900">{{ $from }}</span> to <span class="font-semibold text-gray-900">{{ $to }}</span> of <span class="font-semibold text-gray-900">{{ $documentCounts }}</span> Items
                         </span>
@@ -364,7 +273,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <p class="block w-9 h-9 leading-9 text-center z-10 text-gray-500 border border-gray-300 bg-white font-semibold">{{ $page }}</p>
+                                    <p class="z-10 block font-semibold leading-9 text-center text-gray-500 bg-white border border-gray-300 w-9 h-9">{{ $page }}</p>
                                 </li>
                                 <li>
                                     <a href="{{ ($search == '') ? ($start == '') ? route('view.paginate', ['page' => $next]) : route('view.paginate', ['page' => $next, 'start' => $start, 'end' => $end]) : url('/reports/'.$next.'/'.$search); }}" class="{{ ($to == $documentCounts) ? 'pointer-events-none' : ''; }} block w-9 h-9 leading-9 text-center text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
@@ -375,7 +284,7 @@
                             </ul>
                         </nav>
                     </div>
-                </div>
+                </div> --}}
             {{-- PAGINATION END --}}
 
             {{-- <div class="pb-5">
@@ -403,7 +312,7 @@
                         @if (isset($documents))
                             @foreach ($documents as $document)
                                 <tr>
-                                    <td><button {{ ($document->is_Checked == 0 ? 'disabled' : '') }} data-id="{{ $document->id }}" class="btnView disabled:text-neutral-500 disabled:pointer-events-none text-blue-500 font-bold">View</button></td>
+                                    <td><button {{ ($document->is_Checked == 0 ? 'disabled' : '') }} data-id="{{ $document->id }}" class="font-bold text-blue-500 btnView disabled:text-neutral-500 disabled:pointer-events-none">View</button></td>
                                     <td>{{ $document->department }}</td>
                                     <td>{{ $document->batch }}</td>
                                     <td>{{ $document->docType }}</td>
@@ -449,15 +358,29 @@
             var url = new URL(window.location.href);
             var currentPage = parseInt(url.pathname.split('/').pop(), 10);
 
-            $('#searchButton').click(function(){
-                var search = $('#searchInput').val();
-                if(search != ""){
-                    $('#searchForm').prop('action', `{{ url('/reports/1/${search}') }}`);
-                }else{
-                    $('#searchForm').prop('action', `{{ url('/reports/1') }}`);
-                }
-                $('#searchForm').submit();
-            });
+            // $('#searchButton').click(function(){
+            //     var search = $('#searchInput').val();
+            //     var start = $('#start').val();
+            //     var end = $('#end').val();
+            //     var user = $('#user').val();
+            //     if(search != ""){
+            //         if ($('#filter').prop('checked')) {
+            //             var filter = `${search}?start=${start}&end=${end}&user=${user}`;
+            //             filter = filter.replace(/\//g, '%2F');
+            //             $('#searchForm').prop('action', `{{ url('/reports/1/${filter}') }}`);
+            //         } else {
+            //             $('#searchForm').prop('action', `{{ url('/reports/1/${search}') }}`);
+            //         }
+            //     }else{
+            //         if ($('#filter').prop('checked')) {
+            //             $('#searchForm').prop('action', `{{ url('/reports/1/${search}') }}`);
+            //         } else {
+            //             $('#searchForm').prop('action', `{{ url('/reports/1') }}`);
+            //         }
+            //     }
+            //     alert($('#searchForm').prop('action'));
+            //     $('#searchForm').submit();
+            // });
 
             $('#searchInput').on('keydown', function(event) {
                 if (event.keyCode === 13) {
