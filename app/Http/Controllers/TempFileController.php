@@ -39,10 +39,11 @@ class TempFileController extends Controller
                 //     $docID = "0{$docID}";
                 // }
                 $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
-                dd($nameUnique);
                 // move_uploaded_file($file->getPathName(), "F:/DMS/".$nameUnique);
                 // Storage::disk('dms')->put($nameUnique, $request->file('file'));
                 $file->move('temporary/'.$user->id, $nameUnique);
+                
+                dd($nameUnique);
 
                 $temp = new TempFile();
                 $temp->name = $filename;
