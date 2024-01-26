@@ -29,7 +29,6 @@ class TempFileController extends Controller
 
         if($files = $request->file('file')){
             $docID = DB::table('documents')->get()->count();
-            dd('test');
 
             foreach($files as $file){
                 $filename = $file->getClientOriginalName();
@@ -40,6 +39,7 @@ class TempFileController extends Controller
                 //     $docID = "0{$docID}";
                 // }
                 $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
+                dd($nameUnique);
                 // move_uploaded_file($file->getPathName(), "F:/DMS/".$nameUnique);
                 // Storage::disk('dms')->put($nameUnique, $request->file('file'));
                 $file->move('temporary/'.$user->id, $nameUnique);
