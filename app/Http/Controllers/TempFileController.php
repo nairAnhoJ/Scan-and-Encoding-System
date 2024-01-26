@@ -42,14 +42,14 @@ class TempFileController extends Controller
                 // move_uploaded_file($file->getPathName(), "F:/DMS/".$nameUnique);
                 // Storage::disk('dms')->put($nameUnique, $request->file('file'));
                 $file->move('temporary/'.$user->id, $nameUnique);
-                
-                dd($nameUnique);
 
                 $temp = new TempFile();
                 $temp->name = $filename;
                 $temp->unique_name = $nameUnique;
                 $temp->uploader = $user->id;
                 $temp->save();
+                
+                dd($nameUnique);
             }
         }
 
