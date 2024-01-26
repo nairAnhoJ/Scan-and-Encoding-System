@@ -16,7 +16,6 @@ class TempFileController extends Controller
     public function store(Request $request){
         ini_set('memory_limit', '1024M');
 
-        dd('test');
 
         $user = auth()->user();
 
@@ -24,6 +23,8 @@ class TempFileController extends Controller
         if (!file_exists($dirTemp)) {
             File::makeDirectory($dirTemp,077,true);
         }
+        
+        dd('test');
 
         // dd($request->file('file')[0]->getPathName());
 
