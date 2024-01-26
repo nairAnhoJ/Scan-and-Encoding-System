@@ -24,12 +24,12 @@ class TempFileController extends Controller
             File::makeDirectory($dirTemp,077,true);
         }
         
-        dd('test');
 
         // dd($request->file('file')[0]->getPathName());
 
         if($files = $request->file('file')){
             $docID = DB::table('documents')->get()->count();
+            dd('test');
 
             foreach($files as $file){
                 $filename = $file->getClientOriginalName();
