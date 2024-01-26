@@ -48,8 +48,6 @@ class TempFileController extends Controller
                 $temp->unique_name = $nameUnique;
                 $temp->uploader = $user->id;
                 $temp->save();
-                
-                dd($nameUnique);
             }
         }
 
