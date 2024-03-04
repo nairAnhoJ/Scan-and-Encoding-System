@@ -121,7 +121,7 @@ class DocumentManagementController extends Controller
 
     public function encodeGetFolder(Request $request){
         $selBatch = $request->value;
-        $folders = DB::table('folder_lists')->where('batch_id', $selBatch)->orderBy('name', 'desc')->get();
+        $folders = DB::table('folder_lists')->where('batch_id', $selBatch)->orderBy('id', 'desc')->get();
         $output = '<option selected style="display: none"></option>';
 
         foreach($folders as $folder){
@@ -212,14 +212,14 @@ class DocumentManagementController extends Controller
                             $output .= '
                                         <div class="mt-2">
                                             <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
-                                            <input type="'.$forms[0]->$colName3.'" value="'.$dateVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                            <input type="'.$forms[0]->$colName3.'" value="'.$dateVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block w-full py-1 pl-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
                                         </div>
                                         ';
                         }else{
                             $output .= '
                                         <div class="mt-2">
                                             <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
-                                            <input type="'.$forms[0]->$colName3.'" value="'.$details[0]->$colVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                            <input type="'.$forms[0]->$colName3.'" value="'.$details[0]->$colVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block w-full py-1 pl-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
                                         </div>
                                         ';
                         }
@@ -235,7 +235,7 @@ class DocumentManagementController extends Controller
                         $output .= '
                                     <div class="mt-2">
                                         <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
-                                        <input type="'.$forms[0]->$colName3.'" value="" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <input type="'.$forms[0]->$colName3.'" value="" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block w-full py-1 pl-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                     ';
                     }
@@ -289,12 +289,12 @@ class DocumentManagementController extends Controller
         DB::table('documents')->where(['id' => $selFile])->update(['is_Encoded' => 1]);
 
         echo    '   
-                    <div id="toast-success" class="flex items-center p-4 mb-4 w-80 text-gray-500 bg-green-500 rounded-lg shadow" role="alert">
-                        <div class="inline-flex flex-shrink-0 justify-center items-center w-8 h-8 text-green-500 bg-green-100 rounded-lg">
+                    <div id="toast-success" class="flex items-center p-4 mb-4 text-gray-500 bg-green-500 rounded-lg shadow w-80" role="alert">
+                        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                             <span class="sr-only">Check icon</span>
                         </div>
-                        <div class="ml-3 text-md font-bold text-white">Details Successfully Saved.</div>
+                        <div class="ml-3 font-bold text-white text-md">Details Successfully Saved.</div>
                         <button type="button" id="succNotif" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-600 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8" data-dismiss-target="#toast-success" aria-label="Close">
                             <span class="sr-only">Close</span>
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -334,7 +334,7 @@ class DocumentManagementController extends Controller
 
     public function qcGetFolder(Request $request){
         $selBatch = $request->value;
-        $folders = DB::table('folder_lists')->where('batch_id', $selBatch)->orderBy('name', 'desc')->get();
+        $folders = DB::table('folder_lists')->where('batch_id', $selBatch)->orderBy('id', 'desc')->get();
         $output = '<option selected style="display: none"></option>';
 
         foreach($folders as $folder){
@@ -418,14 +418,14 @@ class DocumentManagementController extends Controller
                             $output .= '
                                     <div class="mt-2">
                                         <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
-                                        <input readonly type="'.$forms[0]->$colName3.'" value="'.$dateVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <input readonly type="'.$forms[0]->$colName3.'" value="'.$dateVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block w-full py-1 pl-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                     ';
                         }else{
                             $output .= '
                                     <div class="mt-2">
                                         <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
-                                        <input readonly type="'.$forms[0]->$colName3.'" value="'.$details[0]->$colVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <input readonly type="'.$forms[0]->$colName3.'" value="'.$details[0]->$colVal.'" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block w-full py-1 pl-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                     ';
                         }
@@ -441,7 +441,7 @@ class DocumentManagementController extends Controller
                         $output .= '
                                     <div class="mt-2">
                                         <label for="'.$forms[0]->$colName2.'" class="block text-sm font-medium text-sky-600">'.$forms[0]->$colName1.'</label>
-                                        <input readonly type="'.$forms[0]->$colName3.'" value="" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block py-1 pl-3 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <input readonly type="'.$forms[0]->$colName3.'" value="" name="'.$forms[0]->$colName2.'" id="'.$forms[0]->$colName2.'" autocomplete="off" class="block w-full py-1 pl-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                     ';
                     }
@@ -461,12 +461,12 @@ class DocumentManagementController extends Controller
         DB::update('update documents SET is_Checked = ? WHERE id = ?', ['1', $selFile]);
 
         echo    '   
-                    <div id="toast-success" class="flex items-center p-4 mb-4 w-80 text-gray-500 bg-green-500 rounded-lg shadow" role="alert">
-                        <div class="inline-flex flex-shrink-0 justify-center items-center w-8 h-8 text-green-500 bg-green-100 rounded-lg">
+                    <div id="toast-success" class="flex items-center p-4 mb-4 text-gray-500 bg-green-500 rounded-lg shadow w-80" role="alert">
+                        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg">
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                             <span class="sr-only">Check icon</span>
                         </div>
-                        <div class="ml-3 text-md font-bold text-white">Document Successfully Checked.</div>
+                        <div class="ml-3 font-bold text-white text-md">Document Successfully Checked.</div>
                         <button type="button" id="succNotif" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-600 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8" data-dismiss-target="#toast-success" aria-label="Close">
                             <span class="sr-only">Close</span>
                             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

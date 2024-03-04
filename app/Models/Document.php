@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     use HasFactory;
+
+    public function brand() {
+        return $this->belongsTo(FolderList::class, 'brand_id');
+    }
 }
