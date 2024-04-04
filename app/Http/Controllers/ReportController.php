@@ -21,7 +21,7 @@ class ReportController extends Controller {
         $nEnd = date('Y-m-d', strtotime($end . ' +1 day'));
         $user = auth()->user();
 
-        if ($user->id == 1 || $user->department == 'ALL') {
+        if ($user->id == 1 || $user->department == '6') {
             $users = DB::table('accounts')->where('id', '!=', '1')->where('viewing_only', '0')->get();
 
             if ($start == null || $start == '') {
