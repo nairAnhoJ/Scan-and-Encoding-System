@@ -62,7 +62,7 @@
                                 Files
                             </div>
                             <div>
-                                <span class="text-green-500" id="doneCount"></span> / <span class="text-black" id="totalCount"></span>
+                                <span class="text-green-500" id="doneCount"></span> / <span class="text-black" id="totalCount"> (<span class="text-black" id="percentage"></span>%)
                             </div>
                         </label>
                         <div class="px-3">
@@ -93,6 +93,7 @@
 
         var doneCount = '';
         var totalCount = '';
+        var percentage = '';
 
 
         // FOR BATCH
@@ -166,8 +167,10 @@
                     $('#file').html(result.output);
                     doneCount = result.doneCount;
                     totalCount = result.totalCount;
+                    percentage = (doneCount / totalCount) * 100
                     $('#doneCount').html(doneCount);
-                    $('#totalCount').htmltotalCount(totalCount);
+                    $('#totalCount').html(totalCount);
+                    $('#percentage').html(percentage);
                 }
             })
 
@@ -226,7 +229,9 @@
                 success:function(result){
                     $('#c-con').html(result);
                     doneCount++;
+                    percentage = (doneCount / totalCount) * 100
                     $('#doneCount').html(doneCount);
+                    $('#percentage').html(percentage);
                     $('#file option:selected').addClass('text-green-500');
                 }
             })
