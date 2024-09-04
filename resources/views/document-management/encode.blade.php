@@ -167,7 +167,7 @@
                     doneCount = result.doneCount;
                     totalCount = result.totalCount;
                     $('#doneCount').html(doneCount);
-                    $('#totalCount').htmltotalCount();
+                    $('#totalCount').htmltotalCount(totalCount);
                 }
             })
 
