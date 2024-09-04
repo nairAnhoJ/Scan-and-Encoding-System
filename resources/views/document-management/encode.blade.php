@@ -153,6 +153,7 @@
             $.ajax({
                 url:"{{ route('encode.getfiles') }}",
                 method:"POST",
+                dataType: 'json',
                 data:{
                     batchValue: batchValue,
                     folderValue: folderValue,
