@@ -91,6 +91,9 @@
 
     <script type="text/javascript">
 
+        var doneCount = '';
+        var totalCount = '';
+
 
         // FOR BATCH
         $('#batch').change(function(){
@@ -107,6 +110,8 @@
                 },
                 success:function(result){
                     $('#folder').html(result);
+                    $('#doneCount').html('');
+                    $('#totalCount').html('');
                 }
             })
 
@@ -141,8 +146,6 @@
 
 
 
-
-
         // FOR FOLDER
         $('#folder').change(function(){
             $('#file').prop('disabled', false);
@@ -161,8 +164,10 @@
                 },
                 success:function(result){
                     $('#file').html(result.output);
-                    $('#doneCount').html(result.doneCount);
-                    $('#totalCount').html(result.totalCount);
+                    doneCount = result.doneCount;
+                    totalCount = result.totalCount;
+                    $('#doneCount').html(doneCount);
+                    $('#totalCount').htmltotalCount();
                 }
             })
 
@@ -206,6 +211,8 @@
             
         });
 
+
+
         $(document).on('click', '#encodeSubmit', function(e){
             e.preventDefault();
             $('#btnModal').click();
@@ -218,6 +225,8 @@
                 data: $('#fillupForm').serialize(),
                 success:function(result){
                     $('#c-con').html(result);
+                    doneCount++;
+                    $('#doneCount').html(doneCount);
                     $('#file option:selected').addClass('text-green-500');
                 }
             })
