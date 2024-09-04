@@ -171,7 +171,7 @@
                     percentage = (doneCount / totalCount) * 100
                     $('#doneCount').html(doneCount);
                     $('#totalCount').html(totalCount);
-                    $('#percentage').html(percentage.toFixed(2) + '%');
+                    $('#percentage').html(Math.round(percentage) + '%');
                 }
             })
 
@@ -232,7 +232,7 @@
                     doneCount++;
                     percentage = (doneCount / totalCount) * 100
                     $('#doneCount').html(doneCount);
-                    $('#percentage').html(percentage.toFixed(2) + '%');
+                    $('#percentage').html(Math.round(percentage) + '%');
                     $('#file option:selected').addClass('text-green-500');
                 }
             })
