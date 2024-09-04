@@ -57,7 +57,14 @@
                     </div>
                     <div id="filedd" class="w-full">
                         @csrf
-                        <label for="file" class="text-sky-600 pl-3 block text-sm font-medium">Files</label>
+                        <label for="file" class="text-sky-600 pl-3 text-sm font-medium flex justify-between">
+                            <div>
+                                Files
+                            </div>
+                            <div>
+                                <span id="doneCount"></span> / <span id="totalCount"></span>
+                            </div>
+                        </label>
                         <div class="px-3">
                             <select multiple id="file" name="file" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-1 pl-3">
                             </select>
@@ -152,7 +159,9 @@
                     _token: _token
                 },
                 success:function(result){
-                    $('#file').html(result);
+                    $('#file').html(result.output);
+                    $('#doneCount').html(result.doneCount);
+                    $('#totalCount').html(result.totalCount);
                 }
             })
 

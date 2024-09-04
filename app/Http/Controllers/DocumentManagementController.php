@@ -135,6 +135,9 @@ class DocumentManagementController extends Controller
         $userID = auth()->user()->id;
         $selBatch = $request->batchValue;
         $selFolder = $request->folderValue;
+        $doneCount = Document::where('batch_id', $selBatch)->where('folder', $selFolder)->where('$is_Encoded', 1)->count();
+        // $totalCount = Document::where('batch_id', $selBatch)->where('folder', $selFolder)->count();
+
         $files = DB::select('SELECT documents.id, documents.doctype_id, documents.name, documents.unique_name, documents.is_Encoded, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.batch_id = ? AND documents.folder = ? ORDER BY documents.id DESC', [$selBatch, $selFolder]);
 
         $output = '';
@@ -151,7 +154,14 @@ class DocumentManagementController extends Controller
             // $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="documents/'.$dept.'/'.$selBatch.'/'.$file->doctype_id.'/'.$file->folder.'/'.$file->unique_name.'">'.$file->name.'</option>';
             $output .= '<option value="'.$file->id.'" class="'.$textColor.'" data-filepath="encoding/'.$userID.'/'.$file->unique_name.'">'.$file->name.'</option>';
         }
-        echo $output;
+
+        $data = [
+            'output' => $output,
+            'doneCount' => $doneCount,
+            'totalCount' => count($files),
+        ];
+
+        return response()->json($data);
     }
 
     public function encodeGetForm(Request $request){
