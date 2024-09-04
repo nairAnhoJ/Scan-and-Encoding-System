@@ -62,7 +62,7 @@
                                 Files
                             </div>
                             <div>
-                                <span class="text-green-500" id="doneCount"></span> / <span class="text-black" id="totalCount"> (<span class="text-black" id="percentage"></span>%)
+                                <span class="text-green-500" id="doneCount"></span> / <span class="text-black" id="totalCount"></span> (<span class="text-black" id="percentage"></span>%)
                             </div>
                         </label>
                         <div class="px-3">
@@ -113,6 +113,7 @@
                     $('#folder').html(result);
                     $('#doneCount').html('');
                     $('#totalCount').html('');
+                    $('#percentage').html('');
                 }
             })
 
