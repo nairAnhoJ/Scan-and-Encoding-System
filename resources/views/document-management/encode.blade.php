@@ -62,7 +62,7 @@
                                 Files
                             </div>
                             <div>
-                                <span id="doneCount"></span> / <span id="totalCount"></span>
+                                <span class="text-green-500" id="doneCount"></span> / <span class="text-black" id="totalCount"></span>
                             </div>
                         </label>
                         <div class="px-3">
