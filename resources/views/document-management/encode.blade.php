@@ -57,7 +57,7 @@
                     </div>
                     <div id="filedd" class="w-full">
                         @csrf
-                        <label for="file" class="text-sky-600 pl-3 text-sm font-medium flex justify-between">
+                        <label for="file" class="text-sky-600 px-3 text-sm font-medium flex justify-between">
                             <div>
                                 Files
                             </div>
