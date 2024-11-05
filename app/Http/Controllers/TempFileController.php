@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TempFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
@@ -17,7 +18,7 @@ class TempFileController extends Controller
         // ini_set('memory_limit', '1024M');
 
 
-        $user = auth()->user();
+        $user = Auth::user();
 
         dd($user);
 
