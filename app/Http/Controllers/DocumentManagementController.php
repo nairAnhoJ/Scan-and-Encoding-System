@@ -23,8 +23,9 @@ class DocumentManagementController extends Controller
     // UPLOAD CONTROLLER
 
         public function uploadIndex(){
-            $user = auth()->user()->id;
-            $dept = auth()->user()->department;
+
+            $user = Auth::user()->id;
+            $dept = Auth::user()->department;
             $tempLast = TempFile::all()->where('uploader',$user)->last();
             $tempCount = TempFile::all()->where('uploader',$user)->count();
             $temps = TempFile::all();
