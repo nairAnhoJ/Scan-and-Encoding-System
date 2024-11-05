@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class TempFileController extends Controller
 {
     public function store(Request $request){
-        ini_set('memory_limit', '1024M');
+        // ini_set('memory_limit', '1024M');
 
 
         $user = auth()->user();
