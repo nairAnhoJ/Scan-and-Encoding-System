@@ -24,33 +24,60 @@ class TempFileController extends Controller
             File::makeDirectory($dirTemp,077,true);
         }
 
-        dd($request->file('file'));
-        
-        // dd($request->file('file')[0]->getPathName());
+        // dd($request->file('file'));
 
-        if($files = $request->file('file')){
-            $docID = DB::table('documents')->get()->count();
+        $files = $request->file('file');
+        $docID = DB::table('documents')->count();
 
-            foreach($files as $file){
-                $filename = $file->getClientOriginalName();
-                $docID++;
-                // $docIDLength = 10 - strlen($docID);
-    
-                // for($x = 1; $x <= $docIDLength; $x++){
-                //     $docID = "0{$docID}";
-                // }
-                $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
-                // move_uploaded_file($file->getPathName(), "F:/DMS/".$nameUnique);
-                // Storage::disk('dms')->put($nameUnique, $request->file('file'));
-                $file->move('temporary/'.$user->id, $nameUnique);
+        foreach($files as $file){
+            $filename = $file->getClientOriginalName();
+            $docID++;
+            // $docIDLength = 10 - strlen($docID);
 
-                $temp = new TempFile();
-                $temp->name = $filename;
-                $temp->unique_name = $nameUnique;
-                $temp->uploader = $user->id;
-                $temp->save();
-            }
+            // for($x = 1; $x <= $docIDLength; $x++){
+            //     $docID = "0{$docID}";
+            // }
+            $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
+            // move_uploaded_file($file->getPathName(), "F:/DMS/".$nameUnique);
+            // Storage::disk('dms')->put($nameUnique, $request->file('file'));
+            $file->move('temporary/'.$user->id, $nameUnique);
+
+            $temp = new TempFile();
+            $temp->name = $filename;
+            $temp->unique_name = $nameUnique;
+            $temp->uploader = $user->id;
+            $temp->save();
         }
+
+
+
+
+
+
+
+        // if($files = $request->file('file')){
+        //     $docID = DB::table('documents')->count();
+
+        //     foreach($files as $file){
+        //         $filename = $file->getClientOriginalName();
+        //         $docID++;
+        //         // $docIDLength = 10 - strlen($docID);
+    
+        //         // for($x = 1; $x <= $docIDLength; $x++){
+        //         //     $docID = "0{$docID}";
+        //         // }
+        //         $nameUnique = date('Y').'_'.date('m').'_'.date('d').'_'.$docID.'.'.$file->getClientOriginalExtension();
+        //         // move_uploaded_file($file->getPathName(), "F:/DMS/".$nameUnique);
+        //         // Storage::disk('dms')->put($nameUnique, $request->file('file'));
+        //         $file->move('temporary/'.$user->id, $nameUnique);
+
+        //         $temp = new TempFile();
+        //         $temp->name = $filename;
+        //         $temp->unique_name = $nameUnique;
+        //         $temp->uploader = $user->id;
+        //         $temp->save();
+        //     }
+        // }
 
         return redirect()->back();
     }
