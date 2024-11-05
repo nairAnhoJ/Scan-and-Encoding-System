@@ -17,10 +17,7 @@ class TempFileController extends Controller
     public function store(Request $request){
         // ini_set('memory_limit', '1024M');
 
-
         $user = Auth::user();
-
-        dd($user);
 
         $dirTemp = public_path().'/temporary';
         if (!file_exists($dirTemp)) {
