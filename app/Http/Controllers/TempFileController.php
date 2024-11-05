@@ -24,7 +24,7 @@ class TempFileController extends Controller
             File::makeDirectory($dirTemp,077,true);
         }
 
-        dd($dirTemp);
+        dd($request->file('file'));
         
         // dd($request->file('file')[0]->getPathName());
 
