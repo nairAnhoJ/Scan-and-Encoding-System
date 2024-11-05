@@ -22,73 +22,73 @@ class DocumentManagementController extends Controller
 
     // UPLOAD CONTROLLER
 
-    public function uploadIndex(){
-        $user = auth()->user()->id;
-        $dept = auth()->user()->department;
-        $tempLast = TempFile::all()->where('uploader',$user)->last();
-        $tempCount = TempFile::all()->where('uploader',$user)->count();
-        $temps = TempFile::all();
-        $batchs = DB::table('batches')->where('dept_id', $dept)->orderby('name', 'asc')->get();
-        $docTypes = DB::table('doc_types')->where('dept_id', $dept)->orderby('name', 'asc')->get();
-        $allTemps = DB::table('temp_files')->where('uploader',$user)->get();
+        public function uploadIndex(){
+            $user = auth()->user()->id;
+            $dept = auth()->user()->department;
+            $tempLast = TempFile::all()->where('uploader',$user)->last();
+            $tempCount = TempFile::all()->where('uploader',$user)->count();
+            $temps = TempFile::all();
+            $batchs = DB::table('batches')->where('dept_id', $dept)->orderby('name', 'asc')->get();
+            $docTypes = DB::table('doc_types')->where('dept_id', $dept)->orderby('name', 'asc')->get();
+            $allTemps = DB::table('temp_files')->where('uploader',$user)->get();
 
-        return view('document-management/upload', compact('tempLast','tempCount','temps','batchs','docTypes', 'allTemps'));
-    }
-
-    public function uploadStore(Request $request){
-        $user = auth()->user();
-        $userId = auth()->user()->id;
-        $temps = TempFile::all()->where('uploader',$userId);
-        $folder = date('mdY');
-
-        // $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
-        $dirDoc = 'F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
-        if (!file_exists($dirDoc)) {
-            File::makeDirectory($dirDoc,077,true);
-            DB::insert('insert into folder_lists (dept_id, batch_id, name) values (?, ?, ?)', [$user->department, $request->batch, $folder]);
+            return view('document-management/upload', compact('tempLast','tempCount','temps','batchs','docTypes', 'allTemps'));
         }
 
-        $request->validate([
-            'batch' => 'required',
-            'docType' => 'required',
-        ]);
+        public function uploadStore(Request $request){
+            $user = auth()->user();
+            $userId = auth()->user()->id;
+            $temps = TempFile::all()->where('uploader',$userId);
+            $folder = date('mdY');
 
-        $folderID = (DB::table('folder_lists')->where('dept_id', $user->department)->where('batch_id', $request->batch)->where('name', $folder)->get())[0]->id;
+            // $dirDoc = public_path().'/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
+            $dirDoc = 'F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder;
+            if (!file_exists($dirDoc)) {
+                File::makeDirectory($dirDoc,077,true);
+                DB::insert('insert into folder_lists (dept_id, batch_id, name) values (?, ?, ?)', [$user->department, $request->batch, $folder]);
+            }
 
-        foreach($temps as $temp){
-            // Save to Database
-            $document = new Document();
-            $document->dept_id = $user->department;
-            $document->batch_id = $request->batch;
-            $document->doctype_id = $request->docType;
-            $document->name = $temp->name;
-            $document->unique_name = $temp->unique_name;
-            $document->is_Encoded = '0';
-            $document->is_Checked = '0';
-            $document->folder = $folderID;
-            $document->uploader = $user->id;
-            $document->save();
+            $request->validate([
+                'batch' => 'required',
+                'docType' => 'required',
+            ]);
 
-            $docID = (DB::table('documents')->latest('id')->first())->id;
-            $fileDetails = new FileDetail();
-            $fileDetails->document_id = $docID;
-            $fileDetails->encoder = $userId;
-            $fileDetails->save();
+            $folderID = (DB::table('folder_lists')->where('dept_id', $user->department)->where('batch_id', $request->batch)->where('name', $folder)->get())[0]->id;
 
-            // Move file from temporary to designated folder
-            $filename = $temp->unique_name;
-            $file = "temporary\\".$userId.'\\'.$filename;
-            $f1 = str_replace('\\', '/', public_path($file));
+            foreach($temps as $temp){
+                // Save to Database
+                $document = new Document();
+                $document->dept_id = $user->department;
+                $document->batch_id = $request->batch;
+                $document->doctype_id = $request->docType;
+                $document->name = $temp->name;
+                $document->unique_name = $temp->unique_name;
+                $document->is_Encoded = '0';
+                $document->is_Checked = '0';
+                $document->folder = $folderID;
+                $document->uploader = $user->id;
+                $document->save();
 
-            // File::move(public_path($file), public_path('F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename));
-            rename($f1, 'F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename);
+                $docID = (DB::table('documents')->latest('id')->first())->id;
+                $fileDetails = new FileDetail();
+                $fileDetails->document_id = $docID;
+                $fileDetails->encoder = $userId;
+                $fileDetails->save();
+
+                // Move file from temporary to designated folder
+                $filename = $temp->unique_name;
+                $file = "temporary\\".$userId.'\\'.$filename;
+                $f1 = str_replace('\\', '/', public_path($file));
+
+                // File::move(public_path($file), public_path('F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename));
+                rename($f1, 'F:/DMS/documents/'.$user->department.'/'.$request->batch.'/'.$request->docType.'/'.$folder.'/'.$filename);
+            }
+
+            // Delete specific rows from temporary table in database
+            TempFile::where('uploader',$userId)->delete();
+
+            return redirect()->back();
         }
-
-        // Delete specific rows from temporary table in database
-        TempFile::where('uploader',$userId)->delete();
-
-        return redirect()->back();
-    }
 
     // UPLOAD END
 
