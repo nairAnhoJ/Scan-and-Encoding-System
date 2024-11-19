@@ -169,7 +169,7 @@
                     $('#file').html(result.output);
                     doneCount = result.doneCount;
                     totalCount = result.totalCount;
-                    percentage = (doneCount / totalCount) * 100
+                    // percentage = (doneCount / totalCount) * 100
                     $('#doneCount').html(doneCount);
                     $('#totalCount').html(totalCount);
                     // $('#percentage').html(Math.round(percentage) + '%');

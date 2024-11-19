@@ -49,6 +49,7 @@ class TempFileController extends Controller
             $temp->save();
         }
 
+        return redirect()->route('upload.index');
 
 
 
@@ -79,7 +80,9 @@ class TempFileController extends Controller
         //     }
         // }
 
-        return redirect()->back();
+        // return redirect()->back();
+
+
     }
 
     public function clear(){

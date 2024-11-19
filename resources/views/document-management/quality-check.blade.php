@@ -58,7 +58,15 @@
                     </div>
                     <div id="filedd" class="w-full">
                         @csrf
-                        <label for="file" class="text-sky-600 pl-3 block text-sm font-medium">Files</label>
+                        <label for="file" class="text-sky-600 px-3 text-sm font-medium flex justify-between">
+                            <div>
+                                Files
+                            </div>
+                            <div>
+                                <span class="text-green-500" id="doneCount"></span> / <span class="text-black" id="totalCount"></span>
+                                 {{-- (<span class="text-black" id="percentage"></span>) --}}
+                            </div>
+                        </label>
                         <div class="px-3">
                             <select multiple id="file" name="file" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-1 pl-3">
                             </select>
@@ -84,6 +92,10 @@
     </div>
 
     <script type="text/javascript">
+
+        var doneCount = '';
+        var totalCount = '';
+        // var percentage = '';
 
 
         // FOR BATCH
@@ -147,6 +159,7 @@
             $.ajax({
                 url:"{{ route('qc.getfiles') }}",
                 method:"POST",
+                dataType: 'json',
                 data:{
                     batchValue: batchValue,
                     folderValue: folderValue,
@@ -154,6 +167,12 @@
                 },
                 success:function(result){
                     $('#file').html(result);
+                    doneCount = result.doneCount;
+                    totalCount = result.totalCount;
+                    // percentage = (doneCount / totalCount) * 100
+                    $('#doneCount').html(doneCount);
+                    $('#totalCount').html(totalCount);
+                    // $('#percentage').html(Math.round(percentage) + '%');
                 }
             })
 
@@ -208,6 +227,10 @@
                 data: $('#fillupForm').serialize(),
                 success:function(result){
                     $('#c-con').html(result);
+                    doneCount++;
+                    percentage = (doneCount / totalCount) * 100
+                    $('#doneCount').html(doneCount);
+                    // $('#percentage').html(Math.round(percentage) + '%');
                 }
             })
 
