@@ -358,7 +358,7 @@ class DocumentManagementController extends Controller
             $userID = auth()->user()->id;
             $selBatch = $request->batchValue;
             $selFolder = $request->folderValue;
-            $doneCount = Document::where('batch_id', $selBatch)->where('folder', $selFolder)->where('is_Encoded', 1)->count();
+            $doneCount = Document::where('batch_id', $selBatch)->where('folder', $selFolder)->where('is_Checked', 1)->count();
 
             $files = DB::select('SELECT documents.id, documents.doctype_id, documents.name, documents.unique_name, documents.is_Checked, folder_lists.name AS folder FROM documents INNER JOIN folder_lists ON documents.folder = folder_lists.id WHERE documents.batch_id = ? AND documents.folder = ? ORDER BY documents.id DESC', [$selBatch, $selFolder]);
 
