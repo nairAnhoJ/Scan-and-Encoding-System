@@ -166,7 +166,7 @@
                     _token: _token
                 },
                 success:function(result){
-                    $('#file').html(result);
+                    $('#file').html(result.output);
                     doneCount = result.doneCount;
                     totalCount = result.totalCount;
                     // percentage = (doneCount / totalCount) * 100
